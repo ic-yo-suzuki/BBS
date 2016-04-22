@@ -1,4 +1,4 @@
-create table dept_post(
-code integer primary key,
+create table departments(
+id integer primary key not null auto_increment,
 name varchar(100) not null
 );
