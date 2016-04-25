@@ -20,6 +20,8 @@ public class User implements Serializable {
 	public int getBranch_Id(){
 		return branchId;
 	}
+	
+
 	public void setBranch_Id(int branchId){
 		this.branchId = branchId;
 	}
@@ -27,6 +29,8 @@ public class User implements Serializable {
 	public int getDepartmentId(){
 		return departmentId;
 	}
+	
+
 	public void setDepartmentId(int departmentId){
 		this.departmentId = departmentId;
 	}

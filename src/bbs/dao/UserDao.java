@@ -1,46 +1,48 @@
 package bbs.dao;
 
-
+import static bbs.utils.CloseableUtil.*;
+import static bbs.utils.DBUtil.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import bbs.beans.User;
 
+
 public class UserDao {
 
 
 
-//	public void insert(Connection connection, User user) {
-//		PreparedStatement ps = null;
-//		try{
-//			StringBuilder sql = new StringBuilder();
-//
-//			sql.append("insert into user ( ");
-//			sql.append("account, name, email, password, description, insert_date, update_date");
-//			sql.append(" ) values ( ");
-//			sql.append("?, ?, ?, ?, ?, ");
-//			sql.append("CURRENT_TIMESTAMP, ");
-//			sql.append("CURRENT_TIMESTAMP);");
-//			ps = connection.prepareStatement(sql.toString());
-//
-//			ps.setString(1, user.getAccount());
-//			ps.setString(2, user.getName());
-//			ps.setString(3, user.getEmail());
-//			ps.setString(4, user.getPassword());
-//			ps.setString(5, user.getDescription());
-//			System.out.println(sql.toString());
-//			ps.executeUpdate();
-//
-//		}catch(SQLException e){
-////			throw new SQLRuntimeException(e);
-//		}finally{
-//			close(ps);
-//		}
-//	}
+	public void insert(Connection connection, User user) {
+		PreparedStatement ps = null;
+		try{
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("insert into users ( ");
+			sql.append("login_id, password, name, branch_id, department_id, status");
+			sql.append(" ) values ( ");
+			sql.append("?, ?, ?, ?, ?, ");
+			sql.append("false);");
+			ps = connection.prepareStatement(sql.toString());
+
+			ps.setString(1, user.getLoginId());
+			ps.setString(2, user.getPassword());
+			ps.setString(3, user.getName());
+			ps.setInt(4, user.getBranch_Id());
+			ps.setInt(5, user.getDepartmentId());
+			System.out.println(ps.toString());
+			ps.executeUpdate();
+
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			close(ps);
+		}
+	}
 
 	private List<User> toUserList(ResultSet rs) throws Exception {
 		List<User> ret = new ArrayList<User>();
@@ -104,28 +106,53 @@ public class UserDao {
 		return userList.get(0);
 	}
 
-//	public User getUser(Connection connection, int id) {
-//		PreparedStatement ps = null;
-//		List<User> userList = null;
-//		try{
-//			String sql = "select * from user where id = ?";
-//			ps = connection.prepareStatement(sql);
-//			ps.setInt(1, id);
-//
-//			ResultSet rs = ps.executeQuery();
-//			userList = toUserList(rs);
-//			if(userList.isEmpty()){
-//				return null;
-//			}else if(2 <= userList.size()){
-//				throw new IllegalStateException("2 <= userList.size()");
-//			}
-//		}catch(Exception e){
-//
-//		}finally{
-//			close(ps);
-//		}
-//		return userList.get(0);
-//	}
+	public static boolean isExist(String loginId) {
+		PreparedStatement ps = null;
+		Connection connection = getConnection();
+		int result = 0;
+		try{
+			String sql = "select count(login_id) as result from users where login_id = ?;";
+			ps = connection.prepareStatement(sql);
+			ps.setString(1, loginId);
+			System.out.println(ps.toString());
+
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			result = rs.getInt("result");
+			if(ps != null){
+				ps.close();
+			}
+		}catch(Exception e){
+		}
+		if(result == 1){
+			return true;
+		}
+		return false;
+	}
+
+
+	public User getUser(Connection connection, int id) {
+		PreparedStatement ps = null;
+		List<User> userList = null;
+		try{
+			String sql = "select * from user where id = ?";
+			ps = connection.prepareStatement(sql);
+			ps.setInt(1, id);
+
+			ResultSet rs = ps.executeQuery();
+			userList = toUserList(rs);
+			if(userList.isEmpty()){
+				return null;
+			}else if(2 <= userList.size()){
+				throw new IllegalStateException("2 <= userList.size()");
+			}
+		}catch(Exception e){
+
+		}finally{
+			close(ps);
+		}
+		return userList.get(0);
+	}
 
 //	public void update(Connection connection, User user) {
 //		PreparedStatement ps = null;

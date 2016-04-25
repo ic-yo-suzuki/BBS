@@ -40,14 +40,18 @@ public class LoginServlet extends HttpServlet{
 		if(user != null){
 			System.out.println("ログイン成功");
 			session.setAttribute("loginUser", user);
-//			response.sendRedirect("./");
+			response.sendRedirect("./top");
 		} else{
 			List<String> messages = new ArrayList<String>();
 			messages.add("ログインに失敗しました");
 			System.out.println(messages.get(0));
 			session.setAttribute("errorMessages", messages);
 			request.setAttribute("inputValue", request.getParameter("loginId"));
-			request.getRequestDispatcher("/login.jsp").forward(request, response);
+			try{
+				request.getRequestDispatcher("/login").forward(request, response);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 		}
 	}
 
