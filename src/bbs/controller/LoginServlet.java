@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import bbs.beans.User;
 import bbs.service.LoginService;
+
 @WebServlet(urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
@@ -28,6 +29,10 @@ public class LoginServlet extends HttpServlet{
 		String loginId = request.getParameter("loginId");
 		String password = request.getParameter("password");
 
+		HttpSession session = request.getSession();
+		List<String> messages = new ArrayList<String>();
+
+
 		LoginService loginService = new LoginService();
 		User user = null;
 		try {
@@ -36,22 +41,17 @@ public class LoginServlet extends HttpServlet{
 
 		}
 
-		HttpSession session = request.getSession();
+
 		if(user != null){
 			System.out.println("ログイン成功");
 			session.setAttribute("loginUser", user);
 			response.sendRedirect("./top");
 		} else{
-			List<String> messages = new ArrayList<String>();
 			messages.add("ログインに失敗しました");
 			System.out.println(messages.get(0));
 			session.setAttribute("errorMessages", messages);
 			request.setAttribute("inputValue", request.getParameter("loginId"));
-			try{
-				request.getRequestDispatcher("/login").forward(request, response);
-			}catch(Exception e){
-				e.printStackTrace();
-			}
+			request.getRequestDispatcher("/login.jsp").forward(request, response);
 		}
 	}
 

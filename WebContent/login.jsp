@@ -23,7 +23,7 @@
 		</c:if>
 
 		<form action = "login" method = "post"> <br />
-			<label for ="loginId"> ユーザID</label>
+			<label for ="loginId"> ログインID</label>
 			<input name = "loginId" id = "loginId" value = "${inputValue }" /> <br />
 			<label for = "password">パスワード</label>
 			<input name = "password" type = "password" id = "password" /> <br />

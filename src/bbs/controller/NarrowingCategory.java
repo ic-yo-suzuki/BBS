@@ -9,30 +9,27 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import bbs.beans.User;
 import bbs.beans.UserMessage;
 import bbs.service.MessageService;
 
-@WebServlet(urlPatterns = {"/top"})
-
-public class HomeServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/narrowingCategory"})
+public class NarrowingCategory extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
-		User user = (User) request.getSession().getAttribute("loginUser");
-		boolean isShowMessageForm = false;
-		if(user == null){
-			request.setAttribute("errorMessages", "ログインしてください");
-			request.getRequestDispatcher("/login.jsp").forward(request, response);
-		}
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+
+		String category = request.getParameter("category");
+
+
 		List<String> categories = new MessageService().getCategories();
 		request.setAttribute("categories", categories);
-		List<UserMessage> messages =  new MessageService().getMessage();
+		request.setAttribute("selectedCategory", category);
+		List<UserMessage> messages =  new MessageService().getMessage(category);
 		request.setAttribute("messages", messages);
-		request.setAttribute("isShowMessageForm", isShowMessageForm);
 		request.getRequestDispatcher("/top.jsp").forward(request, response);
+
+
 	}
-
-
 
 }
