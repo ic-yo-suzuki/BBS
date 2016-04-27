@@ -6,7 +6,7 @@ import java.util.Date;
 public class Message implements Serializable{
 	private static final long serialVersionUID = 1L;
 
-	private int id;
+	private int id, branchId, departmentId;
 	private String title, text, category;
 	private Date insertDate;
 
@@ -45,6 +45,22 @@ public class Message implements Serializable{
 	public void setInsertDate(Date insertDate){
 		this.insertDate = insertDate;
 	}
+
+	public int getBranchId(){
+		return branchId;
+	}
+	public void setBranchId(int branchId){
+		this.branchId = branchId;
+	}
+
+	public int getDepartmentId(){
+		return departmentId;
+	}
+	public void setDepartmentId(int departmentId){
+		this.departmentId = departmentId;
+	}
+
+
 
 
 

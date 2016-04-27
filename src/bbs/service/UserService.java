@@ -49,7 +49,7 @@ public class UserService {
 		}
 		return user;
 	}
-
+/*
 	public void update(User user) {
 		Connection connection = null;
 		try{
@@ -60,7 +60,7 @@ public class UserService {
 			System.out.println("パスワード暗号化完了");
 
 			UserDao userDao = new UserDao();
-	//		userDao.update(connection, user);
+			userDao.update(connection, user);
 
 			commit(connection);
 		}catch(RuntimeException e){
@@ -73,5 +73,5 @@ public class UserService {
 			close(connection);
 		}
 
-	}
+	}*/
 }

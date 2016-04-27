@@ -41,7 +41,7 @@ public class SignUp extends HttpServlet{
 		user.setName(request.getParameter("name"));
 		user.setLoginId(request.getParameter("loginId"));
 		user.setPassword(request.getParameter("password"));
-		user.setBranch_Id(BranchDao.getBranchId(request.getParameter("branch")));
+		user.setBranchId(BranchDao.getBranchId(request.getParameter("branch")));
 		user.setDepartmentId(DepartmentDao.getDepartmentId(request.getParameter("department")));
 
 		if(isValid(request, messages)){

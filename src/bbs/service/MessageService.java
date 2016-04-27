@@ -97,4 +97,68 @@ public class MessageService {
 		}
 		return ret;
 	}
+
+	public List<UserMessage> getMessage(String[] selectedDates) {
+		Connection connection = null;
+		List<UserMessage> ret = null;
+		try{
+			connection = getConnection();
+			UserMessageDao messageDao = new UserMessageDao();
+			ret = messageDao.getUserMessages(connection, selectedDates);
+			commit(connection);
+		}catch(RuntimeException e){
+			rollback(connection);
+			throw e;
+		}catch(Error e){
+			rollback(connection);
+			throw e;
+		} catch (Exception e) {
+
+		}finally{
+			close(connection);
+		}
+		return ret;
+	}
+
+	public List<UserMessage> getMessage(String category, String[] selectedDates) {
+		Connection connection = null;
+		List<UserMessage> ret = null;
+		try{
+			connection = getConnection();
+			UserMessageDao messageDao = new UserMessageDao();
+			ret = messageDao.getUserMessages(connection, category, selectedDates);
+			commit(connection);
+		}catch(RuntimeException e){
+			rollback(connection);
+			throw e;
+		}catch(Error e){
+			rollback(connection);
+			throw e;
+		} catch (Exception e) {
+
+		}finally{
+			close(connection);
+		}
+		return ret;
+	}
+
+	public void delete(int id){
+		Connection connection = null;
+
+		try{
+			connection = getConnection();
+			new MessageDao().delete(connection, id);
+			commit(connection);
+		}catch(RuntimeException e){
+			rollback(connection);
+			throw e;
+		}catch(Error e){
+			rollback(connection);
+			throw e;
+		} catch (Exception e) {
+
+		}finally{
+			close(connection);
+		}
+	}
 }

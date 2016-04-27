@@ -45,6 +45,9 @@ public class LoginServlet extends HttpServlet{
 		if(user != null){
 			System.out.println("ログイン成功");
 			session.setAttribute("loginUser", user);
+
+			System.out.println(user.getId() + ", " + user.getName() + ", " + user.getBranchId() + ", " + user.getDepartmentId());
+
 			response.sendRedirect("./top");
 		} else{
 			messages.add("ログインに失敗しました");

@@ -20,7 +20,7 @@ public class HomeServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		User user = (User) request.getSession().getAttribute("loginUser");
-		boolean isShowMessageForm = false;
+
 		if(user == null){
 			request.setAttribute("errorMessages", "ログインしてください");
 			request.getRequestDispatcher("/login.jsp").forward(request, response);
@@ -28,8 +28,9 @@ public class HomeServlet extends HttpServlet {
 		List<String> categories = new MessageService().getCategories();
 		request.setAttribute("categories", categories);
 		List<UserMessage> messages =  new MessageService().getMessage();
+		request.setAttribute("loginUser", user);
 		request.setAttribute("messages", messages);
-		request.setAttribute("isShowMessageForm", isShowMessageForm);
+		request.setAttribute("categories", categories);
 		request.getRequestDispatcher("/top.jsp").forward(request, response);
 	}
 

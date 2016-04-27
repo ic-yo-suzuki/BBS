@@ -8,14 +8,14 @@ public class UserMessage implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String category, name, text, title;
-	private int userId;
+	private int id, branchId, departmentId;
 	private Date insertDate;
 
-	public int getUserId(){
-		return userId;
+	public int getId(){
+		return id;
 	}
-	public void setUserId(int userId){
-		this.userId = userId;
+	public void setId(int id){
+		this.id = id;
 	}
 
 	public String getName(){
@@ -54,4 +54,19 @@ public class UserMessage implements Serializable {
 	public void setInsertDate(Date insertDate){
 		this.insertDate = insertDate;
 	}
+
+	public int getBranchId(){
+		return branchId;
+	}
+	public void setBranchId(int branchId){
+		this.branchId = branchId;
+	}
+
+	public int getDepartmentId(){
+		return departmentId;
+	}
+	public void setDepartmentId(int departmentId){
+		this.departmentId = departmentId;
+	}
+
 }

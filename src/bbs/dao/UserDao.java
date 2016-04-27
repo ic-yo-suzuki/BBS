@@ -32,7 +32,7 @@ public class UserDao {
 			ps.setString(1, user.getLoginId());
 			ps.setString(2, user.getPassword());
 			ps.setString(3, user.getName());
-			ps.setInt(4, user.getBranch_Id());
+			ps.setInt(4, user.getBranchId());
 			ps.setInt(5, user.getDepartmentId());
 			System.out.println(ps.toString());
 			ps.executeUpdate();
@@ -58,7 +58,7 @@ public class UserDao {
 
 				User user = new User();
 				user.setId(id);
-				user.setBranch_Id(branchId);
+				user.setBranchId(branchId);
 				user.setDepartmentId(departmentId);
 				user.setLoginId(loginId);
 				user.setName(name);

@@ -17,6 +17,7 @@ public class MessageDao {
 	public List<String> getCategories(Connection connection){
 		PreparedStatement ps = null;
 		List<String> categories = new ArrayList<String>();
+		categories.add("カテゴリを選択してください");
 		try{
 			StringBuilder sql = new StringBuilder();
 			sql.append("select distinct category from posts order by category;");
@@ -31,6 +32,7 @@ public class MessageDao {
 		}catch(Exception e){
 
 		}
+
 		return categories;
 	}
 
@@ -49,6 +51,24 @@ public class MessageDao {
 			ps.setString(4, message.getCategory());
 			System.out.println(ps.toString());
 			System.out.println(ps.executeUpdate());
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			close(ps);
+		}
+	}
+
+	public void delete(Connection connection, int id) throws Exception{
+		PreparedStatement ps = null;
+		try{
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("delete from posts where id = ?;");
+			ps = connection.prepareStatement(sql.toString());
+
+			ps.setInt(1, id);
+
+			ps.executeUpdate();
 		}catch(SQLException e){
 			e.printStackTrace();
 		}finally{

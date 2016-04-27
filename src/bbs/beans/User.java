@@ -17,19 +17,17 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
-	public int getBranch_Id(){
+	public int getBranchId(){
 		return branchId;
 	}
 
-
-	public void setBranch_Id(int branchId){
+	public void setBranchId(int branchId){
 		this.branchId = branchId;
 	}
 
 	public int getDepartmentId(){
 		return departmentId;
 	}
-
 
 	public void setDepartmentId(int departmentId){
 		this.departmentId = departmentId;
