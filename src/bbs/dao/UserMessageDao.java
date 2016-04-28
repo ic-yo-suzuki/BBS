@@ -10,19 +10,22 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import bbs.beans.Comment;
 import bbs.beans.UserMessage;
 
 public class UserMessageDao {
+
+	private static final String FIXED_STRING = "select posts.id as post_id, users.id as user_id, branch_id, department_id, users.name as name, title, text, category, insert_date from posts inner join users on posts.user_id = users.id ";
+
 	public List<UserMessage> getUserMessages(Connection connection) throws Exception{
 		PreparedStatement ps  = null;
 		List<UserMessage> ret = null;
 		try{
 			StringBuilder sql = new StringBuilder();
-			sql.append("select posts.id, branch_id, department_id, users.name as name, title, text, category, insert_date from posts inner join users on posts.user_id = users.id order by insert_date DESC;");
+			sql.append(FIXED_STRING);
+			sql.append("order by insert_date DESC;");
 
 			ps = connection.prepareStatement(sql.toString());
-			System.out.println(ps.toString());
-
 			ResultSet rs = ps.executeQuery();
 			ret = toUserMessageList(rs);
 
@@ -37,9 +40,10 @@ public class UserMessageDao {
 		try{
 
 			while(rs.next()){
-				int id = rs.getInt("id");
+				int id = rs.getInt("post_id");
 				int branchId = rs.getInt("branch_id");
 				int departmentId = rs.getInt("department_id");
+				int userId = rs.getInt("user_id");
 				String name = rs.getString("name");
 				String title = rs.getString("title");
 				String category = rs.getString("category");
@@ -57,6 +61,7 @@ public class UserMessageDao {
 				message.setInsertDate(insertDate);
 				message.setBranchId(branchId);
 				message.setDepartmentId(departmentId);
+				message.setUserId(userId);
 
 				ret.add(message);
 
@@ -73,14 +78,11 @@ public class UserMessageDao {
 		List<UserMessage> ret = null;
 		try{
 			StringBuilder sql = new StringBuilder();
-			sql.append("select posts.id, users.name as name, branch_id, department_id, title, text, category, insert_date from posts inner join users on posts.user_id = users.id ");
+			sql.append(FIXED_STRING);
 			sql.append("where category = ? order by insert_date DESC;");
 
 			ps = connection.prepareStatement(sql.toString());
 			ps.setString(1, category);
-
-			System.out.println(ps.toString());
-
 			ResultSet rs = ps.executeQuery();
 			ret = toUserMessageList(rs);
 
@@ -94,7 +96,7 @@ public class UserMessageDao {
 		PreparedStatement ps  = null;
 		List<UserMessage> ret = null;
 		StringBuilder sql = new StringBuilder();
-		sql.append("select posts.id, users.name as name, branch_id, department_id, title, text, category, insert_date from posts inner join users on posts.user_id = users.id ");
+		sql.append(FIXED_STRING);
 
 		String[] time = {" 00:00:00", " 23:59:59"};
 
@@ -109,8 +111,6 @@ public class UserMessageDao {
 				selectedDate.append(time[1]);
 				ps.setString(1, selectedDate.toString());
 
-				System.out.println(ps.toString());
-
 			}else if(selectedDates[1].isEmpty()){
 				sql.append("where insert_date >= ? order by insert_date DESC;");
 				ps = connection.prepareStatement(sql.toString());
@@ -119,8 +119,6 @@ public class UserMessageDao {
 				selectedDate.append(selectedDates[0]);
 				selectedDate.append(time[0]);
 				ps.setString(1, selectedDate.toString());
-
-				System.out.println(ps.toString());
 
 			} else{
 				sql.append("where insert_date between ? and ? order by insert_date DESC;");
@@ -133,7 +131,6 @@ public class UserMessageDao {
 					selectedDate.append(time[i]);
 					ps.setString(index, selectedDate.toString());
 				}
-				System.out.println(ps.toString());
 			}
 			ResultSet rs = ps.executeQuery();
 			ret = toUserMessageList(rs);
@@ -151,7 +148,7 @@ public class UserMessageDao {
 		List<UserMessage> ret = null;
 		try{
 			StringBuilder sql = new StringBuilder();
-			sql.append("select posts.id, users.name as name, branch_id, department_id, title, text, category, insert_date from posts inner join users on posts.user_id = users.id ");
+			sql.append(FIXED_STRING);
 
 			String[] time = {" 00:00:00", " 23:59:59"};
 
@@ -165,8 +162,6 @@ public class UserMessageDao {
 				selectedDate.append(time[1]);
 				ps.setString(2, selectedDate.toString());
 
-				System.out.println(ps.toString());
-
 			}else if(selectedDates[1].isEmpty()){
 				sql.append("where category = ? and insert_date >= ? order by insert_date DESC;");
 				ps = connection.prepareStatement(sql.toString());
@@ -176,8 +171,6 @@ public class UserMessageDao {
 				selectedDate.append(selectedDates[0]);
 				selectedDate.append(time[0]);
 				ps.setString(2, selectedDate.toString());
-
-				System.out.println(ps.toString());
 			}else{
 				sql.append("where category = ? and insert_date between ? and ? order by insert_date DESC;");
 				ps = connection.prepareStatement(sql.toString());
@@ -188,10 +181,7 @@ public class UserMessageDao {
 					selectedDate.append(time[i]);
 					ps.setString(i + 2, selectedDate.toString());
 				}
-
-				System.out.println(ps.toString());
 			}
-
 			ResultSet rs = ps.executeQuery();
 			ret = toUserMessageList(rs);
 		}catch(Exception e){
@@ -201,5 +191,58 @@ public class UserMessageDao {
 			close(ps);
 		}
 		return ret;
+	}
+	public List<Comment> getComments(Connection connection) throws Exception{
+		PreparedStatement ps  = null;
+		List<Comment> ret = null;
+		try{
+			StringBuilder sql = new StringBuilder();
+			sql.append("select comments.id, user_id, post_id, users.name as name, users.branch_id as branch_id, users.department_id as department_id, text, insert_date from comments inner join users on users.id = comments.user_id ");
+			sql.append("order by insert_date DESC;");
+
+			ps = connection.prepareStatement(sql.toString());
+			ResultSet rs = ps.executeQuery();
+			ret = toCommentList(rs);
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			close(ps);
+		}
+		return ret;
+	}
+
+	public List<Comment> toCommentList(ResultSet rs) throws SQLException {
+		List<Comment> ret = new ArrayList<Comment>();
+		try{
+
+			while(rs.next()){
+				int id = rs.getInt("id");
+				int postId = rs.getInt("post_id");
+				int userId = rs.getInt("user_id");
+				int branchId = rs.getInt("branch_id");
+				int departmentId = rs.getInt("department_id");
+
+				String text = rs.getString("text");
+				String name = rs.getString("name");
+				Timestamp insertDate = rs.getTimestamp("insert_date");
+
+				Comment comment = new Comment();
+
+				comment.setId(id);
+				comment.setUserId(userId);
+				comment.setPostId(postId);
+				comment.setText(text);
+				comment.setName(name);
+				comment.setInsertDate(insertDate);
+				comment.setBranchId(branchId);
+				comment.setDepartmentId(departmentId);
+
+				ret.add(comment);
+			}
+			return ret;
+		}finally{
+			rs.close();
+		}
+
 	}
 }

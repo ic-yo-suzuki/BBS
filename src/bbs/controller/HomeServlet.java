@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import bbs.beans.Comment;
 import bbs.beans.User;
 import bbs.beans.UserMessage;
 import bbs.service.MessageService;
@@ -31,6 +32,8 @@ public class HomeServlet extends HttpServlet {
 		request.setAttribute("loginUser", user);
 		request.setAttribute("messages", messages);
 		request.setAttribute("categories", categories);
+		List<Comment> comments = new MessageService().getComment();
+		request.setAttribute("comments", comments);
 		request.getRequestDispatcher("/top.jsp").forward(request, response);
 	}
 

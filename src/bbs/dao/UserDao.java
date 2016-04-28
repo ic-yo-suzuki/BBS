@@ -34,7 +34,6 @@ public class UserDao {
 			ps.setString(3, user.getName());
 			ps.setInt(4, user.getBranchId());
 			ps.setInt(5, user.getDepartmentId());
-			System.out.println(ps.toString());
 			ps.executeUpdate();
 
 		}catch(SQLException e){
@@ -64,7 +63,6 @@ public class UserDao {
 				user.setName(name);
 				user.setPassword(password);
 
-
 				ret.add(user);
 			}
 			return ret;
@@ -82,12 +80,9 @@ public class UserDao {
 			ps = connection.prepareStatement(sql);
 			ps.setString(1, loginId);
 			ps.setString(2, encPassword);
-			System.out.println(ps.toString());
 
 			ResultSet rs = ps.executeQuery();
-			System.out.println("SQL実行");
 			userList = toUserList(rs);
-			System.out.println(userList.size());
 			if(userList.isEmpty()){
 				return null;
 			}else if(2 <= userList.size()){
@@ -114,8 +109,6 @@ public class UserDao {
 			String sql = "select count(login_id) as result from users where login_id = ?;";
 			ps = connection.prepareStatement(sql);
 			ps.setString(1, loginId);
-			System.out.println(ps.toString());
-
 			ResultSet rs = ps.executeQuery();
 			rs.next();
 			result = rs.getInt("result");
@@ -152,6 +145,28 @@ public class UserDao {
 			close(ps);
 		}
 		return userList.get(0);
+	}
+
+	public List<User> getUserList(Connection connection) {
+		PreparedStatement ps = null;
+		List<User> userList = null;
+		try{
+			String sql = "select * from users;";
+			ps = connection.prepareStatement(sql);
+
+			ResultSet rs = ps.executeQuery();
+			userList = toUserList(rs);
+			if(userList.isEmpty()){
+				return null;
+			}else if(2 <= userList.size()){
+				throw new IllegalStateException("2 <= userList.size()");
+			}
+		}catch(Exception e){
+
+		}finally{
+			close(ps);
+		}
+		return userList;
 	}
 
 //	public void update(Connection connection, User user) {

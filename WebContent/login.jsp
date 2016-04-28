@@ -10,6 +10,9 @@
 <!-- <link href = "./css/style.css" rel = "stylesheet" type = "text/css"> -->
 </head>
 <body>
+	<div class = "header">
+		<h3>掲示板　ログイン</h3>
+	</div>
 	<div class = "main-contents">
 		<c:if test="${not empty errorMessages }">
 			<div class = "errorMessages">
@@ -28,7 +31,7 @@
 			<label for = "password">パスワード</label>
 			<input name = "password" type = "password" id = "password" /> <br />
 			<input type = "submit" value = "ログイン" /> <br />
-			<a href = "./"> 戻る</a>
+
 
 		</form>
 		<div class = "copyright">Copyright(c) Yoshihiro Suzuki</div>

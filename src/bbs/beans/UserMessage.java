@@ -8,7 +8,7 @@ public class UserMessage implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String category, name, text, title;
-	private int id, branchId, departmentId;
+	private int id, branchId, departmentId, userId;
 	private Date insertDate;
 
 	public int getId(){
@@ -16,6 +16,13 @@ public class UserMessage implements Serializable {
 	}
 	public void setId(int id){
 		this.id = id;
+	}
+
+	public int getUserId(){
+		return userId;
+	}
+	public void setUserId(int userId){
+		this.userId = userId;
 	}
 
 	public String getName(){

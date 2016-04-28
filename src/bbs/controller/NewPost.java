@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
+import bbs.beans.Comment;
 import bbs.beans.Message;
 import bbs.beans.User;
 import bbs.service.MessageService;
@@ -63,6 +64,8 @@ public class NewPost extends HttpServlet {
 			request.setAttribute("inputValues", message);
 			List<String> categories = new MessageService().getCategories();
 			request.setAttribute("categories", categories);
+			List<Comment> comments = new MessageService().getComment();
+			request.setAttribute("comments", comments);
 			request.getRequestDispatcher("/newposts.jsp").forward(request, response);
 		}
 		request.setAttribute("loginUser", user);

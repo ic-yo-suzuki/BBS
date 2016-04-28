@@ -8,7 +8,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import bbs.beans.Comment;
 import bbs.beans.UserMessage;
 import bbs.service.MessageService;
 
@@ -19,21 +21,48 @@ public class Delete extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 
-
+		String operation = null;
 		System.out.println(request.getParameter("id"));
-		new MessageService().delete(Integer.parseInt(request.getParameter("id")));
+		HttpSession session = request.getSession();
+		String mode = null;
 
-		if(!(request.getParameter("permission").equals("1"))){
+		int permission = Integer.parseInt(request.getParameter("permission"));
+
+		switch(permission){
+		case 1:
+			operation = "delete from posts ";
+			mode = "post";
+			break;
+
+		case 2:
+			operation = "delete from comments ";
+			mode = "comment";
+			break;
+
+		default:
 			request.setAttribute("errorMessages", "この操作の権限がありません");
+			List<String> categories = new MessageService().getCategories();
+			request.setAttribute("categories", categories);
+			List<UserMessage> messages =  new MessageService().getMessage();
+			request.setAttribute("messages", messages);
+			request.setAttribute("categories", categories);
+			List<Comment> comments = new MessageService().getComment();
+			request.setAttribute("comments", comments);
 			request.getRequestDispatcher("/top.jsp").forward(request, response);
 		}
 
+
+		new MessageService().delete(Integer.parseInt(request.getParameter("id")), operation, mode);
+
+
 		List<String> categories = new MessageService().getCategories();
-		request.setAttribute("categories", categories);
+		session.setAttribute("categories", categories);
 		List<UserMessage> messages =  new MessageService().getMessage();
-		request.setAttribute("messages", messages);
-		request.setAttribute("categories", categories);
-		request.getRequestDispatcher("/top.jsp").forward(request, response);
+		session.setAttribute("messages", messages);
+		session.setAttribute("categories", categories);
+		List<Comment> comments = new MessageService().getComment();
+		session.setAttribute("comments", comments);
+		response.sendRedirect("./top");
 	}
 
 }

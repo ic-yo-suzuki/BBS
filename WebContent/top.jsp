@@ -18,17 +18,30 @@
 <body>
 	<div class = "header">
 		<a href = "top">ホーム</a>
-		<a href = "settings">設定</a>
+		<c:if test = "${loginUser.departmentId == 1 }">
+			<a href = "settings">設定</a>
+		</c:if>
 		<a href = "logout">ログアウト</a>
 	</div><p>
 	<div class = "profile">
-		<div class = "name">ようこそ<b><c:out value = "${loginUser.name }" />(<c:out value = "${loginUser.branchId }" />)</b>さん</div>
+		<div class = "name">ようこそ<b><c:out value = "${loginUser.name }" /></b>さん</div>
 
 
 	</div>
 	<div class = "newPost"><p>
 		<a href = "newPost">新規投稿</a>
 	</div>
+	<p><hr>
+		<c:if test="${not empty errorMessages }">
+		<div class = "errorMessages">
+			<ul>
+				<c:forEach items = "${errorMessages }" var = "messages">
+					<li><c:out value = "${messages }" /><br />
+				</c:forEach>
+			</ul>
+		</div>
+		<c:remove var = "errorMessages" scope = "session"/>
+	</c:if>
 	<p><hr>
 
 
@@ -56,7 +69,9 @@
 		開始日時：<input type = "text" name = "dateStart" id = "dateStart" value = "${dates[0] }">
 		終了日時：<input type = "text" name = "dateEnd"   id = "dateEnd"   value = "${dates[1] }">
 		<input type = "submit" value = "指定した条件で検索">
-		<input type = "reset" value = "条件をクリア">
+	</form>
+	<form action = "top" method = "get">
+		<input type = "submit" value = "条件をクリア">
 	</form>
 
 
@@ -68,9 +83,7 @@
 
 			<div class = "account-name">
 
-				<span class = "id">投稿番号：<c:out value = "${message.id }"></c:out></span><br />
 				<c:set var = "id" scope = "request" value = "${message.id }" />
-				<span class = "branchId">投稿者所属支店：<c:out value = "${message.branchId }"></c:out></span>
 
 				<span class = "name">投稿者：<c:out value = "${message.name }"></c:out></span><br />
 				<c:set var = "name" scope = "request" value = "${message.name }" />
@@ -81,15 +94,14 @@
 			<% String lineSeparator = System.getProperty("line.separator"); %>
 
 			<div class = "text">本文：<br />
-
 				<c:forTokens var = "splitedMessage" items = "${message.text }" delims = "<%= lineSeparator %>">
 					<c:out value = "${splitedMessage }"></c:out><br>
 				</c:forTokens>
-				</div>
+			</div>
 			<br />
 			<div class = "date">投稿日時：<fmt:formatDate value="${message.insertDate }" pattern ="yyyy/MM/dd HH:mm:ss" /></div>
 			<div class = "delte">
-			<c:if test = "${(message.id == loginUser.id) || (loginUser.departmentId == 2) || (message.branchId == loginUser.branchId && loginUser.departmentId == 3) }">
+			<c:if test = "${(message.userId == loginUser.id) || (loginUser.departmentId == 2) || (message.branchId == loginUser.branchId && loginUser.departmentId == 3) }">
 				<form action = "delete" method = "post">
 					<input type = "submit" value = "投稿を削除する" onClick = "return confirm('この投稿を削除します。よろしいですか？')" /><br>
 					<input type = "hidden" name = "id" value = "${message.id }" />
@@ -99,13 +111,43 @@
 		</div>
 
 		</div>
-		<div class = "postComeent">
-			<form action = "postComment" method = "post">
-				<br />コメント<br />
-				<textarea name = "message" cols = "80" rows = "5" class = "post-box" ><c:out value = "${inputValues.text }"></c:out></textarea>
-				<br />
-				<input type = "submit" value = "投稿する">(500文字まで)
-			</form>
+		<div class = "comment">
+		<br />コメント一覧<p>
+		<c:forEach items = "${comments }" var = "comment">
+			<c:if test = "${message.id == comment.postId }">
+				<div class = "showComment">
+					<span class = "name">投稿者：<c:out value = "${comment.name }"></c:out></span><br />
+					<div class = "text">本文：<br>
+						<c:forTokens var = "splitedMessage" items = "${comment.text }" delims = "<%= lineSeparator %>">
+							<c:out value = "${splitedMessage }"></c:out><br>
+						</c:forTokens>
+					<br />
+
+					</div>
+					<div class = "date">投稿日時：<c:out value = "${comment.insertDate }"></c:out></div>
+
+					<c:if test = "${(comment.userId == loginUser.id) || (loginUser.departmentId == 2) || (comment.branchId == loginUser.branchId && loginUser.departmentId == 3) }">
+						<form action = "delete" method = "post">
+							<input type = "submit" value = "コメントを削除する" onClick = "return confirm('このコメントを削除します。よろしいですか？')" /><br>
+							<input type = "hidden" name = "id" value = "${comment.id }" />
+							<input type = "hidden" name = "permission" value = "2" >
+						</form>
+					</c:if>
+					<br />
+				</div>
+			</c:if>
+		</c:forEach>
+			<div class = "postComeent">
+				<form action = "postComment" method = "post">
+					<br />コメントの投稿<br />
+					<textarea name = "comment" cols = "80" rows = "5" class = "post-box" ><c:out value = "${inputValues.text }"></c:out></textarea>
+					<br />
+					<input type = "submit" value = "投稿する">(500文字まで)
+					<input type = "hidden" name = "postId" value = "${message.id }" />
+					<input type = "hidden" name = "userId" value = "${loginUser.id }" />
+
+				</form>
+			</div>
 		</div>
 		<hr>
 		</c:forEach>
