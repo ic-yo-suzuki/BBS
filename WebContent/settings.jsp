@@ -17,7 +17,9 @@
 		<c:if test = "${loginUser.departmentId == 1 }">
 			<a href = "signup">ユーザ新規登録</a>
 		</c:if>
-		<a href = "logout">ログアウト</a>
+
 	</div><p>
+	<hr>
+	ユーザ一覧
 </body>
 </html>
