@@ -43,9 +43,14 @@ public class UserService {
 			user = userDao.getUser(connection, userId);
 			commit(connection);
 
+		}catch(RuntimeException e){
+			rollback(connection);
+			throw e;
 		}catch(Error e){
 			rollback(connection);
-		}finally{
+			throw e;
+		}
+		finally{
 			close(connection);
 		}
 		return user;
@@ -59,27 +64,54 @@ public class UserService {
 			UserDao userDao = new UserDao();
 			userList = userDao.getUserList(connection);
 			commit(connection);
+		}catch(RuntimeException e){
+			rollback(connection);
+			throw e;
 		}catch(Error e){
 			rollback(connection);
-		}finally{
+			throw e;
+		}
+		finally{
 			close(connection);
 		}
 		return userList;
 	}
 
+	public void changeStatis(int id){
+		Connection connection = null;
+		boolean status = false;
+		try{
+			connection = getConnection();
+			UserDao userDao = new UserDao();
+			status = userDao.getStatus(connection, id);
+			userDao.changeStatus(connection, id, status);
+			commit(connection);
+		}catch(RuntimeException e){
+			rollback(connection);
+			throw e;
+		}catch(Error e){
+			rollback(connection);
+			throw e;
+		}
+		finally{
+			close(connection);
+		}
+	}
 
-/*
-	public void update(User user) {
+
+
+	public void update(User user, boolean passwordModifyFlg) {
 		Connection connection = null;
 		try{
 			connection = getConnection();
 
-			String encPassword = CipherUtil.encrypt(user.getPassword());
-			user.setPassword(encPassword);
-			System.out.println("パスワード暗号化完了");
-
+			if(passwordModifyFlg){
+				String encPassword = CipherUtil.encrypt(user.getPassword());
+				user.setPassword(encPassword);
+				System.out.println("パスワード暗号化完了");
+			}
 			UserDao userDao = new UserDao();
-			userDao.update(connection, user);
+			userDao.update(connection, user, passwordModifyFlg);
 
 			commit(connection);
 		}catch(RuntimeException e){
@@ -92,5 +124,24 @@ public class UserService {
 			close(connection);
 		}
 
-	}*/
+	}
+
+	public void deleteUser(int id){
+		Connection connection = null;
+		try{
+			connection = getConnection();
+
+			new UserDao().delete(connection, id);
+			commit(connection);
+		}catch(RuntimeException e){
+			rollback(connection);
+			throw e;
+		}catch(Error e){
+			rollback(connection);
+			throw e;
+		}finally{
+			close(connection);
+		}
+
+	}
 }

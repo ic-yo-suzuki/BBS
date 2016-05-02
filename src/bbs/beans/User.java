@@ -6,7 +6,7 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private int id, branchId, departmentId;
-	private String loginId, name, password;
+	private String loginId, name, password, branchName, departmentName;
 	private boolean status;
 //	private Date insertDate, updateDate;
 
@@ -25,12 +25,28 @@ public class User implements Serializable {
 		this.branchId = branchId;
 	}
 
+	public String getBranchName(){
+		return branchName;
+	}
+
+	public void setBranchName(String branch){
+		this.branchName = branch;
+	}
+
 	public int getDepartmentId(){
 		return departmentId;
 	}
 
 	public void setDepartmentId(int departmentId){
 		this.departmentId = departmentId;
+	}
+
+	public String getDepartmentName(){
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName){
+		this.departmentName = departmentName;
 	}
 
 	public String getLoginId(){
@@ -59,7 +75,7 @@ public class User implements Serializable {
 	}
 
 	public void setStatus(boolean status){
-		this.status = !status;
+		this.status = status;
 	}
 
 

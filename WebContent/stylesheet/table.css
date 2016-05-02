@@ -1,0 +1,9 @@
+@CHARSET "UTF-8";
+.userlist table {
+border: 1px #000000 solid;
+}
+
+.userlist td {
+border: 1px #000000 solid;
+}
+

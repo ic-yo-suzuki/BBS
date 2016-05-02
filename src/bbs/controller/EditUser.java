@@ -18,12 +18,12 @@ import bbs.beans.User;
 import bbs.beans.UserMessage;
 import bbs.dao.BranchDao;
 import bbs.dao.DepartmentDao;
-import bbs.dao.UserDao;
 import bbs.service.MessageService;
 import bbs.service.UserService;
 
-@WebServlet(urlPatterns = {"/signup"})
-public class SignUp extends HttpServlet{
+@WebServlet(urlPatterns = {"/edit"})
+
+public class EditUser extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -35,43 +35,52 @@ public class SignUp extends HttpServlet{
 			request.getRequestDispatcher("/login.jsp").forward(request, response);
 		}
 
-		if(user .getDepartmentId() != 1){
+		if(user.getDepartmentId() != 1){
 			request.setAttribute("errorMessages", "この操作に必要な権限がありません");
+
 			List<String> categories = new MessageService().getCategories();
-			request.setAttribute("categories", categories);
 			List<UserMessage> messages =  new MessageService().getMessage();
-			request.setAttribute("loginUser", user);
-			request.setAttribute("messages", messages);
-			request.setAttribute("categories", categories);
 			List<Comment> comments = new MessageService().getComment();
+
+			request.setAttribute("loginUser", user);
+			request.setAttribute("categories", categories);
+			request.setAttribute("messages", messages);
 			request.setAttribute("comments", comments);
+
 			request.getRequestDispatcher("/top.jsp").forward(request, response);
 		}else{
+
+			User editUser = new UserService().getUser(Integer.parseInt(request.getParameter("editUserId")));
+			request.setAttribute("editUser", editUser);
 			request.setAttribute("branches", BranchDao.getBranches());
 			request.setAttribute("departments", DepartmentDao.getDepartments());
-			request.getRequestDispatcher("signup.jsp").forward(request, response);
+			request.getRequestDispatcher("edit.jsp").forward(request, response);
 		}
 	}
-
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)throws IOException, ServletException{
 		List<String> messages = new ArrayList<String>();
 		HttpSession session = request.getSession();
-//		request.setCharacterEncoding("UTF-8");
 		User user = new User();
+		boolean passwordModifyFlg = false;
+
 		user.setName(request.getParameter("name"));
 		user.setLoginId(request.getParameter("loginId"));
-		user.setPassword(request.getParameter("password"));
+		if(isModifyPassword(request.getParameter("password"), request.getParameter("password_verify"))){
+			user.setPassword(request.getParameter("password"));
+			passwordModifyFlg = true;
+		}
 		user.setBranchId(BranchDao.getBranchId(request.getParameter("branch")));
 		user.setDepartmentId(DepartmentDao.getDepartmentId(request.getParameter("department")));
+		user.setId(Integer.parseInt(request.getParameter("userId")));
 
-		if(isValid(request, messages)){
-			new UserService().register(user);
+		if(isValid(request, messages, passwordModifyFlg)){
+			new UserService().update(user, passwordModifyFlg);
 			System.out.println("ユーザ登録完了");
 			response.sendRedirect("./settings");
 		}else{
 			session.setAttribute("errorMessages", messages);
-			request.setAttribute("inputValues", user);
+			request.setAttribute("editUser", user);
 
 			request.setAttribute("branches", BranchDao.getBranches());
 			request.setAttribute("selectedBranch", request.getParameter("branch"));
@@ -81,12 +90,12 @@ public class SignUp extends HttpServlet{
 			request.setAttribute("selectedDepartment", request.getParameter("department"));
 			System.out.println(request.getAttribute("selectedDepartment"));
 
-			request.getRequestDispatcher("signup.jsp").forward(request, response);
+			request.getRequestDispatcher("edit.jsp").forward(request, response);
 			session.removeAttribute("editUser");
 		}
 	}
 
-	private boolean isValid(HttpServletRequest request, List<String> messages) {
+	private boolean isValid(HttpServletRequest request, List<String> messages, boolean passwordModifyFlg) {
 
 		if(StringUtils.isEmpty(request.getParameter("name"))){
 			messages.add("名前を入力してください");
@@ -96,33 +105,24 @@ public class SignUp extends HttpServlet{
 		}
 
 		if(StringUtils.isEmpty(request.getParameter("loginId"))){
-			System.out.println("ログインID空欄");
 			messages.add("ログインIDを入力してください");
 
 		} else if((!request.getParameter("loginId").matches("^[0-9a-zA-Z]{6,20}"))){
 
-			System.out.println("ログインIDフォーマット不正");
 			messages.add("ログインIDは半角英数字6文字以上20文字以下で入力してください");
 
-		} else if(UserDao.isExist(request.getParameter("loginId"))){
-			System.out.println("アカウント存在");
-			messages.add("ログインIDが既に使われています");
+		}
 
-		}
-		if(StringUtils.isEmpty(request.getParameter("password"))
-				|| StringUtils.isEmpty(request.getParameter("password_verify"))){
-			System.out.println("パスワード空欄");
-			messages.add("パスワードを入力してください");
-		}
-		if(request.getParameter("password").getBytes().length > request.getParameter("password").length()
-				|| request.getParameter("password_verify").getBytes().length > request.getParameter("password_verify").length()
-				|| (request.getParameter("password").matches("{6,255}"))
-				|| (request.getParameter("password_verify").matches("{6,255}"))){
-			System.out.println(request.getParameter("password").length() + ", " + request.getParameter("password_verify").length() + "：パスワードフォーマット不正");
-			messages.add("パスワードは半角文字6文字以上255文字以下で入力してください");
-		} else if(!(request.getParameter("password").equals(request.getParameter("password_verify")))){
-			System.out.println("パスワード不一致");
+		if(!(request.getParameter("password").equals(request.getParameter("password_verify")))){
 			messages.add("入力されたパスワードが一致しません");
+		}
+		if(passwordModifyFlg){
+			if(request.getParameter("password").getBytes().length > request.getParameter("password").length()
+					|| request.getParameter("password_verify").getBytes().length > request.getParameter("password_verify").length()
+					|| (request.getParameter("password").matches("{6,255}"))
+					|| (request.getParameter("password_verify").matches("{6,255}"))){
+				messages.add("パスワードは半角文字6文字以上255文字以下で入力してください");
+			}
 		}
 
 		if(messages.size() == 0){
@@ -132,6 +132,12 @@ public class SignUp extends HttpServlet{
 		}
 	}
 
-
-
+	private boolean isModifyPassword(String password, String password_verify){
+		if(StringUtils.isBlank(password) && StringUtils.isBlank(password_verify)){
+			return false;
+		}else{
+			return true;
+		}
+	}
 }
+
