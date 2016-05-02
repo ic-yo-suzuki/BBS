@@ -19,7 +19,7 @@
 	<div class = "header">
 		<a href = "top">ホーム</a>
 		<c:if test = "${loginUser.departmentId == 1 }">
-			<a href = "settings">設定</a>
+			<a href = "usermanager">ユーザの管理</a>
 		</c:if>
 		<a href = "logout">ログアウト</a>
 	</div><p>
