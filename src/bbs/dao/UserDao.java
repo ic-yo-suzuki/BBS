@@ -325,4 +325,23 @@ public class UserDao {
 			}
 		}
 	}
+	public boolean isExistUser(Connection connection, int id){
+		StringBuilder sql = new StringBuilder();
+		sql.append("select count(*) as count from users where id = ?;");
+		PreparedStatement ps = null;
+		try{
+			ps = connection.prepareStatement(sql.toString());
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			if(rs.getInt("count") == 1){
+				return true;
+			}else{
+				return false;
+			}
+		}catch(Exception e){
+			return false;
+		}
+
+	}
 }

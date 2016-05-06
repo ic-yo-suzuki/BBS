@@ -26,11 +26,30 @@ public class EditUser extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)throws IOException, ServletException{
 
-		User editUser = new UserService().getUser(Integer.parseInt(request.getParameter("editUserId")));
-		request.setAttribute("editUser", editUser);
-		request.setAttribute("branches", BranchDao.getBranches());
-		request.setAttribute("departments", DepartmentDao.getDepartments());
-		request.getRequestDispatcher("edit.jsp").forward(request, response);
+		User editUser = null;
+		List<User> userList =  new UserService().getUserList();
+		try{
+			editUser = new UserService().getUser(Integer.parseInt(request.getParameter("editUserId")));
+		}catch(Exception e){
+
+
+			request.setAttribute("userList", userList);
+			request.getRequestDispatcher("usermanager.jsp").forward(request, response);
+			return;
+		}
+		String[] queryString = new String[2];
+		queryString = request.getQueryString().split("=");
+		if(isExistUser(Integer.parseInt(queryString[1]))){
+			request.setAttribute("editUser", editUser);
+			request.setAttribute("branches", BranchDao.getBranches());
+			request.setAttribute("departments", DepartmentDao.getDepartments());
+			request.getRequestDispatcher("edit.jsp").forward(request, response);
+		}else{
+			request.setAttribute("userList", userList);
+			request.getRequestDispatcher("usermanager.jsp").forward(request, response);
+			return;
+		}
+
 
 	}
 	@Override
@@ -114,6 +133,11 @@ public class EditUser extends HttpServlet{
 		}else{
 			return true;
 		}
+	}
+
+	private boolean isExistUser(int userId){
+
+		return new UserService().isExistUser(userId);
 	}
 }
 

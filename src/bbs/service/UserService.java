@@ -144,4 +144,22 @@ public class UserService {
 		}
 
 	}
+	public boolean isExistUser(int id){
+		Connection connection = null;
+		boolean flg = false;
+		try{
+			connection = getConnection();
+			flg = new UserDao().isExistUser(connection, id);
+			commit(connection);
+		}catch(RuntimeException e){
+			rollback(connection);
+			throw e;
+		}catch(Error e){
+			rollback(connection);
+			throw e;
+		}finally{
+			close(connection);
+		}
+		return flg;
+	}
 }

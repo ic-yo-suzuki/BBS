@@ -20,6 +20,7 @@ background: #ffd3e4;
 	width: 850px;
 	margin: 5px auto;
 	border: 1px solid #cccccc;
+		text-align: right;
 }
 
 .messages{
@@ -36,7 +37,7 @@ background: #ffd3e4;
 }
 .text{
 	border: 1px solid #cccccc;
-	width = 800px;
+	width : 800px;
 	margin: 5px auto;
 }
 .showComment{
@@ -46,8 +47,8 @@ background: #ffd3e4;
 	border: 1px solid #cccccc;
 }
 
-.comment{
-	background: #feeeef;
+.comments{
+	background: #eeffee;
 	width: 800px;
 	margin: 5px auto;
 }
@@ -75,6 +76,7 @@ background: #ffd3e4;
 .profile{
 	width: 850px;
 	margin: 5px auto;
+
 
 }
 
@@ -117,6 +119,52 @@ background-color: #eee;
 border: 1px solid #b9b9b9;
 }
 .inputvalue td{
+padding: 6px;
+background-color: #fff;
+border: 1px solid #b9b9b9;
+}
+
+.newpost{
+width: 800px;
+border-collapse: collapse;
+}
+
+
+.newpost td{
+padding: 6px;
+background-color: #fff;
+border: 1px solid #b9b9b9;
+}
+
+.message{
+width: 800px;
+border-collapse: collapse;
+}
+
+
+.message td{
+padding: 6px;
+background-color: #fff;
+border: 1px solid #b9b9b9;
+}
+
+
+.comments{
+width: 600px;
+border-collapse: collapse;
+
+}
+.comments th{
+
+padding: 6px;
+text-align: left;
+vertical-align: top;
+color: #333;
+background-color: #eee;
+border: 1px solid #b9b9b9;
+}
+
+.comments td{
 padding: 6px;
 background-color: #fff;
 border: 1px solid #b9b9b9;

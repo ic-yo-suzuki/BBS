@@ -26,8 +26,9 @@
 		</c:if>
 	<div class = "form-area">
 		<p>
+		<table class = "newpost">
 		<form action = "newPost" method = "post">
-			カテゴリー(必須)
+			<tr><td>カテゴリー(必須)</td><td>
 			<select name = "category">
 				<c:forEach items = "${categories }" var = "category">
 					<c:if test ="${category == inputValues.category }">
@@ -41,15 +42,19 @@
 			</select>
 			カテゴリーの新規作成
 			<input name = "newCategory" id = "newCategory" value = "${inputValues.category }">
-			<p>
-			投稿者：<c:out value = "${loginUser.name }"></c:out>さん(自動で追加されます)<br />
-			タイトル(必須)
-			<input name = "title" id = "title" value = "${inputValues.title }">
-			<br />本文<br />
+			</td></tr>
+			<tr><td>投稿者</td><td><c:out value = "${loginUser.name }"></c:out>さん(自動で追加されます)</td></tr>
+			<tr><td>タイトル(必須)</td><td>
+			<input name = "title" id = "title" value = "${inputValues.title }"></td></tr>
+			<tr><td>本文(1000文字まで)</td><td>
 			<textarea name = "message" cols = "80" rows = "10" class = "post-box" ><c:out value = "${inputValues.text }"></c:out></textarea>
-			<br />
-			<input type = "submit" value = "投稿する">(1000文字まで)
+			</td></tr>
+
+			<tr><td></td><td><input type = "submit" value = "投稿する"></td></tr>
+
 		</form>
+					</table>
+
 	</div>
 	</div>
 	</body>
