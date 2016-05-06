@@ -14,9 +14,13 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" >
+<link rel = "stylesheet" type = "text/css" href = "stylesheet/style.css">
+
 </head>
 <body>
+	<div class = "main-contents">
 	<div class = "header">
+
 		<a href = "top">ホーム</a>
 		<c:if test = "${loginUser.departmentId == 1 }">
 			<a href = "usermanager">ユーザの管理</a>
@@ -31,7 +35,7 @@
 	<div class = "newPost"><p>
 		<a href = "newPost">新規投稿</a>
 	</div>
-	<p><hr>
+	<p>
 		<c:if test="${not empty errorMessages }">
 		<div class = "errorMessages">
 			<ul>
@@ -42,9 +46,9 @@
 		</div>
 		<c:remove var = "errorMessages" scope = "session"/>
 	</c:if>
-	<p><hr>
+	<p>
 
-
+	<div class = "narrowing">
 	<form action = "narrowing" method = "post">
 		投稿の絞込み検索<br>
 		カテゴリー<br>
@@ -60,8 +64,8 @@
 		</select>
 		<script>
 		$(function() {
-			$("#dateStart").datepicker();
-			$("#dateEnd").datepicker();
+			$("#dateStart").datepicker({maxDate: 0});
+			$("#dateEnd").datepicker({maxDate: 0});
 		});
 		</script>
 		<p>
@@ -74,8 +78,8 @@
 		<input type = "submit" value = "条件をクリア">
 	</form>
 
+	</div>
 
-	<hr>
 	<div class = "messages">
 		<c:forEach items = "${messages }" var = "message">
 
@@ -91,16 +95,19 @@
 				<span class = "category">カテゴリ：<c:out value = "${message.category }"></c:out></span>
 			</div>
 
-			<% String lineSeparator = System.getProperty("line.separator"); %>
+
 
 			<div class = "text">本文：<br />
+				<%
+					String lineSeparator = System.getProperty("line.separator");
+				%>
 				<c:forTokens var = "splitedMessage" items = "${message.text }" delims = "<%= lineSeparator %>">
 					<c:out value = "${splitedMessage }"></c:out><br>
 				</c:forTokens>
 			</div>
 			<br />
 			<div class = "date">投稿日時：<fmt:formatDate value="${message.insertDate }" pattern ="yyyy/MM/dd HH:mm:ss" /></div>
-			<div class = "delte">
+			<div class = "delete">
 			<c:if test = "${(message.userId == loginUser.id) || (loginUser.departmentId == 2) || (message.branchId == loginUser.branchId && loginUser.departmentId == 3) }">
 				<form action = "delete" method = "post">
 					<input type = "submit" value = "投稿を削除する" onClick = "return confirm('この投稿を削除します。よろしいですか？')" /><br>
@@ -124,7 +131,7 @@
 					<br />
 
 					</div>
-					<div class = "date">投稿日時：<c:out value = "${comment.insertDate }"></c:out></div>
+					<div class = "date">投稿日時：<fmt:formatDate value= "${comment.insertDate }" pattern ="yyyy/MM/dd HH:mm:ss" /></div>
 
 					<c:if test = "${(comment.userId == loginUser.id) || (loginUser.departmentId == 2) || (comment.branchId == loginUser.branchId && loginUser.departmentId == 3) }">
 						<form action = "delete" method = "post">
@@ -133,7 +140,6 @@
 							<input type = "hidden" name = "permission" value = "2" >
 						</form>
 					</c:if>
-					<br />
 				</div>
 			</c:if>
 		</c:forEach>
@@ -155,5 +161,6 @@
 	</div>
 
 	<div class = "copylight"> Copyright(c) Yoshihiro Suzuki</div>
+	</div>
 </body>
 </html>

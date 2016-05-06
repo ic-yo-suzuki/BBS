@@ -26,7 +26,7 @@ public class ChangeStatus extends HttpServlet{
 		HttpSession session = request.getSession();
 
 		session.setAttribute("userList", userList);
-		response.sendRedirect("./settings");
+		response.sendRedirect("./usermanager");
 	}
 
 }

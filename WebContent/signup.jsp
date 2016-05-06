@@ -8,10 +8,11 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>ユーザー登録</title>
-	<link href = "./css/style.css" rel = "stylesheet" type = "text/css">
+	<link rel = "stylesheet" type = "text/css" href = "stylesheet/style.css">
 </head>
 
 <body>
+	<div class = "site-box">
 	<div class = "main-contents">
 		<c:if test = "${not empty errorMessages }">
 			<div class = "errorMessages">
@@ -25,22 +26,28 @@
 		</c:if>
 
 		<form action = "signup" method = "post"> <br />
-			<label for = "name">名前</label>
-			<input name = "name" id = "name" value = "${inputValues.name }" />(10文字以下)<br />
+		<table class = "inputvalue">
+		<th>項目</th>
+		<th>入力値</th>
+		<th>備考</th>
+			<tr>
+			<td><label for = "name">名前</label></td>
+			<td><input name = "name" id = "name" value = "${inputValues.name }" /></td><td>10文字以下</td>
+			</tr>
+			<tr>
+			<td><label for = "loginId">ログインID</label></td>
+			<td><input name = "loginId" id = "loginId"  value = "${inputValues.loginId }" /></td><td>半角英数字(A～Z、a～z、0～9)で6～20文字</td>
+			</tr><tr>
+			<td><label for = "password">パスワード</label></td>
+			<td><input name = "password" type = "password" /></td><td>記号含む半角文字で6～255文字</td>
+			</tr><tr>
+			<td><label for = "password_verify">パスワード(確認用)</label></td>
+			<td><input name = "password_verify" type = "password" /></td><td></td>
+			</tr>
+			<tr>
+			<td><label for = "branch">所属支店</label></td>
 
-			<label for = "loginId">ログインID</label>
-			<input name = "loginId" id = "loginId"  value = "${inputValues.loginId }" />(半角英数字(A～Z、a～z、0～9)で6～20文字<br />
-
-			<label for = "password">パスワード</label>
-			<input name = "password" type = "password" />(記号含む半角文字で6～255文字)<br />
-
-			<label for = "password_verify">パスワード(確認用)</label>
-			<input name = "password_verify" type = "password" /><br />
-
-
-			<label for = "branch">所属支店</label>
-
-				<select name = "branch">
+				<td><select name = "branch">
 					<c:forEach items = "${branches }" var = "branch">
 						<c:if test ="${branch == selectedBranch }">
 							<option value = "${branch }" selected ><c:out value = "${branch }"></c:out></option>
@@ -49,11 +56,12 @@
 							<option value = "${branch }" ><c:out value = "${branch }"></c:out></option>
 						</c:if>
 					</c:forEach>
-				</select>
-			<br />
+				</select></td><td></td>
+			</tr>
+			<tr>
 
-			<label for = "department">所属部署・役職</label>
-				<select name = "department">
+			<td><label for = "department">所属部署・役職</label></td>
+				<td><select name = "department">
 				<c:forEach items = "${departments }" var = "department">
 					<c:if test ="${department == selectedDepartment }">
 							<option value = "${department }" selected ><c:out value = "${department }"></c:out></option>
@@ -63,13 +71,15 @@
 					</c:if>
 				</c:forEach>
 
-				</select>
-			<br />
-
+				</select></td><td></td>
+			</tr>
+			</table>
 			<input type = "submit" value = "登録" /><br />
+
 			<a href="javascript:window.history.back();">戻る</a>
 		</form>
 		<div class = "copyright"> Copyright (c) Yoshihiro Suzuki</div>
+	</div>
 	</div>
 </body>
 </html>

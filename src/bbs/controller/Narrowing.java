@@ -1,7 +1,6 @@
 package bbs.controller;
 
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -25,11 +24,6 @@ public class Narrowing extends HttpServlet {
 		String dateStart = request.getParameter("dateStart");
 		String dateEnd = request.getParameter("dateEnd");
 
-	    Enumeration<String> names = request.getParameterNames();
-	    while (names.hasMoreElements()){
-	      String name = (String)names.nextElement();
-	      System.out.println(name);
-	    }
 
 	 // 開始日時が終了日時よりも後ろにあった場合、開始日時と終了日時を入れ替え
 
@@ -51,16 +45,12 @@ public class Narrowing extends HttpServlet {
 		List<UserMessage> messages;
 
 		if(!category.equals("カテゴリを選択してください") && ((!dateStart.isEmpty()) || (!dateEnd.isEmpty()))){
-			System.out.println("日付とカテゴリの検索：" + category + "： " + dateStart + "～" + dateEnd);
 			messages =  new MessageService().getMessage(category, selectedDates);
 		} else if(category.equals("カテゴリを選択してください") && dateStart.isEmpty() && dateEnd.isEmpty()){
 			messages =  new MessageService().getMessage();
-
 		} else if(dateStart.isEmpty() && dateEnd.isEmpty()){
-			System.out.println("カテゴリ検索：" + category);
 			messages =  new MessageService().getMessage(category);
 		} else{
-			System.out.println("日付検索：" + dateStart + "～" + dateEnd);
 			messages =  new MessageService().getMessage(selectedDates);
 		}
 		request.setAttribute("messages", messages);

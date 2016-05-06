@@ -9,8 +9,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>新規投稿</title>
+<link rel = "stylesheet" type = "text/css" href = "stylesheet/style.css">
 </head>
 <body>
+
 	<div class = "main-contents">
 		<c:if test = "${not empty errorMessages }">
 			<div class = "errorMessages">
@@ -50,5 +52,5 @@
 		</form>
 	</div>
 	</div>
-</body>
+	</body>
 </html>

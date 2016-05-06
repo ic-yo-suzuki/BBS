@@ -7,13 +7,14 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>ログイン</title>
-<!-- <link href = "./css/style.css" rel = "stylesheet" type = "text/css"> -->
+	<link rel = "stylesheet" type = "text/css" href = "stylesheet/style.css">
 </head>
 <body>
-	<div class = "header">
+	<div class = "login-screen">
+
 		<h3>掲示板　ログイン</h3>
-	</div>
-	<div class = "main-contents">
+
+
 		<c:if test="${not empty errorMessages }">
 			<div class = "errorMessages">
 				<ul>

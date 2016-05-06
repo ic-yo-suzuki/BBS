@@ -13,12 +13,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
-import bbs.beans.Comment;
 import bbs.beans.User;
-import bbs.beans.UserMessage;
 import bbs.dao.BranchDao;
 import bbs.dao.DepartmentDao;
-import bbs.service.MessageService;
 import bbs.service.UserService;
 
 @WebServlet(urlPatterns = {"/edit"})
@@ -28,34 +25,13 @@ public class EditUser extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)throws IOException, ServletException{
-		User user = (User) request.getSession().getAttribute("loginUser");
 
-		if(user == null){
-			request.setAttribute("errorMessages", "ログインしてください");
-			request.getRequestDispatcher("/login.jsp").forward(request, response);
-		}
+		User editUser = new UserService().getUser(Integer.parseInt(request.getParameter("editUserId")));
+		request.setAttribute("editUser", editUser);
+		request.setAttribute("branches", BranchDao.getBranches());
+		request.setAttribute("departments", DepartmentDao.getDepartments());
+		request.getRequestDispatcher("edit.jsp").forward(request, response);
 
-		if(user.getDepartmentId() != 1){
-			request.setAttribute("errorMessages", "この操作に必要な権限がありません");
-
-			List<String> categories = new MessageService().getCategories();
-			List<UserMessage> messages =  new MessageService().getMessage();
-			List<Comment> comments = new MessageService().getComment();
-
-			request.setAttribute("loginUser", user);
-			request.setAttribute("categories", categories);
-			request.setAttribute("messages", messages);
-			request.setAttribute("comments", comments);
-
-			request.getRequestDispatcher("/top.jsp").forward(request, response);
-		}else{
-
-			User editUser = new UserService().getUser(Integer.parseInt(request.getParameter("editUserId")));
-			request.setAttribute("editUser", editUser);
-			request.setAttribute("branches", BranchDao.getBranches());
-			request.setAttribute("departments", DepartmentDao.getDepartments());
-			request.getRequestDispatcher("edit.jsp").forward(request, response);
-		}
 	}
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)throws IOException, ServletException{
@@ -77,7 +53,7 @@ public class EditUser extends HttpServlet{
 		if(isValid(request, messages, passwordModifyFlg)){
 			new UserService().update(user, passwordModifyFlg);
 			System.out.println("ユーザ登録完了");
-			response.sendRedirect("./settings");
+			response.sendRedirect("./usermanager");
 		}else{
 			session.setAttribute("errorMessages", messages);
 			request.setAttribute("editUser", user);

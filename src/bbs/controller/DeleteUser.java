@@ -26,6 +26,6 @@ public class DeleteUser extends HttpServlet{
 		HttpSession session = request.getSession();
 		List<User> userList =  new UserService().getUserList();
 		session.setAttribute("userList", userList);
-		response.sendRedirect("./settings");
+		response.sendRedirect("./usermanager");
 	}
 }

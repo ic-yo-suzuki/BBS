@@ -13,13 +13,10 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
-import bbs.beans.Comment;
 import bbs.beans.User;
-import bbs.beans.UserMessage;
 import bbs.dao.BranchDao;
 import bbs.dao.DepartmentDao;
 import bbs.dao.UserDao;
-import bbs.service.MessageService;
 import bbs.service.UserService;
 
 @WebServlet(urlPatterns = {"/signup"})
@@ -28,29 +25,11 @@ public class SignUp extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)throws IOException, ServletException{
-		User user = (User) request.getSession().getAttribute("loginUser");
 
-		if(user == null){
-			request.setAttribute("errorMessages", "ログインしてください");
-			request.getRequestDispatcher("/login.jsp").forward(request, response);
-		}
+		request.setAttribute("branches", BranchDao.getBranches());
+		request.setAttribute("departments", DepartmentDao.getDepartments());
+		request.getRequestDispatcher("signup.jsp").forward(request, response);
 
-		if(user .getDepartmentId() != 1){
-			request.setAttribute("errorMessages", "この操作に必要な権限がありません");
-			List<String> categories = new MessageService().getCategories();
-			request.setAttribute("categories", categories);
-			List<UserMessage> messages =  new MessageService().getMessage();
-			request.setAttribute("loginUser", user);
-			request.setAttribute("messages", messages);
-			request.setAttribute("categories", categories);
-			List<Comment> comments = new MessageService().getComment();
-			request.setAttribute("comments", comments);
-			request.getRequestDispatcher("/top.jsp").forward(request, response);
-		}else{
-			request.setAttribute("branches", BranchDao.getBranches());
-			request.setAttribute("departments", DepartmentDao.getDepartments());
-			request.getRequestDispatcher("signup.jsp").forward(request, response);
-		}
 	}
 
 	@Override
@@ -68,7 +47,7 @@ public class SignUp extends HttpServlet{
 		if(isValid(request, messages)){
 			new UserService().register(user);
 			System.out.println("ユーザ登録完了");
-			response.sendRedirect("./settings");
+			response.sendRedirect("./usermanager");
 		}else{
 			session.setAttribute("errorMessages", messages);
 			request.setAttribute("inputValues", user);

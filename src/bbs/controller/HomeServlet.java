@@ -20,12 +20,9 @@ public class HomeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+
 		User user = (User) request.getSession().getAttribute("loginUser");
 
-		if(user == null){
-			request.setAttribute("errorMessages", "ログインしてください");
-			request.getRequestDispatcher("/login.jsp").forward(request, response);
-		}
 		List<String> categories = new MessageService().getCategories();
 		request.setAttribute("categories", categories);
 		List<UserMessage> messages =  new MessageService().getMessage();

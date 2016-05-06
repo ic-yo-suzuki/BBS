@@ -8,7 +8,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>ユーザー編集</title>
-	<link href = "./css/style.css" rel = "stylesheet" type = "text/css">
+	<link rel = "stylesheet" type = "text/css" href = "stylesheet/style.css">
 </head>
 
 <body>
@@ -23,25 +23,30 @@
 			</div>
 			<c:remove var = "errorMessages" scope = "session"/>
 		</c:if>
-
+		<table class = "inputvalue">
+		<th>項目</th>
+		<th>入力値</th>
+		<th>備考</th>
 
 		<form action = "edit" method = "post"> <br />
-					<label for = "name">名前</label>
-			<input name = "name" id = "name" value = "${editUser.name }" />(10文字以下)<br />
+			<tr>
+			<td><label for = "name">名前</label></td>
+			<td><input name = "name" id = "name" value = "${editUser.name }" /></td><td>10文字以下</td>
+			</tr>
+			<tr>
+			<td><label for = "loginId">ログインID</label></td>
+			<td><input name = "loginId" id = "loginId"  value = "${editUser.loginId }" /></td><td>半角英数字(A～Z、a～z、0～9)で6～20文字</td>
+			</tr><tr>
+			<td><label for = "password">パスワード</label></td>
+			<td><input name = "password" type = "password" /></td><td>記号含む半角文字で6～255文字</td>
+			</tr><tr>
+			<td><label for = "password_verify">パスワード(確認用)</label></td>
+			<td><input name = "password_verify" type = "password" /></td><td></td>
+			</tr>
+			<tr>
+			<td><label for = "branch">所属支店</label></td>
 
-			<label for = "loginId">ログインID</label>
-			<input name = "loginId" id = "loginId"  value = "${editUser.loginId }" />(半角英数字(A～Z、a～z、0～9)で6～20文字<br />
-
-			<label for = "password">パスワード</label>
-			<input name = "password" type = "password" />(記号含む半角文字で6～255文字)<br />
-
-			<label for = "password_verify">パスワード(確認用)</label>
-			<input name = "password_verify" type = "password" /><br />
-
-
-			<label for = "branch">所属支店</label>
-
-				<select name = "branch">
+				<td><select name = "branch">
 					<c:forEach items = "${branches }" var = "branch">
 						<c:if test ="${branch == editUser.branchName }">
 							<option value = "${branch }" selected ><c:out value = "${branch }"></c:out></option>
@@ -50,11 +55,12 @@
 							<option value = "${branch }" ><c:out value = "${branch }"></c:out></option>
 						</c:if>
 					</c:forEach>
-				</select>
-			<br />
+				</select></td><td></td>
+			</tr>
 
-			<label for = "department">所属部署・役職</label>
-				<select name = "department">
+
+			<tr><td><label for = "department">所属部署・役職</label></td>
+				<td><select name = "department">
 				<c:forEach items = "${departments }" var = "department">
 					<c:if test ="${department == editUser.departmentName }">
 							<option value = "${department }" selected ><c:out value = "${department }"></c:out></option>
@@ -64,10 +70,10 @@
 					</c:if>
 				</c:forEach>
 
-				</select>
-			<br />
-			<button type = 'submit' name = 'userId' value = "${editUser.id }">編集の登録</button>
-			<input type = "submit" value = "登録" /><br />
+				</select></td><td></td>
+			</tr>
+			</table>
+			<button type = 'submit' name = 'userId' value = "${editUser.id }">編集の登録</button><br>
 			<a href="javascript:window.history.back();">戻る</a>
 		</form>
 		<div class = "copyright"> Copyright (c) Yoshihiro Suzuki</div>

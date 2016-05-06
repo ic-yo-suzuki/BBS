@@ -38,6 +38,7 @@ public class LoginServlet extends HttpServlet{
 		try {
 			user = loginService.login(loginId, password);
 		} catch (Exception e) {
+			e.printStackTrace();
 
 		}
 		if(user != null){
