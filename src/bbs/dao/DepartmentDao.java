@@ -32,10 +32,11 @@ public class DepartmentDao {
 		List<String> departmentList = new ArrayList<String>();
 		PreparedStatement ps = null;
 		Connection connection = DBUtil.getConnection();
-
+		StringBuilder sql = new StringBuilder();
+		sql.append("select name from departments;");
 		try{
-			String sql = "select name from departments;";
-			ps = connection.prepareStatement(sql);
+
+			ps = connection.prepareStatement(sql.toString());
 
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){

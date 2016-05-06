@@ -29,8 +29,8 @@ public class User implements Serializable {
 		return branchName;
 	}
 
-	public void setBranchName(String branch){
-		this.branchName = branch;
+	public void setBranchName(String branchName){
+		this.branchName = branchName;
 	}
 
 	public int getDepartmentId(){

@@ -113,6 +113,7 @@
 
 				<div class = comments>
 					<br />コメント一覧
+					<hr>
 					<c:forEach items = "${comments }" var = "comment">
 						<table class = "comment">
 							<c:if test = "${message.id == comment.postId }">
@@ -135,8 +136,11 @@
 									</c:if>
 
 							</c:if>
+
 						</table>
+
 					</c:forEach>
+
 					<div class = "postComeent">
 						<form action = "postComment" method = "post">
 							<br />コメントの投稿<br />
