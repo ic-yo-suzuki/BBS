@@ -15,7 +15,7 @@ import bbs.beans.UserMessage;
 
 public class UserMessageDao {
 
-	private static final String FIXED_STRING = "select posts.id as post_id, users.id as user_id, branch_id, department_id, users.name as name, title, text, category, insert_date from posts inner join users on posts.user_id = users.id ";
+	private static final String FIXED_STRING = "select posts.id as post_id, users.id as user_id, branch_id, department_id, users.name as name, title, text, category, insert_date, timestampdiff(MICROSECOND, posts.insert_date, CURRENT_TIMESTAMP) as elapsed_time from posts inner join users on posts.user_id = users.id ";
 
 	public List<UserMessage> getUserMessages(Connection connection) throws Exception{
 		PreparedStatement ps  = null;
@@ -26,9 +26,11 @@ public class UserMessageDao {
 			sql.append("order by insert_date DESC;");
 
 			ps = connection.prepareStatement(sql.toString());
+			System.out.println(ps.toString());
 			ResultSet rs = ps.executeQuery();
 			ret = toUserMessageList(rs);
-
+		}catch(Exception e){
+			e.printStackTrace();
 		}finally{
 			close(ps);
 		}
@@ -50,8 +52,10 @@ public class UserMessageDao {
 
 				String text = rs.getString("text");
 				Timestamp insertDate = rs.getTimestamp("insert_date");
-
 				UserMessage message = new UserMessage();
+				long elapsedTime = rs.getLong("elapsed_time");
+				System.out.println(elapsedTime);
+
 
 				message.setId(id);
 				message.setName(name);
@@ -62,6 +66,7 @@ public class UserMessageDao {
 				message.setBranchId(branchId);
 				message.setDepartmentId(departmentId);
 				message.setUserId(userId);
+				message.setElapsedTime(elapsedTime);
 
 				ret.add(message);
 
@@ -244,5 +249,7 @@ public class UserMessageDao {
 			rs.close();
 		}
 
+
 	}
+
 }

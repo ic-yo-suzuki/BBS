@@ -8,6 +8,7 @@ public class UserMessage implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String category, name, text, title;
+	private long elapsedTime;
 	private int id, branchId, departmentId, userId;
 	private Date insertDate;
 
@@ -74,6 +75,13 @@ public class UserMessage implements Serializable {
 	}
 	public void setDepartmentId(int departmentId){
 		this.departmentId = departmentId;
+	}
+
+	public long getElapsedTime(){
+		return elapsedTime;
+	}
+	public void setElapsedTime(long elapsedTime){
+		this.elapsedTime = elapsedTime;
 	}
 
 }

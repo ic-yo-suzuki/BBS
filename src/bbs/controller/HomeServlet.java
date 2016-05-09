@@ -26,7 +26,9 @@ public class HomeServlet extends HttpServlet {
 		List<String> categories = new MessageService().getCategories();
 		request.setAttribute("categories", categories);
 		List<UserMessage> messages =  new MessageService().getMessage();
+
 		request.setAttribute("loginUser", user);
+
 		request.setAttribute("messages", messages);
 		request.setAttribute("categories", categories);
 		List<Comment> comments = new MessageService().getComment();

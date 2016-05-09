@@ -1,8 +1,11 @@
+<%@page import="java.text.DateFormat"%>
 <script src = "js/jquery-1.12.3.js" ></script>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page isELIgnored = "false" %>
 <%@ page import = "java.lang.*" %>
+<%@ page import = "java.util.*" %>
+<%@ page import = "java.text.*" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 
@@ -97,9 +100,16 @@
 						<c:forTokens var = "splitedMessage" items = "${message.text }" delims = "<%= lineSeparator %>">
 							<c:out value = "${splitedMessage }"></c:out><br>
 						</c:forTokens>
-
 					</td></tr>
-					<tr><td>投稿日時</td><td><fmt:formatDate value="${message.insertDate }" pattern ="yyyy/MM/dd HH:mm:ss" /></td></tr>
+					 <tr><td>投稿日時</td><td><fmt:formatDate value="${message.insertDate }" pattern ="yyyy/MM/dd HH:mm:ss" />
+					 	<c:choose>
+					 		<c:when test="${(message.elapsedTime / 86400000000) >= 1 }">(<fmt:formatNumber value ="${message.elapsedTime / 86400000000 }" pattern = "##" />日前)</c:when>
+					 		<c:when test = "${(message.elapsedTime / 3600000000) >= 1 }">(<fmt:formatNumber value ="${message.elapsedTime / 3600000000 }" pattern = "##" />時間前)</c:when>
+							<c:when test = "${(message.elapsedTime / 60000000) >= 1 }">(<fmt:formatNumber value ="${message.elapsedTime / 60000000 }" pattern = "##" />分前)</c:when>
+							<c:otherwise>(<fmt:formatNumber value ="${message.elapsedTime / 1000000 }" pattern = "##" />秒前)</c:otherwise>
+					 	</c:choose>
+					 	</td></tr>
+
 
 					<c:if test = "${(message.userId == loginUser.id) || (loginUser.departmentId == 2) || (message.branchId == loginUser.branchId && loginUser.departmentId == 3) }">
 						<form action = "delete" method = "post">
