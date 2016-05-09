@@ -103,7 +103,7 @@
 
 					<c:if test = "${(message.userId == loginUser.id) || (loginUser.departmentId == 2) || (message.branchId == loginUser.branchId && loginUser.departmentId == 3) }">
 						<form action = "delete" method = "post">
-							<tr><td></td><td><button type = "submit" name = "id" value = "${message.id },1"  onClick = "return confirm('この投稿を削除します。よろしいですか？')" >投稿を削除する</button>
+							<tr><td colspan = "2"><button type = "submit" name = "id" value = "${message.id },1"  onClick = "return confirm('この投稿を削除します。よろしいですか？')" >投稿を削除する</button>
 
 						</form>
 					</c:if>
@@ -111,10 +111,12 @@
 				</table>
 
 				<div class = comments>
-					<br />コメント一覧
+					<br />コメント一覧<br>
+					<% int count = 1; %>
 					<c:forEach items = "${comments }" var = "comment">
 							<c:if test = "${message.id == comment.postId }">
 								<table class = "comment">
+
 									<tr><td>投稿者</td><td><c:out value = "${comment.name }"></c:out></td></tr>
 									<tr><td>本文</td><td>
 										<c:forTokens var = "splitedMessage" items = "${comment.text }" delims = "<%= lineSeparator %>">
@@ -123,11 +125,13 @@
 									<tr><td>投稿日時</td><td><fmt:formatDate value= "${comment.insertDate }" pattern ="yyyy/MM/dd HH:mm:ss" /></td></tr>
 									<c:if test = "${(comment.userId == loginUser.id) || (loginUser.departmentId == 2) || (comment.branchId == loginUser.branchId && loginUser.departmentId == 3) }">
 										<form action = "delete" method = "post">
-											<tr><td></td><td><button type = "submit" name = "id" value = "${comment.id },2"  onClick = "return confirm('このコメントを削除します。よろしいですか？')" >コメントを削除する</button> </td></tr>
+											<tr><td colspan = "2"><button type = "submit" name = "id" value = "${comment.id },2"  onClick = "return confirm('このコメントを削除します。よろしいですか？')" >コメントを削除する</button> </td></tr>
 										</form>
 									</c:if>
 								<hr>
+								投稿番号：<%= count %><br>
 								</table>
+							<% count++; %>
 							</c:if>
 					</c:forEach>
 					<div class = "postComeent">
