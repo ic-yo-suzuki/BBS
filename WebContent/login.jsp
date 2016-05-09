@@ -35,7 +35,7 @@
 
 
 		</form>
-		<div class = "copyright">Copyright(c) Yoshihiro Suzuki</div>
+
 	</div>
 
 </body>

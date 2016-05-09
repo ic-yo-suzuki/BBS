@@ -27,14 +27,22 @@ public class EditUser extends HttpServlet{
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)throws IOException, ServletException{
 
 		User editUser = null;
-		editUser = new UserService().getUser(Integer.parseInt(request.getParameter("editUserId")));
-
-			request.setAttribute("editUser", editUser);
-			request.setAttribute("branches", BranchDao.getBranches());
-			request.setAttribute("departments", DepartmentDao.getDepartments());
-			request.getRequestDispatcher("edit.jsp").forward(request, response);
-
-
+		try{
+			if(isExistUser(Integer.parseInt(request.getParameter("id")))){
+				editUser = new UserService().getUser(Integer.parseInt(request.getParameter("id")));
+				request.setAttribute("editUser", editUser);
+				request.setAttribute("branches", BranchDao.getBranches());
+				request.setAttribute("departments", DepartmentDao.getDepartments());
+				request.getRequestDispatcher("edit.jsp").forward(request, response);
+				return;
+			}else{
+				response.sendRedirect("./usermanager");
+				return;
+			}
+		}catch(NumberFormatException e){
+			response.sendRedirect("./usermanager");
+			return;
+		}
 
 	}
 	@Override
@@ -56,19 +64,13 @@ public class EditUser extends HttpServlet{
 
 		if(isValid(request, messages, passwordModifyFlg)){
 			new UserService().update(user, passwordModifyFlg);
-			System.out.println("ユーザ登録完了");
 			response.sendRedirect("./usermanager");
 		}else{
+			User editUser = new UserService().getUser(user.getId());
 			session.setAttribute("errorMessages", messages);
-			request.setAttribute("editUser", user);
-			System.out.println(request.getParameter("editUser.branchName"));
-
+			request.setAttribute("editUser", editUser);
 			request.setAttribute("branches", BranchDao.getBranches());
-			request.setAttribute("selectedBranch", request.getParameter("branch"));
-
 			request.setAttribute("departments", DepartmentDao.getDepartments());
-			request.setAttribute("selectedDepartment", request.getParameter("department"));
-
 			request.getRequestDispatcher("edit.jsp").forward(request, response);
 			session.removeAttribute("editUser");
 		}

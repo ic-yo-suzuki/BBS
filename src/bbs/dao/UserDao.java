@@ -138,7 +138,6 @@ public class UserDao {
 			String sql = "select * from users where id = ?";
 			ps = connection.prepareStatement(sql);
 			ps.setInt(1, id);
-			System.out.println(ps.toString());
 
 			ResultSet rs = ps.executeQuery();
 			userList = toUserList(rs);
@@ -293,8 +292,6 @@ public class UserDao {
 				ps.setInt(5, user.getId());
 			}
 
-
-			System.out.println(ps.toString());
 			if((ps.executeUpdate()) == 0){
 				throw new NoRowsUpdatedRuntimeException();
 			}

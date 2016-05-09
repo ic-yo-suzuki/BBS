@@ -49,7 +49,7 @@
 		<p>
 
 		<div class = "narrowing">
-		<form action = "narrowing" method = "post">
+		<form action = "narrowing" method = "post"  style = "display:inline">
 			投稿の絞込み検索<br>
 			カテゴリー<br>
 			<select name = "category">
@@ -72,9 +72,10 @@
 			日付<br />
 			開始日時：<input type = "text" name = "dateStart" id = "dateStart" value = "${dates[0] }">
 			終了日時：<input type = "text" name = "dateEnd"   id = "dateEnd"   value = "${dates[1] }">
-			<input type = "submit" value = "指定した条件で検索">
+
+			<input type = "submit" value = "指定した条件で検索" >
 		</form>
-		<form action = "top" method = "get">
+		<form action = "top" method = "get"  style = "display:inline">
 			<input type = "submit" value = "条件をクリア">
 		</form>
 
@@ -113,7 +114,7 @@
 
 				<div class = comments>
 					<br />コメント一覧
-					<hr>
+
 					<c:forEach items = "${comments }" var = "comment">
 						<table class = "comment">
 							<c:if test = "${message.id == comment.postId }">
@@ -134,12 +135,13 @@
 											<input type = "hidden" name = "permission" value = "2" >
 										</form>
 									</c:if>
-
+								<hr>
 							</c:if>
 
 						</table>
 
 					</c:forEach>
+
 
 					<div class = "postComeent">
 						<form action = "postComment" method = "post">
@@ -158,9 +160,6 @@
 
 		</div>
 	</div>
-
-
-	<div class = "copylight"> Copyright(c) Yoshihiro Suzuki</div>
 
 </body>
 </html>

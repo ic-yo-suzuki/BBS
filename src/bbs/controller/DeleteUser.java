@@ -20,7 +20,7 @@ public class DeleteUser extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 
-		int id = Integer.parseInt(request.getParameter("deleteUserId"));
+		int id = Integer.parseInt(request.getParameter("id"));
 		new UserService().deleteUser(id);
 
 		HttpSession session = request.getSession();

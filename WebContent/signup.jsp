@@ -27,8 +27,8 @@
 
 		<form action = "signup" method = "post"> <br />
 		<table class = "inputvalue">
-		<th>項目</th>
-		<th>入力値</th>
+		<th colspan = "2">項目</th>
+
 		<th>備考</th>
 			<tr>
 			<td><label for = "name">名前</label></td>
@@ -78,7 +78,6 @@
 
 			<a href="javascript:window.history.back();">戻る</a>
 		</form>
-		<div class = "copyright"> Copyright (c) Yoshihiro Suzuki</div>
 	</div>
 	</div>
 </body>

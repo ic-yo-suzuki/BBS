@@ -93,7 +93,7 @@ border-collapse: collapse;
 .userlist th{
 
 padding: 6px;
-text-align: left;
+text-align: center;
 vertical-align: top;
 color: #333;
 background-color: #eee;
@@ -112,7 +112,7 @@ border-collapse: collapse;
 .inputvalue th{
 
 padding: 6px;
-text-align: left;
+text-align: center;
 vertical-align: top;
 color: #333;
 background-color: #eee;

@@ -23,12 +23,13 @@
 			</div>
 			<c:remove var = "errorMessages" scope = "session"/>
 		</c:if>
-		<table class = "inputvalue">
-		<th>項目</th>
-		<th>入力値</th>
-		<th>備考</th>
+		<form action = "edit" method = "post"><br />
+			<table class = "inputvalue">
+			<th>項目</th>
+			<th>入力値</th>
+			<th>備考</th>
 
-		<form action = "edit" method = "post"> <br />
+
 			<tr>
 			<td><label for = "name">名前</label></td>
 			<td><input name = "name" id = "name" value = "${editUser.name }" /></td><td>10文字以下</td>
@@ -74,9 +75,8 @@
 			</tr>
 			</table>
 			<button type = 'submit' name = 'userId' value = "${editUser.id }">編集の登録</button><br>
-			<a href="javascript:window.history.back();">戻る</a>
 		</form>
-		<div class = "copyright"> Copyright (c) Yoshihiro Suzuki</div>
+		<a href="./usermanager">戻る</a>
 	</div>
 </body>
 </html>

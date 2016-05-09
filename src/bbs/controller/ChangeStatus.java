@@ -19,8 +19,7 @@ public class ChangeStatus extends HttpServlet{
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		System.out.println(request.getParameter("changeStatusUserId"));
-		int id = Integer.parseInt(request.getParameter("changeStatusUserId"));
+		int id = Integer.parseInt(request.getParameter("id"));
 		new UserService().changeStatis(id);
 		List<User> userList =  new UserService().getUserList();
 		HttpSession session = request.getSession();

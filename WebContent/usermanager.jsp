@@ -29,31 +29,30 @@
 			<tbody>
 				<th>ユーザ名</th>
 				<th>ログインID</th>
-				<th>所属・肩書き</th>
-				<th>編集</th>
-				<th>停止/復活</th>
-				<th>削除</th>
+				<th colspan = "2">所属</th>
+				<th colspan = "3">ユーザの操作</th>
+
 
 				<c:forEach items = "${userList }" var = "user">
 					<tr>
 						<td><c:out value = "${user.name }" /></td>
 						<td><c:out value = "${user.loginId }" /></td>
-						<td><c:out value = "${user.branchName }" />
-						<c:out value = "${user.departmentName }" /></td>
+						<td><c:out value = "${user.branchName }" /></td>
+						<td><c:out value = "${user.departmentName }" /></td>
 						<form action = "edit" method = "get" style = "display:inline">
-							<td><button type = 'submit' name = 'editUserId' value = "${user.id }" >編集</button></td>
+							<td><button type = 'submit' name = 'id' value = "${user.id }" >編集</button></td>
 						</form>
 
 						<form action = "changeStatus" method = "post" style = "display:inline">
-						<c:if test = "${user.status == true }">
-							<td><button type = 'submit' name = 'changeStatusUserId'' value = "${user.id }" onClick = "return confirm('このユーザを停止します。よろしいですか？')">停止</button></td>
-						</c:if>
-						<c:if test = "${user.status == false }">
-							<td><button type = 'submit' name = 'changeStatusUserId' value = "${user.id }" onClick = "return confirm('このユーザを復活します。よろしいですか？')">復活</button></td>
-						</c:if>
+							<c:if test = "${user.status == true }">
+								<td><button type = 'submit' name = 'id' value = "${user.id }" onClick = "return confirm('このユーザを停止します。よろしいですか？')">停止</button></td>
+							</c:if>
+							<c:if test = "${user.status == false }">
+								<td><button type = 'submit' name = 'id' value = "${user.id }" onClick = "return confirm('このユーザを復活します。よろしいですか？')">復活</button></td>
+							</c:if>
 						</form>
 						<form action = "deleteUser" method = "post" style = "display:inline">
-							<td><button type = 'submit' name = 'deleteUserId' value = "${user.id }" onClick = "return confirm('このユーザを削除します。よろしいですか？')">削除</button></td>
+							<td><button type = 'submit' name = 'id' value = "${user.id }" onClick = "return confirm('このユーザを削除します。よろしいですか？')">削除</button></td>
 						</form>
 
 					</tr>

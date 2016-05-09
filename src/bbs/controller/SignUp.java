@@ -46,7 +46,6 @@ public class SignUp extends HttpServlet{
 
 		if(isValid(request, messages)){
 			new UserService().register(user);
-			System.out.println("ユーザ登録完了");
 			response.sendRedirect("./usermanager");
 		}else{
 			session.setAttribute("errorMessages", messages);
