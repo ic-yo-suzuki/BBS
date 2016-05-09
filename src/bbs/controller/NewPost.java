@@ -110,10 +110,8 @@ public class NewPost extends HttpServlet {
 		System.out.println(flg);
 
 		for(String s : ngWord){
-			System.out.println("本文：" + text + "　NGワード：" + s);
 			if(text.indexOf(s) != -1){
 				flg = true;
-				System.out.println("NGワード発見：" + text.indexOf(s));
 			}
 		}
 		return flg;

@@ -6,6 +6,7 @@ import java.util.Date;
 public class Comment implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private int id, postId, userId, branchId, departmentId;
+	private long elapsedTime;
 	private String text, name;
 	private Date insertDate;
 
@@ -64,6 +65,13 @@ public class Comment implements Serializable{
 	}
 	public void setName(String name){
 		this.name = name;
+	}
+
+	public long getElapsedTime(){
+		return elapsedTime;
+	}
+	public void setElapsedTime(long elapsedTime){
+		this.elapsedTime = elapsedTime;
 	}
 
 }

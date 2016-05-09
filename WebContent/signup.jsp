@@ -76,7 +76,7 @@
 			</table>
 			<input type = "submit" value = "登録" /><br />
 
-			<a href="javascript:window.history.back();">戻る</a>
+			<a href="./usermanager">戻る</a>
 		</form>
 	</div>
 	</div>
