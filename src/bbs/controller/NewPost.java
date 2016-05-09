@@ -57,7 +57,6 @@ public class NewPost extends HttpServlet {
 
 		}else{
 			messages.add("投稿に失敗しました");
-			System.out.println(messages.get(0));
 			session.setAttribute("errorMessages", messages);
 			request.setAttribute("inputValues", message);
 			List<String> categories = new MessageService().getCategories();
@@ -92,10 +91,31 @@ public class NewPost extends HttpServlet {
 			messages.add("カテゴリ名は10文字以内で入力してください");
 			message.setCategory("");
 		}
+
+		if(isExistNgWord(message.getText())){
+			messages.add("使うことの出来ないキーワードが含まれています");
+			System.out.println("NGワード");
+		}
 		if(messages.size() == 0){
 			return true;
 		}else{
 			return false;
 		}
+	}
+
+	private boolean isExistNgWord(String text){
+		List<String> ngWord = new MessageService().getNgWord();
+		System.out.println(ngWord.size());
+		boolean flg = false;
+		System.out.println(flg);
+
+		for(String s : ngWord){
+			System.out.println("本文：" + text + "　NGワード：" + s);
+			if(text.indexOf(s) != -1){
+				flg = true;
+				System.out.println("NGワード発見：" + text.indexOf(s));
+			}
+		}
+		return flg;
 	}
 }

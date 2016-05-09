@@ -128,4 +128,25 @@ public class MessageDao {
 		}
 	}
 
+	public List<String> getNgWord(Connection connection){
+		PreparedStatement ps = null;
+		List<String> ngWord = new ArrayList<String>();
+		try{
+			StringBuilder sql = new StringBuilder();
+			sql.append("select word from ngwords;");
+			ps = connection.prepareStatement(sql.toString());
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				ngWord.add(rs.getString("word"));
+			}
+			if(ps != null){
+				ps.close();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		return ngWord;
+	}
+
 }

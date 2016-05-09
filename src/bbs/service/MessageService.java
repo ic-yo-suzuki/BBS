@@ -211,4 +211,25 @@ public class MessageService {
 		return ret;
 	}
 
+	public List<String> getNgWord(){
+		Connection connection = null;
+		List<String> ngWord = null;
+		try{
+			connection = getConnection();
+			MessageDao messageDao = new MessageDao();
+			ngWord = messageDao.getNgWord(connection);
+			commit(connection);
+		}catch(RuntimeException e){
+			rollback(connection);
+			throw e;
+		}catch(Error e){
+			rollback(connection);
+			throw e;
+		}finally{
+			close(connection);
+		}
+	return ngWord;
+	}
+
+
 }

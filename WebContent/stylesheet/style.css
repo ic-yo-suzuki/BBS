@@ -1,6 +1,6 @@
 @CHARSET "UTF-8";
 body{
-background: #ffd3e4;
+background: #fffafa;
 
 	text-align:justify;
 	text-justify: inter-ideograph;
@@ -15,12 +15,12 @@ background: #ffd3e4;
 
 	margin: 5px auto;
 }
-.header{
-	background: #eeffff;
+.menu{
+	background:#e6e6fa;
 	width: 850px;
 	margin: 5px auto;
-	border: 1px solid #cccccc;
-		text-align: right;
+
+	text-align: right;
 }
 
 .messages{
@@ -64,108 +64,110 @@ background: #ffd3e4;
 
 .errorMessages{
 	color: red;
+
 }
 
 .narrowing{
-	background: #ffffee;
+	background: #ffa07a;
 	width: 850px;
 	margin: 5px auto;
 	border: 1px solid #cccccc;
 }
 
-.profile{
+.header{
+	background:#e6e6fa;
 	width: 850px;
 	margin: 5px auto;
-
-
+	border: 1px solid #cccccc;
+	text-align: left;
 }
 
 .newPost{
-		width: 850px;
+	width: 850px;
 	margin: 5px auto;
 }
 
 
 .userlist{
-width: 850px;
-border-collapse: collapse;
+	width: 850px;
+	border-collapse: collapse;
 }
 .userlist th{
 
-padding: 6px;
-text-align: center;
-vertical-align: top;
-color: #333;
-background-color: #eee;
-border: 1px solid #b9b9b9;
+	padding: 6px;
+	text-align: center;
+	vertical-align: top;
+	color: #333;
+	background-color: #eee;
+	border: 1px solid #b9b9b9;
 }
 .userlist td{
-padding: 6px;
-background-color: #fff;
-border: 1px solid #b9b9b9;
+	padding: 6px;
+	background-color: #fff;
+	border: 1px solid #b9b9b9;
 }
 
 .inputvalue{
-width: 850px;
-border-collapse: collapse;
+	width: 850px;
+	border-collapse: collapse;
 }
 .inputvalue th{
 
-padding: 6px;
-text-align: center;
-vertical-align: top;
-color: #333;
-background-color: #eee;
-border: 1px solid #b9b9b9;
+	padding: 6px;
+	text-align: center;
+	vertical-align: top;
+	color: #333;
+	background-color: #eee;
+	border: 1px solid #b9b9b9;
 }
 .inputvalue td{
-padding: 6px;
-background-color: #fff;
-border: 1px solid #b9b9b9;
+	padding: 6px;
+	background-color: #fff;
+	border: 1px solid #b9b9b9;
 }
 
 .newpost{
-width: 800px;
-border-collapse: collapse;
+	width: 800px;
+	border-collapse: collapse;
 }
 
 
 .newpost td{
-padding: 6px;
-background-color: #fff;
-border: 1px solid #b9b9b9;
+	padding: 6px;
+	background-color: #fff;
+	border: 1px solid #b9b9b9;
 }
 
 .message{
-width: 800px;
-border-collapse: collapse;
+	width: 800px;
+	border-collapse: collapse;
 }
 
 
 .message td{
-padding: 6px;
-background-color: #fff;
-border: 1px solid #b9b9b9;
+	padding: 6px;
+	background-color: #fff;
+	border: 1px solid #b9b9b9;
 }
 
 
 .comments{
-width: 600px;
-border-collapse: collapse;
+	width: 600px;
+	border-collapse: collapse;
 
 }
 .comments th{
 
-padding: 6px;
-text-align: left;
-vertical-align: top;
-color: #333;
-background-color: #eee;
-border: 1px solid #b9b9b9;
+	padding: 6px;
+	text-align: left;
+	vertical-align: top;
+	color: #333;
+	background-color: #eee;
+	border: 1px solid #b9b9b9;
 }
 
 .comments td{
-padding: 6px;
-background-color: #fff;
-border: 1px solid #b9b9b9;
+	padding: 6px;
+	background-color: #fff;
+	border: 1px solid #b9b9b9;
 }

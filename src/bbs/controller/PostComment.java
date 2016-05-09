@@ -68,11 +68,31 @@ public class PostComment extends HttpServlet {
 		}else if(request.getParameter("comment").length() > 500){
 			messages.add("コメントは500文字以内で入力してください");
 		}
+		if(isExistNgWord(request.getParameter("comment"))){
+			messages.add("使うことの出来ないキーワードが含まれています");
+			System.out.println("NGワード");
+		}
 
 		if(messages.size() == 0){
 			return true;
 		}else{
 			return false;
 		}
+	}
+
+	private boolean isExistNgWord(String text){
+		List<String> ngWord = new MessageService().getNgWord();
+		System.out.println(ngWord.size());
+		boolean flg = false;
+		System.out.println(flg);
+
+		for(String s : ngWord){
+			System.out.println("本文：" + text + "　NGワード：" + s);
+			if(text.indexOf(s) != -1){
+				flg = true;
+				System.out.println("NGワード発見：" + text.indexOf(s));
+			}
+		}
+		return flg;
 	}
 }

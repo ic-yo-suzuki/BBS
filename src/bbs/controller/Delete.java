@@ -25,8 +25,8 @@ public class Delete extends HttpServlet {
 		System.out.println(request.getParameter("id"));
 		HttpSession session = request.getSession();
 		String mode = null;
-
-		int permission = Integer.parseInt(request.getParameter("permission"));
+		String[] value = request.getParameter("id").split(",");
+		int permission = Integer.parseInt(value[1]);
 
 		switch(permission){
 		case 1:
@@ -49,10 +49,11 @@ public class Delete extends HttpServlet {
 			List<Comment> comments = new MessageService().getComment();
 			request.setAttribute("comments", comments);
 			request.getRequestDispatcher("/top.jsp").forward(request, response);
+			return;
 		}
 
 
-		new MessageService().delete(Integer.parseInt(request.getParameter("id")), operation, mode);
+		new MessageService().delete(Integer.parseInt(value[0]), operation, mode);
 
 
 		List<String> categories = new MessageService().getCategories();
