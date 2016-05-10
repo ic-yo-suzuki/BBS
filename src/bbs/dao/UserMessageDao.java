@@ -65,6 +65,7 @@ public class UserMessageDao {
 				message.setDepartmentId(departmentId);
 				message.setUserId(userId);
 				message.setElapsedTime(elapsedTime);
+				message.setElapsedTimeText(elapsedTime);
 
 				ret.add(message);
 

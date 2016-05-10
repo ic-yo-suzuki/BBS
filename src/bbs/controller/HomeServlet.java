@@ -29,15 +29,15 @@ public class HomeServlet extends HttpServlet {
 
 
 		int[] userPostCount = new MessageService().getUserPostCount(user.getId());
-
 		int[] branchPostCount = new MessageService().getBranchPostCount(user.getId());
+		request.setAttribute("userPostCount", userPostCount);
+		request.setAttribute("branchPostCount", branchPostCount);
 
 		request.setAttribute("loginUser", user);
 
 		request.setAttribute("messages", messages);
 		request.setAttribute("categories", categories);
-		request.setAttribute("userPostCount", userPostCount);
-		request.setAttribute("branchPostCount", branchPostCount);
+
 		List<Comment> comments = new MessageService().getComment();
 		request.setAttribute("comments", comments);
 		request.getRequestDispatcher("/top.jsp").forward(request, response);

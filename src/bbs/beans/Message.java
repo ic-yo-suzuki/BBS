@@ -88,14 +88,25 @@ public class Message implements Serializable {
 
 		if(elapsedTime / 60 < 1){
 			this.elapsedTimeText = String.valueOf(elapsedTime) + "秒前";
-		}else if(elapsedTime / 60 >= 1){
-			this.elapsedTimeText = String.valueOf(elapsedTime) + "分前";
-		}else if(elapsedTime / 3600 >= 1){
-			this.elapsedTimeText = String.valueOf(elapsedTime) + "時間前";
-		}else if(elapsedTime / 86400 >= 1){
-			this.elapsedTimeText = String.valueOf(elapsedTime) + "日前";
-		}else if(elapsedTime / 604800 >= 1){
-			this.elapsedTimeText = String.valueOf(elapsedTime) + "週間前";
 		}
+		if(elapsedTime / 60 >= 1){
+			this.elapsedTimeText = String.valueOf(elapsedTime / 60) + "分前";
+		}
+		if(elapsedTime / 3600 >= 1){
+			this.elapsedTimeText = String.valueOf(elapsedTime / 3600) + "時間前";
+		}
+		if(elapsedTime / 86400 >= 1){
+			this.elapsedTimeText = String.valueOf(elapsedTime / 86400) + "日前";
+		}
+		if(elapsedTime / 604800 >= 1){
+			this.elapsedTimeText = String.valueOf(elapsedTime / 604800) + "週間前";
+		}
+		if(elapsedTime / 2592000 >= 1){
+			this.elapsedTimeText = String.valueOf(elapsedTime / 2592000) + "ヶ月前";
+		}
+		if(elapsedTime / 31536000 >= 1){
+			this.elapsedTimeText = String.valueOf(elapsedTime / 31536000) + "年前";
+		}
+		System.out.println(this.elapsedTimeText);
 	}
 }
