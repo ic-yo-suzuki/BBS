@@ -9,7 +9,6 @@ import java.util.List;
 
 import bbs.beans.Comment;
 import bbs.beans.Message;
-import bbs.beans.UserMessage;
 import bbs.dao.MessageDao;
 import bbs.dao.UserMessageDao;
 
@@ -36,9 +35,9 @@ public class MessageService {
 		}
 	}
 
-	public List<UserMessage> getMessage() {
+	public List<Message> getMessage() {
 		Connection connection = null;
-		List<UserMessage> ret = null;
+		List<Message> ret = null;
 		try{
 			connection = getConnection();
 			UserMessageDao messageDao = new UserMessageDao();
@@ -78,9 +77,9 @@ public class MessageService {
 	return ret;
 	}
 
-	public List<UserMessage> getMessage(String category) {
+	public List<Message> getMessage(String category) {
 		Connection connection = null;
-		List<UserMessage> ret = null;
+		List<Message> ret = null;
 		try{
 			connection = getConnection();
 			UserMessageDao messageDao = new UserMessageDao();
@@ -100,9 +99,9 @@ public class MessageService {
 		return ret;
 	}
 
-	public List<UserMessage> getMessage(String[] selectedDates) {
+	public List<Message> getMessage(String[] selectedDates) {
 		Connection connection = null;
-		List<UserMessage> ret = null;
+		List<Message> ret = null;
 		try{
 			connection = getConnection();
 			UserMessageDao messageDao = new UserMessageDao();
@@ -122,9 +121,9 @@ public class MessageService {
 		return ret;
 	}
 
-	public List<UserMessage> getMessage(String category, String[] selectedDates) {
+	public List<Message> getMessage(String category, String[] selectedDates) {
 		Connection connection = null;
-		List<UserMessage> ret = null;
+		List<Message> ret = null;
 		try{
 			connection = getConnection();
 			UserMessageDao messageDao = new UserMessageDao();
@@ -144,18 +143,12 @@ public class MessageService {
 		return ret;
 	}
 
-	public void delete(int id, String operation, String mode){
+	public void delete(int id){
 		Connection connection = null;
 
 		try{
 			connection = getConnection();
-			if(mode.equals("post")){
-				String query = "delete from comments ";
-				new MessageDao().delete(connection, id, operation, query);
-			}else{
-				new MessageDao().delete(connection, id, operation);
-			}
-
+			new MessageDao().postDelete(connection, id);
 			commit(connection);
 		}catch(RuntimeException e){
 			rollback(connection);
@@ -229,6 +222,69 @@ public class MessageService {
 			close(connection);
 		}
 	return ngWord;
+	}
+
+	public void deleteComment(int id) {
+		Connection connection = null;
+
+		try{
+			connection = getConnection();
+			new MessageDao().deleteComment(connection, id);
+			commit(connection);
+		}catch(RuntimeException e){
+			rollback(connection);
+			throw e;
+		}catch(Error e){
+			rollback(connection);
+			throw e;
+		} catch (Exception e) {
+
+		}finally{
+			close(connection);
+		}
+	}
+
+	public int[] getUserPostCount(int id){
+		Connection connection = null;
+		int[] count = new int[2];
+		try{
+			connection = getConnection();
+
+			count = new MessageDao().getUserPostCount(connection , id);
+			commit(connection);
+		}catch(RuntimeException e){
+			rollback(connection);
+			throw e;
+		}catch(Error e){
+			rollback(connection);
+			throw e;
+		} catch (Exception e) {
+
+		}finally{
+			close(connection);
+		}
+		return count;
+	}
+
+	public int[] getBranchPostCount(int id){
+		Connection connection = null;
+		int[] count = new int[2];
+		try{
+			connection = getConnection();
+			count = new MessageDao().getBranchPostCount(connection , id);
+			commit(connection);
+		}catch(RuntimeException e){
+			rollback(connection);
+			throw e;
+		}catch(Error e){
+			rollback(connection);
+			throw e;
+		} catch (Exception e) {
+
+		}finally{
+			close(connection);
+		}
+		return count;
 	}
 
 

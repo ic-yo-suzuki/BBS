@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bbs.beans.Comment;
+import bbs.beans.Message;
 import bbs.beans.User;
-import bbs.beans.UserMessage;
 import bbs.service.MessageService;
 
 @WebServlet(urlPatterns = {"/top"})
@@ -25,12 +25,19 @@ public class HomeServlet extends HttpServlet {
 
 		List<String> categories = new MessageService().getCategories();
 		request.setAttribute("categories", categories);
-		List<UserMessage> messages =  new MessageService().getMessage();
+		List<Message> messages =  new MessageService().getMessage();
+
+
+		int[] userPostCount = new MessageService().getUserPostCount(user.getId());
+
+		int[] branchPostCount = new MessageService().getBranchPostCount(user.getId());
 
 		request.setAttribute("loginUser", user);
 
 		request.setAttribute("messages", messages);
 		request.setAttribute("categories", categories);
+		request.setAttribute("userPostCount", userPostCount);
+		request.setAttribute("branchPostCount", branchPostCount);
 		List<Comment> comments = new MessageService().getComment();
 		request.setAttribute("comments", comments);
 		request.getRequestDispatcher("/top.jsp").forward(request, response);

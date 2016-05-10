@@ -11,15 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bbs.beans.Comment;
-import bbs.beans.UserMessage;
+import bbs.beans.Message;
 
 public class UserMessageDao {
 
 	private static final String FIXED_STRING = "select posts.id as post_id, users.id as user_id, branch_id, department_id, users.name as name, title, text, category, insert_date, timestampdiff(SECOND, posts.insert_date, CURRENT_TIMESTAMP) as elapsed_time from posts inner join users on posts.user_id = users.id ";
 
-	public List<UserMessage> getUserMessages(Connection connection) throws Exception{
+	public List<Message> getUserMessages(Connection connection) throws Exception{
 		PreparedStatement ps  = null;
-		List<UserMessage> ret = null;
+		List<Message> ret = null;
 		try{
 			StringBuilder sql = new StringBuilder();
 			sql.append(FIXED_STRING);
@@ -37,8 +37,8 @@ public class UserMessageDao {
 		return ret;
 	}
 
-	public List<UserMessage> toUserMessageList(ResultSet rs) throws SQLException {
-		List<UserMessage> ret = new ArrayList<UserMessage>();
+	public List<Message> toUserMessageList(ResultSet rs) throws SQLException {
+		List<Message> ret = new ArrayList<Message>();
 		try{
 
 			while(rs.next()){
@@ -52,7 +52,7 @@ public class UserMessageDao {
 
 				String text = rs.getString("text");
 				Timestamp insertDate = rs.getTimestamp("insert_date");
-				UserMessage message = new UserMessage();
+				Message message = new Message();
 				long elapsedTime = rs.getLong("elapsed_time");
 
 				message.setId(id);
@@ -76,9 +76,9 @@ public class UserMessageDao {
 
 	}
 
-	public List<UserMessage> getUserMessages(Connection connection, String category) throws SQLException {
+	public List<Message> getUserMessages(Connection connection, String category) throws SQLException {
 		PreparedStatement ps  = null;
-		List<UserMessage> ret = null;
+		List<Message> ret = null;
 		try{
 			StringBuilder sql = new StringBuilder();
 			sql.append(FIXED_STRING);
@@ -95,9 +95,9 @@ public class UserMessageDao {
 		return ret;
 	}
 
-	public List<UserMessage> getUserMessages(Connection connection, String[] selectedDates) throws SQLException {
+	public List<Message> getUserMessages(Connection connection, String[] selectedDates) throws SQLException {
 		PreparedStatement ps  = null;
-		List<UserMessage> ret = null;
+		List<Message> ret = null;
 		StringBuilder sql = new StringBuilder();
 		sql.append(FIXED_STRING);
 
@@ -146,9 +146,9 @@ public class UserMessageDao {
 		return ret;
 	}
 
-	public List<UserMessage> getUserMessages(Connection connection, String category, String[] selectedDates) {
+	public List<Message> getUserMessages(Connection connection, String category, String[] selectedDates) {
 		PreparedStatement ps  = null;
-		List<UserMessage> ret = null;
+		List<Message> ret = null;
 		try{
 			StringBuilder sql = new StringBuilder();
 			sql.append(FIXED_STRING);

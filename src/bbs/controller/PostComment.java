@@ -15,8 +15,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 
 import bbs.beans.Comment;
+import bbs.beans.Message;
 import bbs.beans.User;
-import bbs.beans.UserMessage;
 import bbs.service.MessageService;
 
 @WebServlet(urlPatterns = {"/postComment"})
@@ -48,8 +48,12 @@ public class PostComment extends HttpServlet {
 		}
 		List<String> categories = new MessageService().getCategories();
 		session.setAttribute("categories", categories);
-		List<UserMessage> userMessages =  new MessageService().getMessage();
+		List<Message> userMessages =  new MessageService().getMessage();
 		List<Comment> comments = new MessageService().getComment();
+		int[] userPostCount = new MessageService().getUserPostCount(user.getId());
+		int[] branchPostCount = new MessageService().getBranchPostCount(user.getId());
+		session.setAttribute("userPostCount", userPostCount);
+		session.setAttribute("branchPostCount", branchPostCount);
 		session.setAttribute("loginUser", user);
 		session.setAttribute("messages", userMessages);
 		session.setAttribute("comments", comments);
@@ -58,6 +62,8 @@ public class PostComment extends HttpServlet {
 		session.removeAttribute("comments");
 		session.removeAttribute("messages");
 		session.removeAttribute("categories");
+		session.removeAttribute("userPostCount");
+		session.removeAttribute("branchPostCount");
 }
 
 	private boolean isValid(HttpServletRequest request, List<String> messages) {
@@ -70,7 +76,6 @@ public class PostComment extends HttpServlet {
 		}
 		if(isExistNgWord(request.getParameter("comment"))){
 			messages.add("使うことの出来ないキーワードが含まれています");
-			System.out.println("NGワード");
 		}
 
 		if(messages.size() == 0){
@@ -82,15 +87,10 @@ public class PostComment extends HttpServlet {
 
 	private boolean isExistNgWord(String text){
 		List<String> ngWord = new MessageService().getNgWord();
-		System.out.println(ngWord.size());
 		boolean flg = false;
-		System.out.println(flg);
-
 		for(String s : ngWord){
-			System.out.println("本文：" + text + "　NGワード：" + s);
 			if(text.indexOf(s) != -1){
 				flg = true;
-				System.out.println("NGワード発見：" + text.indexOf(s));
 			}
 		}
 		return flg;

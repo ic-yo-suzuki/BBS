@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import bbs.beans.Comment;
 import bbs.beans.User;
-import bbs.beans.UserMessage;
+import bbs.beans.Message;
 import bbs.service.MessageService;
 
 @WebFilter(urlPatterns = {"/signup", "/usermanager", "/edit"})
@@ -34,7 +34,7 @@ public class PermissionFilter implements Filter{
 				request.setAttribute("errorMessages", "この操作に対する権限がありません");
 				List<String> categories = new MessageService().getCategories();
 				request.setAttribute("categories", categories);
-				List<UserMessage> messages =  new MessageService().getMessage();
+				List<Message> messages =  new MessageService().getMessage();
 				request.setAttribute("loginUser", user);
 				request.setAttribute("messages", messages);
 				request.setAttribute("categories", categories);

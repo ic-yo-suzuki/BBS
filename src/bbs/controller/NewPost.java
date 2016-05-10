@@ -46,8 +46,6 @@ public class NewPost extends HttpServlet {
 			message.setCategory(request.getParameter("category"));
 		}
 
-
-
 		if(isValid(request, messages, message)){
 			try {
 				new MessageService().register(message);
@@ -94,7 +92,6 @@ public class NewPost extends HttpServlet {
 
 		if(isExistNgWord(message.getText())){
 			messages.add("使うことの出来ないキーワードが含まれています");
-			System.out.println("NGワード");
 		}
 		if(messages.size() == 0){
 			return true;
@@ -105,10 +102,7 @@ public class NewPost extends HttpServlet {
 
 	private boolean isExistNgWord(String text){
 		List<String> ngWord = new MessageService().getNgWord();
-		System.out.println(ngWord.size());
 		boolean flg = false;
-		System.out.println(flg);
-
 		for(String s : ngWord){
 			if(text.indexOf(s) != -1){
 				flg = true;

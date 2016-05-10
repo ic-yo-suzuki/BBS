@@ -83,6 +83,19 @@
 		</form>
 
 		</div>
+		<table class = "postCount">
+			<th></th>
+			<th>記事投稿数</th>
+			<th>コメント投稿数</th>
+
+			<tr>
+				<td><c:out value = "${loginUser.name }"></c:out>さんの投稿件数</td>
+				<td><c:out value = "${userPostCount[0] }" /></td><td><c:out value = "${userPostCount[1] }" /></td>
+			</tr>
+			<tr><td><c:out value = "${loginUser.branchName }"></c:out>の投稿件数</td>
+				<td><c:out value = "${branchPostCount[0] }" /></td><td><c:out value = "${branchPostCount[1] }" /></td>
+			</tr>
+		</table>
 
 		<div class = "messages">
 			<c:forEach items = "${messages }" var = "message">
@@ -104,6 +117,7 @@
 					</td></tr>
 					 <tr><td>投稿日時</td><td><fmt:formatDate value="${message.insertDate }" pattern ="yyyy/MM/dd HH:mm:ss" />
 					 	<c:choose>
+							<c:when test="${(message.elapsedTime / (86400 * 7)) >= 1 }">(<fmt:formatNumber value ="${message.elapsedTime / (86400 * 7 ) % 86400 }" pattern = "##" />週間前)</c:when>
 					 		<c:when test="${(message.elapsedTime / 86400) >= 1 }">(<fmt:formatNumber value ="${message.elapsedTime / 86400 }" pattern = "##" />日前)</c:when>
 					 		<c:when test = "${(message.elapsedTime / 3600) >= 1 }">(<fmt:formatNumber value ="${message.elapsedTime / 3600 }" pattern = "##" />時間前)</c:when>
 							<c:when test = "${(message.elapsedTime / 60) >= 1 }">(<fmt:formatNumber value ="${message.elapsedTime / 60 }" pattern = "##" />分前)</c:when>
@@ -113,8 +127,8 @@
 
 
 					<c:if test = "${(message.userId == loginUser.id) || (loginUser.departmentId == 2) || (message.branchId == loginUser.branchId && loginUser.departmentId == 3) }">
-						<form action = "delete" method = "post">
-							<tr><td colspan = "2"><button type = "submit" name = "id" value = "${message.id },1"  onClick = "return confirm('この投稿を削除します。よろしいですか？')" >投稿を削除する</button>
+						<form action = "deletePost" method = "post">
+							<tr><td colspan = "2"><button type = "submit" name = "id" value = "${message.id }"  onClick = "return confirm('この投稿を削除します。よろしいですか？')" >投稿を削除する</button>
 
 						</form>
 					</c:if>
@@ -135,6 +149,7 @@
 										</c:forTokens></td></tr>
 									<tr><td>投稿日時</td><td><fmt:formatDate value= "${comment.insertDate }" pattern ="yyyy/MM/dd HH:mm:ss" />
 									<c:choose>
+										<c:when test="${(comment.elapsedTime / (86400 * 7)) >= 1 }">(<fmt:formatNumber value ="${comment.elapsedTime / (86400 * 7 ) % 86400 }" pattern = "##" />週間前)</c:when>
 								 		<c:when test="${(comment.elapsedTime / 86400) >= 1 }">(<fmt:formatNumber value ="${comment.elapsedTime / 86400 }" pattern = "##" />日前)</c:when>
 								 		<c:when test = "${(comment.elapsedTime / 3600) >= 1 }">(<fmt:formatNumber value ="${comment.elapsedTime / 3600 }" pattern = "##" />時間前)</c:when>
 										<c:when test = "${(comment.elapsedTime / 60) >= 1 }">(<fmt:formatNumber value ="${comment.elapsedTime / 60 }" pattern = "##" />分前)</c:when>
@@ -142,12 +157,11 @@
 					 				</c:choose>
 									</td></tr>
 									<c:if test = "${(comment.userId == loginUser.id) || (loginUser.departmentId == 2) || (comment.branchId == loginUser.branchId && loginUser.departmentId == 3) }">
-										<form action = "delete" method = "post">
-											<tr><td colspan = "2"><button type = "submit" name = "id" value = "${comment.id },2"  onClick = "return confirm('このコメントを削除します。よろしいですか？')" >コメントを削除する</button> </td></tr>
+										<form action = "deleteComment" method = "post">
+											<tr><td colspan = "2"><button type = "submit" name = "id" value = "${comment.id }"  onClick = "return confirm('このコメントを削除します。よろしいですか？')" >コメントを削除する</button> </td></tr>
 										</form>
 									</c:if>
-								<hr>
-								投稿番号：<%= count %><br>
+								<hr>投稿番号：<%= count %><br>
 								</table>
 							<% count++; %>
 							</c:if>

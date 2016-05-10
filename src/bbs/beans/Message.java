@@ -3,11 +3,13 @@ package bbs.beans;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Message implements Serializable{
+
+public class Message implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private int id, branchId, departmentId;
-	private String title, text, category;
+	private String category, name, text, title;
+	private long elapsedTime;
+	private int id, branchId, departmentId, userId;
 	private Date insertDate;
 
 	public int getId(){
@@ -17,19 +19,34 @@ public class Message implements Serializable{
 		this.id = id;
 	}
 
+	public int getUserId(){
+		return userId;
+	}
+	public void setUserId(int userId){
+		this.userId = userId;
+	}
+
+	public String getName(){
+		return name;
+	}
+	public void setName(String name){
+		this.name = name;
+	}
+
 	public String getTitle(){
 		return title;
 	}
 	public void setTitle(String title){
 		this.title = title;
 	}
-
 	public String getText(){
 		return text;
 	}
+
 	public void setText(String text){
 		this.text = text;
 	}
+
 
 	public String getCategory(){
 		return category;
@@ -38,10 +55,10 @@ public class Message implements Serializable{
 		this.category = category;
 	}
 
+
 	public Date getInsertDate(){
 		return insertDate;
 	}
-
 	public void setInsertDate(Date insertDate){
 		this.insertDate = insertDate;
 	}
@@ -60,6 +77,11 @@ public class Message implements Serializable{
 		this.departmentId = departmentId;
 	}
 
-
+	public long getElapsedTime(){
+		return elapsedTime;
+	}
+	public void setElapsedTime(long elapsedTime){
+		this.elapsedTime = elapsedTime;
+	}
 
 }

@@ -99,7 +99,7 @@ public class MessageDao {
 	}
 
 
-	public void delete(Connection connection, int id, String operation, String query) {
+	public void postDelete(Connection connection, int id) {
 		PreparedStatement ps_post = null;
 		PreparedStatement ps_comment = null;
 
@@ -107,9 +107,9 @@ public class MessageDao {
 			StringBuilder sql_post = new StringBuilder();
 			StringBuilder sql_comment = new StringBuilder();
 
-			sql_post.append(operation);
+			sql_post.append("delete from posts ");
 			sql_post.append("where id = ?;");
-			sql_comment.append(query);
+			sql_comment.append("delete from comments ");
 			sql_comment.append("where post_id = ?;");
 			ps_post = connection.prepareStatement(sql_post.toString());
 			ps_comment = connection.prepareStatement(sql_comment.toString());
@@ -148,5 +148,111 @@ public class MessageDao {
 
 		return ngWord;
 	}
+
+
+	public void deleteComment(Connection connection, int id) {
+		PreparedStatement ps = null;
+		try{
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("delete from comments ");
+			sql.append("where id = ?;");
+			ps = connection.prepareStatement(sql.toString());
+
+			ps.setInt(1, id);
+
+			ps.executeUpdate();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			close(ps);
+		}
+	}
+
+
+	public int[] getUserPostCount(Connection connection, int id) {
+		PreparedStatement ps_post = null;
+		PreparedStatement ps_comment = null;
+
+		int[] count = new int[2];
+		try{
+			StringBuilder sql_post = new StringBuilder();
+			StringBuilder sql_comment = new StringBuilder();
+
+			sql_post.append("select count(*) as count from posts ");
+			sql_post.append("where user_id = ?;");
+
+			ps_post = connection.prepareStatement(sql_post.toString());
+			ps_post.setInt(1, id);
+
+
+
+			sql_comment.append("select count(*) as count from comments ");
+			sql_comment.append("where user_id = ?;");
+
+			ps_comment = connection.prepareStatement(sql_comment.toString());
+			ps_comment.setInt(1, id);
+
+
+
+			ResultSet rs = ps_post.executeQuery();
+			rs.next();
+			count[0] = rs.getInt("count");
+
+			rs = ps_comment.executeQuery();
+			rs.next();
+			count[1] = rs.getInt("count");
+
+
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			close(ps_post);
+			close(ps_comment);
+		}
+		return count;
+	}
+
+	public int[] getBranchPostCount(Connection connection, int id) {
+		PreparedStatement ps_post = null;
+		PreparedStatement ps_comment = null;
+
+		int[] count = new int[2];
+		try{
+			StringBuilder sql_post = new StringBuilder();
+			StringBuilder sql_comment = new StringBuilder();
+
+			sql_post.append("select count(posts.text) as count from users inner join posts on users.id = posts.user_id ");
+			sql_post.append("where branch_id = (select branch_id from users where id = ?);");
+
+			ps_post = connection.prepareStatement(sql_post.toString());
+			ps_post.setInt(1, id);
+
+
+			sql_comment.append("select count(comments.text) as count from users inner join comments on users.id = comments.user_id ");
+			sql_comment.append("where branch_id = (select branch_id from users where id = ?);");
+
+			ps_comment = connection.prepareStatement(sql_comment.toString());
+			ps_comment.setInt(1, id);
+
+
+
+			ResultSet rs = ps_post.executeQuery();
+			rs.next();
+			count[0] = rs.getInt("count");
+
+			rs = ps_comment.executeQuery();
+			rs.next();
+			count[1] = rs.getInt("count");
+
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			close(ps_post);
+			close(ps_comment);
+		}
+		return count;
+	}
+
 
 }

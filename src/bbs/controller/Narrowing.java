@@ -10,7 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bbs.beans.Comment;
-import bbs.beans.UserMessage;
+import bbs.beans.Message;
+import bbs.beans.User;
 import bbs.service.MessageService;
 
 @WebServlet(urlPatterns = {"/narrowing"})
@@ -23,6 +24,7 @@ public class Narrowing extends HttpServlet {
 		String category = request.getParameter("category");
 		String dateStart = request.getParameter("dateStart");
 		String dateEnd = request.getParameter("dateEnd");
+		User user = (User) request.getSession().getAttribute("loginUser");
 
 
 	 // 開始日時が終了日時よりも後ろにあった場合、開始日時と終了日時を入れ替え
@@ -42,7 +44,7 @@ public class Narrowing extends HttpServlet {
 		request.setAttribute("categories", categories);
 
 		request.setAttribute("selectedCategory", category);
-		List<UserMessage> messages;
+		List<Message> messages;
 
 		if(!category.equals("カテゴリを選択してください") && ((!dateStart.isEmpty()) || (!dateEnd.isEmpty()))){
 			messages =  new MessageService().getMessage(category, selectedDates);
@@ -56,6 +58,10 @@ public class Narrowing extends HttpServlet {
 		request.setAttribute("messages", messages);
 		List<Comment> comments = new MessageService().getComment();
 		request.setAttribute("comments", comments);
+		int[] userPostCount = new MessageService().getUserPostCount(user.getId());
+		int[] branchPostCount = new MessageService().getBranchPostCount(user.getId());
+		request.setAttribute("userPostCount", userPostCount);
+		request.setAttribute("branchPostCount", branchPostCount);
 		request.getRequestDispatcher("/top.jsp").forward(request, response);
 
 	}
