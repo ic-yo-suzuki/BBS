@@ -8,6 +8,7 @@ public class Message implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String category, name, text, title;
+	private String elapsedTimeText;
 	private long elapsedTime;
 	private int id, branchId, departmentId, userId;
 	private Date insertDate;
@@ -83,5 +84,18 @@ public class Message implements Serializable {
 	public void setElapsedTime(long elapsedTime){
 		this.elapsedTime = elapsedTime;
 	}
+	public void setElapsedTimeText(long elapsedTime){
 
+		if(elapsedTime / 60 < 1){
+			this.elapsedTimeText = String.valueOf(elapsedTime) + "秒前";
+		}else if(elapsedTime / 60 >= 1){
+			this.elapsedTimeText = String.valueOf(elapsedTime) + "分前";
+		}else if(elapsedTime / 3600 >= 1){
+			this.elapsedTimeText = String.valueOf(elapsedTime) + "時間前";
+		}else if(elapsedTime / 86400 >= 1){
+			this.elapsedTimeText = String.valueOf(elapsedTime) + "日前";
+		}else if(elapsedTime / 604800 >= 1){
+			this.elapsedTimeText = String.valueOf(elapsedTime) + "週間前";
+		}
+	}
 }

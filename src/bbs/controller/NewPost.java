@@ -17,6 +17,7 @@ import bbs.beans.Comment;
 import bbs.beans.Message;
 import bbs.beans.User;
 import bbs.service.MessageService;
+import bbs.utils.Trimming;
 
 @WebServlet(urlPatterns = { "/newPost"})
 
@@ -41,7 +42,9 @@ public class NewPost extends HttpServlet {
 		message.setId(user.getId());
 		message.setTitle(request.getParameter("title"));
 		if(request.getParameter("newCategory").length() != 0){
-			message.setCategory( request.getParameter("newCategory"));
+			new Trimming();
+			String category = Trimming.trim(request.getParameter("newCategory").toString());
+			message.setCategory(category);
 		}else{
 			message.setCategory(request.getParameter("category"));
 		}

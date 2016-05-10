@@ -55,7 +55,8 @@
 		<div class = "narrowing">
 		<form action = "narrowing" method = "post"  style = "display:inline">
 			<b>投稿の絞込み検索</b><p>
-			カテゴリー
+			<ul>
+			<li>カテゴリー</li>
 			<select name = "category">
 			<c:forEach items = "${categories }" var = "category">
 				<c:if test ="${category == selectedCategory }">
@@ -73,9 +74,10 @@
 			});
 			</script></p>
 			<p>
-			日付<br />
-			開始日時：<input type = "text" name = "dateStart" id = "dateStart" value = "${dates[0] }">
-			終了日時：<input type = "text" name = "dateEnd"   id = "dateEnd"   value = "${dates[1] }">
+			<li>日付<br /></li>
+
+			開始日時<input type = "text" name = "dateStart" id = "dateStart" value = "${dates[0] }">
+			終了日時<input type = "text" name = "dateEnd"   id = "dateEnd"   value = "${dates[1] }">(クリックするとカレンダーが表示されます)
 			<p></p>
 			<input type = "submit" value = "指定した条件で検索" >
 		</form>
@@ -101,6 +103,11 @@
 
 		<div class = "messages">
 		<b>投稿一覧</b>
+		<c:if test="${empty messages }">
+			<ul type = "circle">
+				<li><b>投稿がありません</b></li>
+			</ul>
+		</c:if>
 			<c:forEach items = "${messages }" var = "message">
 				<table class = "message">
 
@@ -120,11 +127,11 @@
 					</td></tr>
 					 <tr><td>投稿日時</td><td><fmt:formatDate value="${message.insertDate }" pattern ="yyyy/MM/dd HH:mm:ss" />
 					 	<c:choose>
-							<c:when test="${(message.elapsedTime / (86400 * 7)) >= 1 }">(<fmt:formatNumber value ="${message.elapsedTime / (86400 * 7 ) % 86400 }" pattern = "##" />週間前)</c:when>
-					 		<c:when test="${(message.elapsedTime / 86400) >= 1 }">(<fmt:formatNumber value ="${message.elapsedTime / 86400 }" pattern = "##" />日前)</c:when>
-					 		<c:when test = "${(message.elapsedTime / 3600) >= 1 }">(<fmt:formatNumber value ="${message.elapsedTime / 3600 }" pattern = "##" />時間前)</c:when>
-							<c:when test = "${(message.elapsedTime / 60) >= 1 }">(<fmt:formatNumber value ="${message.elapsedTime / 60 }" pattern = "##" />分前)</c:when>
-							<c:otherwise>(<fmt:formatNumber value ="${message.elapsedTime}" pattern = "##" />秒前)</c:otherwise>
+							<c:when test = "${message.elapsedTime / (86400 * 7) >= 1 }">(<fmt:formatNumber value ="${message.elapsedTime / (86400 * 7) }" pattern = "##.#" />週間前)</c:when>
+					 		<c:when test="${(message.elapsedTime / 86400) >= 1 }">(<fmt:formatNumber value ="${message.elapsedTime / 86400 }" pattern = "##.#" />日前)</c:when>
+					 		<c:when test = "${(message.elapsedTime / 3600) >= 1 }">(<fmt:formatNumber value ="${message.elapsedTime / 3600 }" pattern = "##.#" />時間前)</c:when>
+							<c:when test = "${(message.elapsedTime / 60) >= 1 }">(<fmt:formatNumber value ="${message.elapsedTime / 60 }" pattern = "##.#" />分前)</c:when>
+							<c:otherwise>(<fmt:formatNumber value ="${message.elapsedTime}" pattern = "##.#" />秒前)</c:otherwise>
 					 	</c:choose>
 					 </td></tr>
 
@@ -152,11 +159,11 @@
 										</c:forTokens></td></tr>
 									<tr><td>投稿日時</td><td><fmt:formatDate value= "${comment.insertDate }" pattern ="yyyy/MM/dd HH:mm:ss" />
 									<c:choose>
-										<c:when test="${(comment.elapsedTime / (86400 * 7)) >= 1 }">(<fmt:formatNumber value ="${comment.elapsedTime / (86400 * 7 ) / 86400 }" pattern = "##" />週間前)</c:when>
-								 		<c:when test="${(comment.elapsedTime / 86400) >= 1 }">(<fmt:formatNumber value ="${comment.elapsedTime / 86400 }" pattern = "##" />日前)</c:when>
-								 		<c:when test = "${(comment.elapsedTime / 3600) >= 1 }">(<fmt:formatNumber value ="${comment.elapsedTime / 3600 }" pattern = "##" />時間前)</c:when>
-										<c:when test = "${(comment.elapsedTime / 60) >= 1 }">(<fmt:formatNumber value ="${comment.elapsedTime / 60 }" pattern = "##" />分前)</c:when>
-										<c:otherwise>(<fmt:formatNumber value ="${comment.elapsedTime}" pattern = "##" />秒前)</c:otherwise>
+										<c:when test = "${comment.elapsedTime / (86400 * 7) >= 1 }">(<fmt:formatNumber value ="${comment.elapsedTime / (86400 * 7) }" pattern = "##.#" />週間前)</c:when>
+								 		<c:when test="${(comment.elapsedTime / 86400) >= 1 }">(<fmt:formatNumber value ="${comment.elapsedTime / 86400 }" pattern = "##.#" />日前)</c:when>
+								 		<c:when test = "${(comment.elapsedTime / 3600) >= 1 }">(<fmt:formatNumber value ="${comment.elapsedTime / 3600 }" pattern = "##.#" />時間前)</c:when>
+										<c:when test = "${(comment.elapsedTime / 60) >= 1 }">(<fmt:formatNumber value ="${comment.elapsedTime / 60 }" pattern = "##.#" />分前)</c:when>
+										<c:otherwise>(<fmt:formatNumber value ="${comment.elapsedTime}" pattern = "##.#" />秒前)</c:otherwise>
 					 				</c:choose>
 									</td></tr>
 									<c:if test = "${(comment.userId == loginUser.id) || (loginUser.departmentId == 2) || (comment.branchId == loginUser.branchId && loginUser.departmentId == 3) }">
