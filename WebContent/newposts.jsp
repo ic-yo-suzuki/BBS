@@ -12,7 +12,9 @@
 <link rel = "stylesheet" type = "text/css" href = "stylesheet/style.css">
 </head>
 <body>
-
+	<div class = "header">
+			<a href="./top">戻る</a>
+	</div>
 	<div class = "main-contents">
 		<c:if test = "${not empty errorMessages }">
 			<div class = "errorMessages">
@@ -28,7 +30,7 @@
 		<p>
 		<table class = "newpost">
 		<form action = "newPost" method = "post">
-			<tr><td>カテゴリー(必須)</td><td>
+			<tr><td>カテゴリー(必須)<br>カテゴリーの新規作成</td><td>
 			<select name = "category">
 				<c:forEach items = "${categories }" var = "category">
 					<c:if test ="${category == inputValues.category }">
@@ -39,12 +41,12 @@
 					</c:if>
 				</c:forEach>
 
-			</select>
-			カテゴリーの新規作成
-			<input name = "newCategory" id = "newCategory" value = "${inputValues.category }">
+			</select><br>
+
+			<input name = "newCategory" id = "newCategory" value = "${inputValues.category }">(新たに追加するカテゴリ名を10文字以内で入力してください)
 			</td></tr>
 			<tr><td>投稿者</td><td><c:out value = "${loginUser.name }"></c:out>さん(自動で追加されます)</td></tr>
-			<tr><td>タイトル(必須)</td><td>
+			<tr><td>タイトル(必須)(50文字まで)</td><td>
 			<input name = "title" id = "title" value = "${inputValues.title }"></td></tr>
 			<tr><td>本文(1000文字まで)</td><td>
 			<textarea name = "message" cols = "80" rows = "10" class = "post-box" ><c:out value = "${inputValues.text }"></c:out></textarea>

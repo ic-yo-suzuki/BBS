@@ -16,12 +16,13 @@
 <body>
 	<div class ="main-contents">
 		<div class = "header">
+			<div class = "menu">
 			<a href = "top">ホーム</a>
 			<c:if test = "${loginUser.departmentId == 1 }">
 				<a href = "signup">ユーザ新規登録</a>
 			</c:if>
 
-		</div><p>
+		</div></div><p>
 		<hr>
 		ユーザ一覧
 		<div class = "userlist">

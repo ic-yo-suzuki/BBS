@@ -187,3 +187,7 @@ background: #fffafa;
 	background-color: #fff;
 	border: 1px solid #b9b9b9;
 }
+
+.userlist tr:nth-child(2n+1) td {
+    background: #F0FFFF;
+}

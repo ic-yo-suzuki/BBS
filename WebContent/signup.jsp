@@ -12,7 +12,9 @@
 </head>
 
 <body>
-	<div class = "site-box">
+	<div class = "header">
+			<a href="./usermanager">戻る</a>
+	</div>
 	<div class = "main-contents">
 		<c:if test = "${not empty errorMessages }">
 			<div class = "errorMessages">
@@ -76,9 +78,8 @@
 			</table>
 			<input type = "submit" value = "登録" /><br />
 
-			<a href="./usermanager">戻る</a>
 		</form>
 	</div>
-	</div>
+
 </body>
 </html>

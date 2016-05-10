@@ -12,6 +12,9 @@
 </head>
 
 <body>
+	<div class = "header">
+			<a href="./usermanager">戻る</a>
+	</div>
 	<div class = "main-contents">
 		<c:if test = "${not empty errorMessages }">
 			<div class = "errorMessages">
@@ -76,7 +79,7 @@
 			</table>
 			<button type = 'submit' name = 'userId' value = "${editUser.id }">編集の登録</button><br>
 		</form>
-		<a href="./usermanager">戻る</a>
+
 	</div>
 </body>
 </html>

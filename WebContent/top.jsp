@@ -25,7 +25,8 @@
 	<div class = "main-contents">
 		<div class = "header">
 			<div class = "menu">
-				<a href = "top">ホーム</a>
+
+				<a href = "newPost">新規投稿</a>
 				<c:if test = "${loginUser.departmentId == 1 }">
 					<a href = "usermanager">ユーザの管理</a>
 				</c:if>
@@ -36,7 +37,7 @@
 
 
 		<p>
-			<a href = "newPost">新規投稿</a>
+
 		</div>
 		<p>
 			<c:if test="${not empty errorMessages }">
@@ -53,8 +54,8 @@
 
 		<div class = "narrowing">
 		<form action = "narrowing" method = "post"  style = "display:inline">
-			投稿の絞込み検索<br>
-			カテゴリー<br>
+			<b>投稿の絞込み検索</b><p>
+			カテゴリー
 			<select name = "category">
 			<c:forEach items = "${categories }" var = "category">
 				<c:if test ="${category == selectedCategory }">
@@ -70,12 +71,12 @@
 				$("#dateStart").datepicker({maxDate: 0});
 				$("#dateEnd").datepicker({maxDate: 0});
 			});
-			</script>
+			</script></p>
 			<p>
 			日付<br />
 			開始日時：<input type = "text" name = "dateStart" id = "dateStart" value = "${dates[0] }">
 			終了日時：<input type = "text" name = "dateEnd"   id = "dateEnd"   value = "${dates[1] }">
-
+			<p></p>
 			<input type = "submit" value = "指定した条件で検索" >
 		</form>
 		<form action = "top" method = "get"  style = "display:inline">
@@ -97,7 +98,9 @@
 			</tr>
 		</table>
 
+
 		<div class = "messages">
+		<b>投稿一覧</b>
 			<c:forEach items = "${messages }" var = "message">
 				<table class = "message">
 
@@ -123,7 +126,7 @@
 							<c:when test = "${(message.elapsedTime / 60) >= 1 }">(<fmt:formatNumber value ="${message.elapsedTime / 60 }" pattern = "##" />分前)</c:when>
 							<c:otherwise>(<fmt:formatNumber value ="${message.elapsedTime}" pattern = "##" />秒前)</c:otherwise>
 					 	</c:choose>
-					 	</td></tr>
+					 </td></tr>
 
 
 					<c:if test = "${(message.userId == loginUser.id) || (loginUser.departmentId == 2) || (message.branchId == loginUser.branchId && loginUser.departmentId == 3) }">
@@ -149,7 +152,7 @@
 										</c:forTokens></td></tr>
 									<tr><td>投稿日時</td><td><fmt:formatDate value= "${comment.insertDate }" pattern ="yyyy/MM/dd HH:mm:ss" />
 									<c:choose>
-										<c:when test="${(comment.elapsedTime / (86400 * 7)) >= 1 }">(<fmt:formatNumber value ="${comment.elapsedTime / (86400 * 7 ) % 86400 }" pattern = "##" />週間前)</c:when>
+										<c:when test="${(comment.elapsedTime / (86400 * 7)) >= 1 }">(<fmt:formatNumber value ="${comment.elapsedTime / (86400 * 7 ) / 86400 }" pattern = "##" />週間前)</c:when>
 								 		<c:when test="${(comment.elapsedTime / 86400) >= 1 }">(<fmt:formatNumber value ="${comment.elapsedTime / 86400 }" pattern = "##" />日前)</c:when>
 								 		<c:when test = "${(comment.elapsedTime / 3600) >= 1 }">(<fmt:formatNumber value ="${comment.elapsedTime / 3600 }" pattern = "##" />時間前)</c:when>
 										<c:when test = "${(comment.elapsedTime / 60) >= 1 }">(<fmt:formatNumber value ="${comment.elapsedTime / 60 }" pattern = "##" />分前)</c:when>
