@@ -84,6 +84,11 @@ public class Message implements Serializable {
 	public void setElapsedTime(long elapsedTime){
 		this.elapsedTime = elapsedTime;
 	}
+
+	public String getElapsedTimeText(){
+		return elapsedTimeText;
+	}
+
 	public void setElapsedTimeText(long elapsedTime){
 
 		if(elapsedTime / 60 < 1){
@@ -107,6 +112,5 @@ public class Message implements Serializable {
 		if(elapsedTime / 31536000 >= 1){
 			this.elapsedTimeText = String.valueOf(elapsedTime / 31536000) + "年前";
 		}
-		System.out.println(this.elapsedTimeText);
 	}
 }

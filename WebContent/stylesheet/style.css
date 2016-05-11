@@ -19,8 +19,8 @@ background: #fffafa;
 	background:#e6e6fa;
 	width: 850px;
 	margin: 5px auto;
-
 	text-align: right;
+
 }
 
 .messages{
@@ -189,5 +189,28 @@ background: #fffafa;
 }
 
 .userlist tr:nth-child(2n+1) td {
+    background: #F0FFFF;
+}
+
+.ngwordlist{
+	width: 450px;
+	margin: 5px auto;
+	border-collapse: collapse;
+}
+.ngwordlist th{
+
+	padding: 6px;
+	text-align: center;
+	vertical-align: top;
+	color: #333;
+	background-color: #eee;
+	border: 1px solid #b9b9b9;
+}
+.ngwordlist td{
+	padding: 6px;
+	background-color: #fff;
+	border: 1px solid #b9b9b9;
+}
+.ngwordlist tr:nth-child(2n+1) td {
     background: #F0FFFF;
 }

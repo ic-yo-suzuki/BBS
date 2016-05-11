@@ -13,7 +13,7 @@ import bbs.beans.User;
 import bbs.service.UserService;
 
 @WebServlet(urlPatterns = {"/usermanager"})
-public class UserManagerServlet extends HttpServlet{
+public class ManageUserServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 
 	@Override

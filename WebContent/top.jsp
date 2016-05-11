@@ -30,6 +30,9 @@
 				<c:if test = "${loginUser.departmentId == 1 }">
 					<a href = "usermanager">ユーザの管理</a>
 				</c:if>
+				<c:if test = "${loginUser.departmentId == 2 }">
+					<a href = "ngwordmanager">NGワードの管理</a>
+				</c:if>
 				<a href = "logout">ログアウト</a>
 				<p>
 			</div>
@@ -125,14 +128,8 @@
 							<c:out value = "${splitedMessage }"></c:out><br>
 						</c:forTokens>
 					</td></tr>
-					 <tr><td>投稿日時</td><td><fmt:formatDate value="${message.insertDate }" pattern ="yyyy/MM/dd HH:mm:ss" />
-					 	<c:choose>
-							<c:when test = "${message.elapsedTime / (86400 * 7) >= 1 }">(<fmt:formatNumber value ="${message.elapsedTime / (86400 * 7) }" pattern = "##.#" />週間前)</c:when>
-					 		<c:when test="${(message.elapsedTime / 86400) >= 1 }">(<fmt:formatNumber value ="${message.elapsedTime / 86400 }" pattern = "##.#" />日前)</c:when>
-					 		<c:when test = "${(message.elapsedTime / 3600) >= 1 }">(<fmt:formatNumber value ="${message.elapsedTime / 3600 }" pattern = "##.#" />時間前)</c:when>
-							<c:when test = "${(message.elapsedTime / 60) >= 1 }">(<fmt:formatNumber value ="${message.elapsedTime / 60 }" pattern = "##.#" />分前)</c:when>
-							<c:otherwise>(<fmt:formatNumber value ="${message.elapsedTime}" pattern = "##.#" />秒前)</c:otherwise>
-					 	</c:choose>
+					 <tr><td>投稿日時</td><td><abbr title = "<fmt:formatDate value="${message.insertDate }" pattern ="yyyy/MM/dd HH:mm:ss" />"><c:out value = "${message.elapsedTimeText }" /></abbr>
+
 					 </td></tr>
 
 
@@ -157,14 +154,8 @@
 										<c:forTokens var = "splitedMessage" items = "${comment.text }" delims = "<%= lineSeparator %>">
 											<c:out value = "${splitedMessage }"></c:out><br>
 										</c:forTokens></td></tr>
-									<tr><td>投稿日時</td><td><fmt:formatDate value= "${comment.insertDate }" pattern ="yyyy/MM/dd HH:mm:ss" />
-									<c:choose>
-										<c:when test = "${comment.elapsedTime / (86400 * 7) >= 1 }">(<fmt:formatNumber value ="${comment.elapsedTime / (86400 * 7) }" pattern = "##.#" />週間前)</c:when>
-								 		<c:when test="${(comment.elapsedTime / 86400) >= 1 }">(<fmt:formatNumber value ="${comment.elapsedTime / 86400 }" pattern = "##.#" />日前)</c:when>
-								 		<c:when test = "${(comment.elapsedTime / 3600) >= 1 }">(<fmt:formatNumber value ="${comment.elapsedTime / 3600 }" pattern = "##.#" />時間前)</c:when>
-										<c:when test = "${(comment.elapsedTime / 60) >= 1 }">(<fmt:formatNumber value ="${comment.elapsedTime / 60 }" pattern = "##.#" />分前)</c:when>
-										<c:otherwise>(<fmt:formatNumber value ="${comment.elapsedTime}" pattern = "##.#" />秒前)</c:otherwise>
-					 				</c:choose>
+									<tr><td>投稿日時</td><td><abbr title = "<fmt:formatDate value= "${comment.insertDate }" pattern ="yyyy/MM/dd HH:mm:ss" />"><c:out value ="${comment.elapsedTimeText }" /></abbr>
+
 									</td></tr>
 									<c:if test = "${(comment.userId == loginUser.id) || (loginUser.departmentId == 2) || (comment.branchId == loginUser.branchId && loginUser.departmentId == 3) }">
 										<form action = "deleteComment" method = "post">

@@ -15,7 +15,7 @@ import bbs.beans.Message;
 import bbs.service.MessageService;
 
 @WebServlet(urlPatterns = {"/deleteComment"})
-public class DeleteComment extends HttpServlet {
+public class DeleteCommentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{

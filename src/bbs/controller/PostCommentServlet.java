@@ -16,12 +16,13 @@ import org.apache.commons.lang.StringUtils;
 
 import bbs.beans.Comment;
 import bbs.beans.Message;
+import bbs.beans.NgWord;
 import bbs.beans.User;
 import bbs.service.MessageService;
 
 @WebServlet(urlPatterns = {"/postComment"})
 
-public class PostComment extends HttpServlet {
+public class PostCommentServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)throws IOException, ServletException{
 		List<String> messages = new ArrayList<String>();
@@ -86,10 +87,10 @@ public class PostComment extends HttpServlet {
 	}
 
 	private boolean isExistNgWord(String text){
-		List<String> ngWord = new MessageService().getNgWord();
+		List<NgWord> ngWord = new MessageService().getNgWord();
 		boolean flg = false;
-		for(String s : ngWord){
-			if(text.indexOf(s) != -1){
+		for(NgWord n : ngWord){
+			if(text.indexOf(n.getWord()) != -1){
 				flg = true;
 			}
 		}

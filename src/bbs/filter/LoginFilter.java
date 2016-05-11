@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import bbs.beans.User;
 
-@WebFilter(urlPatterns = {"/top", "/newposts", "/signup", "/usermanager", "/edit"})
+@WebFilter(urlPatterns = {"/top", "/newposts", "/signup", "/usermanager", "/edit", "/ngwordmanager"})
 public class LoginFilter implements Filter {
 
 	@Override

@@ -16,8 +16,9 @@ import bbs.beans.Message;
 import bbs.beans.User;
 import bbs.service.MessageService;
 
-@WebFilter(urlPatterns = {"/signup", "/usermanager", "/edit"})
-public class PermissionFilter implements Filter{
+@WebFilter(urlPatterns = {"/ngwordmanager"})
+
+public class NgWordPermissionFilter implements Filter {
 
 	@Override
 	public void destroy() {
@@ -30,7 +31,7 @@ public class PermissionFilter implements Filter{
 			throws IOException, ServletException {
 		User user = (User)((HttpServletRequest)request).getSession().getAttribute("loginUser");
 		try{
-			if(user.getDepartmentId() != 1){
+			if(user.getDepartmentId() != 2){
 				request.setAttribute("errorMessages", "この操作に対する権限がありません");
 				List<String> categories = new MessageService().getCategories();
 				request.setAttribute("categories", categories);
@@ -47,10 +48,7 @@ public class PermissionFilter implements Filter{
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-
-
 	}
-
 
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {

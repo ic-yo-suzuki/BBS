@@ -11,6 +11,7 @@ import java.util.List;
 
 import bbs.beans.Comment;
 import bbs.beans.Message;
+import bbs.beans.NgWord;
 
 
 public class MessageDao {
@@ -128,16 +129,21 @@ public class MessageDao {
 		}
 	}
 
-	public List<String> getNgWord(Connection connection){
+	public List<NgWord> getNgWord(Connection connection){
 		PreparedStatement ps = null;
-		List<String> ngWord = new ArrayList<String>();
+		List<NgWord> ngWord = new ArrayList<NgWord>();
 		try{
 			StringBuilder sql = new StringBuilder();
-			sql.append("select word from ngwords;");
+			sql.append("select * from ngwords order by id;");
 			ps = connection.prepareStatement(sql.toString());
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
-				ngWord.add(rs.getString("word"));
+				int id = rs.getInt("id");
+				String word = rs.getString("word");
+				NgWord ng = new NgWord();
+				ng.setId(id);
+				ng.setWord(word);
+				ngWord.add(ng);
 			}
 			if(ps != null){
 				ps.close();
@@ -253,6 +259,48 @@ public class MessageDao {
 		}
 		return count;
 	}
+
+
+	public void deleteNgWord(Connection connection, int id) {
+		PreparedStatement ps = null;
+		try{
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("delete from ngwords ");
+			sql.append("where id = ?;");
+			ps = connection.prepareStatement(sql.toString());
+
+			ps.setInt(1, id);
+
+			ps.executeUpdate();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			close(ps);
+		}
+	}
+
+
+	public void addNgWord(Connection connection, String word) {
+		PreparedStatement ps = null;
+		try{
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("insert into ngwords(word) ");
+			sql.append("values(?);");
+			ps = connection.prepareStatement(sql.toString());
+
+			ps.setString(1, word);
+
+			ps.executeUpdate();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			close(ps);
+		}
+
+	}
+
 
 
 }

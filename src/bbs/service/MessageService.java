@@ -9,6 +9,7 @@ import java.util.List;
 
 import bbs.beans.Comment;
 import bbs.beans.Message;
+import bbs.beans.NgWord;
 import bbs.dao.MessageDao;
 import bbs.dao.UserMessageDao;
 
@@ -204,9 +205,9 @@ public class MessageService {
 		return ret;
 	}
 
-	public List<String> getNgWord(){
+	public List<NgWord> getNgWord(){
 		Connection connection = null;
-		List<String> ngWord = null;
+		List<NgWord> ngWord = null;
 		try{
 			connection = getConnection();
 			MessageDao messageDao = new MessageDao();
@@ -285,6 +286,47 @@ public class MessageService {
 			close(connection);
 		}
 		return count;
+	}
+
+	public void deleteNgWord(int id) {
+		Connection connection = null;
+
+		try{
+			connection = getConnection();
+			new MessageDao().deleteNgWord(connection, id);
+			commit(connection);
+		}catch(RuntimeException e){
+			rollback(connection);
+			throw e;
+		}catch(Error e){
+			rollback(connection);
+			throw e;
+		} catch (Exception e) {
+
+		}finally{
+			close(connection);
+		}
+
+	}
+
+	public void addNgWord(String word) {
+		Connection connection = null;
+		try{
+			connection = getConnection();
+			new MessageDao().addNgWord(connection , word);
+			commit(connection);
+		}catch(RuntimeException e){
+			rollback(connection);
+			throw e;
+		}catch(Error e){
+			rollback(connection);
+			throw e;
+		} catch (Exception e) {
+
+		}finally{
+			close(connection);
+		}
+
 	}
 
 

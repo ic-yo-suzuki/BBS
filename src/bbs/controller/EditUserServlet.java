@@ -20,7 +20,7 @@ import bbs.service.UserService;
 
 @WebServlet(urlPatterns = {"/edit"})
 
-public class EditUser extends HttpServlet{
+public class EditUserServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 
 	@Override

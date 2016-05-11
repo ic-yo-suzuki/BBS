@@ -15,7 +15,7 @@ import bbs.beans.Message;
 import bbs.service.MessageService;
 
 @WebServlet(urlPatterns = {"/deletePost"})
-public class DeletePost extends HttpServlet {
+public class DeletePostServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override

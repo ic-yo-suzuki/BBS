@@ -20,7 +20,7 @@ import bbs.dao.UserDao;
 import bbs.service.UserService;
 
 @WebServlet(urlPatterns = {"/signup"})
-public class SignUp extends HttpServlet{
+public class SignUpServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 
 	@Override

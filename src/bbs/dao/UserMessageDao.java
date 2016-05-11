@@ -242,6 +242,7 @@ public class UserMessageDao {
 				comment.setBranchId(branchId);
 				comment.setDepartmentId(departmentId);
 				comment.setElapsedTime(elapsedTime);
+				comment.setElapsedTimeText(elapsedTime);
 
 				ret.add(comment);
 			}

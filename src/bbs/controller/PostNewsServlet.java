@@ -15,13 +15,14 @@ import org.apache.commons.lang.StringUtils;
 
 import bbs.beans.Comment;
 import bbs.beans.Message;
+import bbs.beans.NgWord;
 import bbs.beans.User;
 import bbs.service.MessageService;
 import bbs.utils.Trimming;
 
 @WebServlet(urlPatterns = { "/newPost"})
 
-public class NewPost extends HttpServlet {
+public class PostNewsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -49,7 +50,7 @@ public class NewPost extends HttpServlet {
 			message.setCategory(request.getParameter("category"));
 		}
 
-		if(isValid(request, messages, message)){
+		if(isValid(messages, message)){
 			try {
 				new MessageService().register(message);
 			} catch (Exception e) {
@@ -73,7 +74,7 @@ public class NewPost extends HttpServlet {
 
 	}
 
-	private boolean isValid(HttpServletRequest request, List<String> messages, Message message) {
+	private boolean isValid(List<String> messages, Message message) {
 
 
 		if(StringUtils.isBlank(message.getText())){
@@ -104,10 +105,10 @@ public class NewPost extends HttpServlet {
 	}
 
 	private boolean isExistNgWord(String text){
-		List<String> ngWord = new MessageService().getNgWord();
+		List<NgWord> ngWord = new MessageService().getNgWord();
 		boolean flg = false;
-		for(String s : ngWord){
-			if(text.indexOf(s) != -1){
+		for(NgWord n : ngWord){
+			if(text.indexOf(n.getWord()) != -1){
 				flg = true;
 			}
 		}

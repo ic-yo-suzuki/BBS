@@ -15,7 +15,7 @@ import bbs.beans.User;
 import bbs.service.MessageService;
 
 @WebServlet(urlPatterns = {"/narrowing"})
-public class Narrowing extends HttpServlet {
+public class NarrowPostServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
