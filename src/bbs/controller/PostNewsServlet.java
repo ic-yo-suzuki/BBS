@@ -20,7 +20,7 @@ import bbs.beans.User;
 import bbs.service.MessageService;
 import bbs.utils.Trimming;
 
-@WebServlet(urlPatterns = { "/newPost"})
+@WebServlet(urlPatterns = { "/newpost"})
 
 public class PostNewsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -94,7 +94,7 @@ public class PostNewsServlet extends HttpServlet {
 			message.setCategory("");
 		}
 
-		if(isExistNgWord(message.getText())){
+		if(isExistNgWord(message.getText()) || isExistNgWord(message.getTitle()) || isExistNgWord(message.getCategory())){
 			messages.add("使うことの出来ないキーワードが含まれています");
 		}
 		if(messages.size() == 0){

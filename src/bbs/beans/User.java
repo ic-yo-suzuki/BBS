@@ -1,14 +1,17 @@
 package bbs.beans;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private int id, branchId, departmentId;
-	private String loginId, name, password, branchName, departmentName;
+	private String loginId, name, password, branchName, departmentName, elapsedTimeText;
 	private boolean status;
-//	private Date insertDate, updateDate;
+	private long elapsedTime;
+	private Date lastLoginDate;
+
 
 	public int getId(){
 		return id;
@@ -78,21 +81,55 @@ public class User implements Serializable {
 		this.status = status;
 	}
 
+	public Date getLastLoginDate(){
+		return lastLoginDate;
+	}
 
-//	public Date getInsertDate(){
-//		return insertDate;
-//	}
-//
-//	public void setInsertDate(Date insertDate){
-//		this.insertDate = insertDate;
-//	}
-//
-//	public Date getUpdateDate(){
-//		return updateDate;
-//	}
-//
-//	public void setUpdateDate(Date updateDate){
-//		this.updateDate = updateDate;
-//	}
+	public void setLastLoginDate(Date lastLoginDate){
+		this.lastLoginDate = lastLoginDate;
+	}
+	public long getElapsedTime(){
+		return elapsedTime;
+	}
+	public void setElapsedTime(long elapsedTime){
+		this.elapsedTime = elapsedTime;
+	}
+
+	public String getElapsedTimeText(){
+		return elapsedTimeText;
+	}
+
+	public void setElapsedTimeText(long elapsedTime){
+
+		if(elapsedTime / 60 < 1){
+			this.elapsedTimeText = String.valueOf(elapsedTime) + "秒前";
+
+		}
+		if(elapsedTime / 60 >= 1){
+			this.elapsedTimeText = String.valueOf(elapsedTime / 60) + "分前";
+
+		}
+		if(elapsedTime / 3600 >= 1){
+			this.elapsedTimeText = String.valueOf(elapsedTime / 3600) + "時間前";
+
+		}
+		if(elapsedTime / 86400 >= 1){
+			this.elapsedTimeText = String.valueOf(elapsedTime / 86400) + "日前";
+
+		}
+		if(elapsedTime / 604800 >= 1){
+			this.elapsedTimeText = String.valueOf(elapsedTime / 604800) + "週間前";
+
+		}
+		if(elapsedTime / 2592000 >= 1){
+			this.elapsedTimeText = String.valueOf(elapsedTime / 2592000) + "ヶ月前";
+
+		}
+		if(elapsedTime / 31536000 >= 1){
+			this.elapsedTimeText = String.valueOf(elapsedTime / 31536000) + "年前";
+
+		}
+	}
+
 
 }

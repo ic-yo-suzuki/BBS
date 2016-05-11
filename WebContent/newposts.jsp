@@ -29,7 +29,7 @@
 	<div class = "form-area">
 		<p>
 		<table class = "newpost">
-		<form action = "newPost" method = "post">
+		<form action = "newpost" method = "post">
 			<tr><td>カテゴリー(必須)<br>カテゴリーの新規作成</td><td>
 			<select name = "category">
 				<c:forEach items = "${categories }" var = "category">

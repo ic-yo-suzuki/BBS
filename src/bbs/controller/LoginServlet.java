@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import bbs.beans.User;
 import bbs.service.LoginService;
+import bbs.service.UserService;
 
 @WebServlet(urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet{
@@ -35,13 +36,16 @@ public class LoginServlet extends HttpServlet{
 
 		LoginService loginService = new LoginService();
 		User user = null;
+		int id = 0;
 		try {
-			user = loginService.login(loginId, password);
+			id = loginService.login(loginId, password);
 		} catch (Exception e) {
 			e.printStackTrace();
 
 		}
-		if(user != null){
+		if(id != 0){
+			new UserService().updateLastLoginDate(id);
+			user = new UserService().getUser(id);
 			session.setAttribute("loginUser", user);
 			response.sendRedirect("./top");
 		} else{

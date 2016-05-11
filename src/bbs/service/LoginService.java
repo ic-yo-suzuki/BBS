@@ -4,20 +4,19 @@ import static bbs.utils.DBUtil.*;
 
 import java.sql.Connection;
 
-import bbs.beans.User;
 import bbs.dao.UserDao;
 import bbs.utils.CipherUtil;
 
 
 public class LoginService {
-	public User login(String loginId, String password) throws Exception{
+	public int login(String loginId, String password) throws Exception{
 		Connection connection = null;
-		User user = null;
+		int id = 0;
 		try{
 			connection = getConnection();
 			UserDao userDao = new UserDao();
 			String encPassword = CipherUtil.encrypt(password);
-			user = userDao.getUser(connection, loginId, encPassword);
+			id = userDao.getUser(connection, loginId, encPassword);
 			commit(connection);
 
 		}catch(RuntimeException e){
@@ -31,6 +30,6 @@ public class LoginService {
 		}finally{
 			connection.close();
 		}
-		return user;
+		return id;
 	}
 }

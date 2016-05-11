@@ -31,6 +31,7 @@
 				<th>ユーザ名</th>
 				<th>ログインID</th>
 				<th colspan = "2">所属</th>
+				<th>最終ログイン</th>
 				<th colspan = "3">ユーザの操作</th>
 
 
@@ -40,6 +41,7 @@
 						<td><c:out value = "${user.loginId }" /></td>
 						<td><c:out value = "${user.branchName }" /></td>
 						<td><c:out value = "${user.departmentName }" /></td>
+						<td><abbr title = "<fmt:formatDate value= "${user.lastLoginDate }" pattern ="yyyy/MM/dd HH:mm:ss" />"><c:out value ="${user.elapsedTimeText }" /></abbr></td>
 						<form action = "edit" method = "get" style = "display:inline">
 							<td><button type = 'submit' name = 'id' value = "${user.id }" >編集</button></td>
 						</form>

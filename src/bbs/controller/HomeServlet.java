@@ -21,8 +21,8 @@ public class HomeServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 
-		User user = (User) request.getSession().getAttribute("loginUser");
 
+		User user = (User) request.getSession().getAttribute("loginUser");
 		List<String> categories = new MessageService().getCategories();
 		request.setAttribute("categories", categories);
 		List<Message> messages =  new MessageService().getMessage();

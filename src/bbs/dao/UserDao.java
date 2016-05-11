@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import bbs.exception.SQLRuntimeException;
 
 public class UserDao {
 
-
+	private static final String FIXED_STRING = "select id, login_id, password, name, branch_id, department_id, status, last_login_date, timestampdiff(SECOND, users.last_login_date, CURRENT_TIMESTAMP) as elapsed_time from users ";
 
 	public void insert(Connection connection, User user) {
 		PreparedStatement ps = null;
@@ -25,10 +26,10 @@ public class UserDao {
 			StringBuilder sql = new StringBuilder();
 
 			sql.append("insert into users ( ");
-			sql.append("login_id, password, name, branch_id, department_id, status");
+			sql.append("login_id, password, name, branch_id, department_id, status, last_login_date");
 			sql.append(" ) values ( ");
 			sql.append("?, ?, ?, ?, ?, ");
-			sql.append("false);");
+			sql.append("false, CURRENT_TIMESTAMP);");
 			ps = connection.prepareStatement(sql.toString());
 
 			ps.setString(1, user.getLoginId());
@@ -58,6 +59,8 @@ public class UserDao {
 				boolean status = rs.getBoolean("status");
 				String branchName = getBranchName(id, branchId);
 				String departmentName = getDepartmentName(id, departmentId);
+				Timestamp lastLoginDate = rs.getTimestamp("last_login_date");
+				long elapsedTime = rs.getLong("elapsed_time");
 
 				User user = new User();
 				user.setId(id);
@@ -69,6 +72,9 @@ public class UserDao {
 				user.setName(name);
 				user.setPassword(password);
 				user.setStatus(status);
+				user.setLastLoginDate(lastLoginDate);
+				user.setElapsedTime(elapsedTime);
+				user.setElapsedTimeText(elapsedTime);
 
 				ret.add(user);
 			}
@@ -79,24 +85,22 @@ public class UserDao {
 		}
 	}
 
-	public User getUser(Connection connection, String loginId, String encPassword) {
+	public int getUser(Connection connection, String loginId, String encPassword) {
 		PreparedStatement ps = null;
-		List<User> userList = null;
+		int id = 0;
 		try{
-			String sql = "select * from users where login_id = ? and password = ? and status = true;";
-			ps = connection.prepareStatement(sql);
+			StringBuilder sql = new StringBuilder();
+			sql.append("select id from users ");
+			sql.append("where login_id = ? and password = ? and status = true;");
+			ps = connection.prepareStatement(sql.toString());
 			ps.setString(1, loginId);
 			ps.setString(2, encPassword);
 
 			ResultSet rs = ps.executeQuery();
-			userList = toUserList(rs);
-			if(userList.isEmpty()){
-				return null;
-			}else if(2 <= userList.size()){
-				throw new IllegalStateException("2 <= userList.size()");
-			}else{
-
+			if(rs.next()){
+				id = rs.getInt("id");
 			}
+
 			if(ps != null){
 				ps.close();
 			}
@@ -105,7 +109,7 @@ public class UserDao {
 		}finally{
 
 		}
-		return userList.get(0);
+		return id;
 	}
 
 	public static boolean isExist(String loginId) {
@@ -135,8 +139,10 @@ public class UserDao {
 		PreparedStatement ps = null;
 		List<User> userList = null;
 		try{
-			String sql = "select * from users where id = ?";
-			ps = connection.prepareStatement(sql);
+			StringBuilder sql = new StringBuilder();
+			sql.append(FIXED_STRING);
+			sql.append("where id = ?");
+			ps = connection.prepareStatement(sql.toString());
 			ps.setInt(1, id);
 
 			ResultSet rs = ps.executeQuery();
@@ -158,8 +164,10 @@ public class UserDao {
 		PreparedStatement ps = null;
 		List<User> userList = null;
 		try{
-			String sql = "select * from users order by branch_id, department_id, id;";
-			ps = connection.prepareStatement(sql);
+			StringBuilder sql = new StringBuilder();
+			sql.append(FIXED_STRING);
+			sql.append("order by branch_id, department_id, id;");
+			ps = connection.prepareStatement(sql.toString());
 
 			ResultSet rs = ps.executeQuery();
 			userList = toUserList(rs);
@@ -340,5 +348,43 @@ public class UserDao {
 			return false;
 		}
 
+	}
+
+	public void updateLastLoginDate(Connection connection, int id) {
+		PreparedStatement ps = null;
+
+		try{
+			StringBuilder sql = new StringBuilder();
+			sql.append("update users set last_login_date = CURRENT_TIMESTAMP where id = ?");
+			ps = connection.prepareStatement(sql.toString());
+			ps.setInt(1, id);
+			if((ps.executeUpdate()) == 0){
+				throw new NoRowsUpdatedRuntimeException();
+			}
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			close(ps);
+		}
+	}
+
+	public long getElapsedTime(Connection connection, int id){
+		PreparedStatement ps = null;
+		long elapsedTime = 0;
+		try{
+			StringBuilder sql = new StringBuilder();
+			sql.append("select timestampdiff(SECOND, users.last_login_date, CURRENT_TIMESTAMP) as elapsed_time from users where id = ?");
+			ps = connection.prepareStatement(sql.toString());
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			elapsedTime = rs.getLong("elapsed_time");
+
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return elapsedTime;
 	}
 }

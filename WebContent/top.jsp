@@ -12,12 +12,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>掲示板　ホーム画面</title>
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
-<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" >
-<link rel = "stylesheet" type = "text/css" href = "stylesheet/style.css">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>掲示板　ホーム画面</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" >
+	<link rel = "stylesheet" type = "text/css" href = "stylesheet/style.css">
 
 
 </head>
@@ -26,7 +26,7 @@
 		<div class = "header">
 			<div class = "menu">
 
-				<a href = "newPost">新規投稿</a>
+				<a href = "newpost">新規投稿</a>
 				<c:if test = "${loginUser.departmentId == 1 }">
 					<a href = "usermanager">ユーザの管理</a>
 				</c:if>
@@ -36,11 +36,8 @@
 				<a href = "logout">ログアウト</a>
 				<p>
 			</div>
-			<div class = "name">ようこそ<b><c:out value = "${loginUser.name }" /></b>さん</div>
-
-
+			<div class = "name">ようこそ<b><c:out value = "${loginUser.name }" /></b>さん(最終ログイン：<fmt:formatDate value="${loginUser.lastLoginDate }" pattern ="yyyy/MM/dd HH:mm:ss" />)</div>
 		<p>
-
 		</div>
 		<p>
 			<c:if test="${not empty errorMessages }">

@@ -161,4 +161,42 @@ public class UserService {
 		}
 		return flg;
 	}
+
+	public void updateLastLoginDate(int id){
+		Connection connection = null;
+		try{
+			connection = getConnection();
+			new UserDao().updateLastLoginDate(connection, id);
+			commit(connection);
+		}catch(RuntimeException e){
+			rollback(connection);
+			throw e;
+		}catch(Error e){
+			rollback(connection);
+			throw e;
+		}finally{
+			close(connection);
+		}
+
+	}
+
+	public long getElapsedTime(int id){
+		Connection connection = null;
+		long elapsedTime = 0;
+		try{
+			connection = getConnection();
+			elapsedTime = new UserDao().getElapsedTime(connection, id);
+			commit(connection);
+		}catch(RuntimeException e){
+			rollback(connection);
+			throw e;
+		}catch(Error e){
+			rollback(connection);
+			throw e;
+		}finally{
+			close(connection);
+		}
+		return elapsedTime;
+
+	}
 }
