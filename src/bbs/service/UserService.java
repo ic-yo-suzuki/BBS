@@ -199,4 +199,25 @@ public class UserService {
 		return elapsedTime;
 
 	}
+
+	public String getLoginId(int id){
+		Connection connection = null;
+		String loginId;
+		try{
+			connection = getConnection();
+			loginId = new UserDao().getLoginId(connection, id);
+			commit(connection);
+		}catch(RuntimeException e){
+			rollback(connection);
+			throw e;
+		}catch(Error e){
+			rollback(connection);
+			throw e;
+		}finally{
+			close(connection);
+		}
+		return loginId;
+	}
+
+
 }

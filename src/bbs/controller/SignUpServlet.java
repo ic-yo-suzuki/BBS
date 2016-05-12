@@ -74,32 +74,26 @@ public class SignUpServlet extends HttpServlet{
 		}
 
 		if(StringUtils.isEmpty(request.getParameter("loginId"))){
-			System.out.println("ログインID空欄");
 			messages.add("ログインIDを入力してください");
 
 		} else if((!request.getParameter("loginId").matches("^[0-9a-zA-Z]{6,20}"))){
 
-			System.out.println("ログインIDフォーマット不正");
 			messages.add("ログインIDは半角英数字6文字以上20文字以下で入力してください");
 
 		} else if(UserDao.isExist(request.getParameter("loginId"))){
-			System.out.println("アカウント存在");
 			messages.add("ログインIDが既に使われています");
 
 		}
 		if(StringUtils.isEmpty(request.getParameter("password"))
 				|| StringUtils.isEmpty(request.getParameter("password_verify"))){
-			System.out.println("パスワード空欄");
 			messages.add("パスワードを入力してください");
 		}
 		if(request.getParameter("password").getBytes().length > request.getParameter("password").length()
 				|| request.getParameter("password_verify").getBytes().length > request.getParameter("password_verify").length()
 				|| (request.getParameter("password").matches("{6,255}"))
 				|| (request.getParameter("password_verify").matches("{6,255}"))){
-			System.out.println(request.getParameter("password").length() + ", " + request.getParameter("password_verify").length() + "：パスワードフォーマット不正");
 			messages.add("パスワードは半角文字6文字以上255文字以下で入力してください");
 		} else if(!(request.getParameter("password").equals(request.getParameter("password_verify")))){
-			System.out.println("パスワード不一致");
 			messages.add("入力されたパスワードが一致しません");
 		}
 

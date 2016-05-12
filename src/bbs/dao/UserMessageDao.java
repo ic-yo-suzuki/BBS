@@ -202,7 +202,7 @@ public class UserMessageDao {
 		try{
 			StringBuilder sql = new StringBuilder();
 			sql.append("select comments.id, user_id, post_id, users.name as name, users.branch_id as branch_id, users.department_id as department_id, text, insert_date, timestampdiff(SECOND, comments.insert_date, CURRENT_TIMESTAMP) as elapsed_time  from comments inner join users on users.id = comments.user_id ");
-			sql.append("order by insert_date;");
+			sql.append("order by id;");
 
 			ps = connection.prepareStatement(sql.toString());
 			ResultSet rs = ps.executeQuery();

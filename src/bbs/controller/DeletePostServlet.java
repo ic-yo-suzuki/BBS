@@ -1,6 +1,7 @@
 package bbs.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -19,13 +20,24 @@ public class DeletePostServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		response.sendRedirect("./top");
+	}
+
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 
 		int id = Integer.parseInt(request.getParameter("id"));
-
+		List<String> errorMessages = new ArrayList<String>();
 		HttpSession session = request.getSession();
 
-		new MessageService().delete(id);
+		if(isExistPost(id)){
+			new MessageService().delete(id);
+		}else{
+			errorMessages.add("削除しようとした投稿は存在しません");
+			session.setAttribute("errorMessages", errorMessages);
+		}
+
 
 
 		List<String> categories = new MessageService().getCategories();
@@ -35,7 +47,12 @@ public class DeletePostServlet extends HttpServlet {
 		session.setAttribute("categories", categories);
 		List<Comment> comments = new MessageService().getComment();
 		session.setAttribute("comments", comments);
+		request.setAttribute("postCount", messages.size());
 		response.sendRedirect("./top");
+	}
+
+	private boolean isExistPost(int id) {
+		return new MessageService().isExistPost(id) ;
 	}
 
 }

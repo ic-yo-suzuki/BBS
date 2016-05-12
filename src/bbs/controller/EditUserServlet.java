@@ -16,6 +16,7 @@ import org.apache.commons.lang.StringUtils;
 import bbs.beans.User;
 import bbs.dao.BranchDao;
 import bbs.dao.DepartmentDao;
+import bbs.dao.UserDao;
 import bbs.service.UserService;
 
 @WebServlet(urlPatterns = {"/edit"})
@@ -87,11 +88,10 @@ public class EditUserServlet extends HttpServlet{
 
 		if(StringUtils.isEmpty(request.getParameter("loginId"))){
 			messages.add("ログインIDを入力してください");
-
 		} else if((!request.getParameter("loginId").matches("^[0-9a-zA-Z]{6,20}"))){
-
 			messages.add("ログインIDは半角英数字6文字以上20文字以下で入力してください");
-
+		} else if(!(new UserService().getLoginId(Integer.parseInt(request.getParameter("userId"))).equals(request.getParameter("loginId"))) && UserDao.isExist(request.getParameter("loginId"))){
+			messages.add("ログインIDが既に使われています");
 		}
 
 		if(!(request.getParameter("password").equals(request.getParameter("password_verify")))){

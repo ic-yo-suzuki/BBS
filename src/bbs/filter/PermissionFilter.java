@@ -40,6 +40,7 @@ public class PermissionFilter implements Filter{
 				request.setAttribute("categories", categories);
 				List<Comment> comments = new MessageService().getComment();
 				request.setAttribute("comments", comments);
+				request.setAttribute("postCount", messages.size());
 				request.getRequestDispatcher("/top.jsp").forward(request, response);
 				return;
 			}

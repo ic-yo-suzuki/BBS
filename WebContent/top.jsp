@@ -108,6 +108,9 @@
 				<li><b>投稿がありません</b></li>
 			</ul>
 		</c:if>
+		<c:if test = "${not empty messages }">
+			(<c:out value = "${postCount }" />件)
+		</c:if>
 			<c:forEach items = "${messages }" var = "message">
 				<table class = "message">
 
@@ -140,30 +143,35 @@
 				</table>
 
 				<div class = comments>
+				<table class = comments>
 					<br />コメント一覧<br>
-					<% int count = 1; %>
-					<c:forEach items = "${comments }" var = "comment">
-							<c:if test = "${message.id == comment.postId }">
-								<table class = "comment">
 
-									<tr><td>投稿者</td><td><c:out value = "${comment.name }"></c:out></td></tr>
-									<tr><td>本文</td><td>
-										<c:forTokens var = "splitedMessage" items = "${comment.text }" delims = "<%= lineSeparator %>">
-											<c:out value = "${splitedMessage }"></c:out><br>
-										</c:forTokens></td></tr>
-									<tr><td>投稿日時</td><td><abbr title = "<fmt:formatDate value= "${comment.insertDate }" pattern ="yyyy/MM/dd HH:mm:ss" />"><c:out value ="${comment.elapsedTimeText }" /></abbr>
+					<c:if test = "${not empty comments }">
+						<% int count = 1; %>
+						<c:forEach items = "${comments }" var = "comment">
+								<c:if test = "${message.id == comment.postId }">
+									<table class = "comment">
 
-									</td></tr>
-									<c:if test = "${(comment.userId == loginUser.id) || (loginUser.departmentId == 2) || (comment.branchId == loginUser.branchId && loginUser.departmentId == 3) }">
-										<form action = "deleteComment" method = "post">
-											<tr><td colspan = "2"><button type = "submit" name = "id" value = "${comment.id }"  onClick = "return confirm('このコメントを削除します。よろしいですか？')" >コメントを削除する</button> </td></tr>
-										</form>
-									</c:if>
-								<hr>投稿番号：<%= count %><br>
-								</table>
-							<% count++; %>
-							</c:if>
-					</c:forEach>
+										<tr><td>投稿者</td><td><c:out value = "${comment.name }"></c:out></td></tr>
+										<tr><td>本文</td><td>
+											<c:forTokens var = "splitedMessage" items = "${comment.text }" delims = "<%= lineSeparator %>">
+												<c:out value = "${splitedMessage }"></c:out><br>
+											</c:forTokens></td></tr>
+										<tr><td>投稿日時</td><td><abbr title = "<fmt:formatDate value= "${comment.insertDate }" pattern ="yyyy/MM/dd HH:mm:ss" />"><c:out value ="${comment.elapsedTimeText }" /></abbr>
+
+										</td></tr>
+										<c:if test = "${(comment.userId == loginUser.id) || (loginUser.departmentId == 2) || (comment.branchId == loginUser.branchId && loginUser.departmentId == 3) }">
+											<form action = "deleteComment" method = "post">
+												<tr><td colspan = "2"><button type = "submit" name = "id" value = "${comment.id }"  onClick = "return confirm('このコメントを削除します。よろしいですか？')" >コメントを削除する</button> </td></tr>
+											</form>
+										</c:if>
+									<hr>投稿番号：<%= count %><br>
+									</table>
+								<% count++; %>
+								</c:if>
+						</c:forEach>
+					</c:if>
+					</table>
 					<div class = "postComeent">
 						<form action = "postComment" method = "post">
 							<br />コメントの投稿<br />

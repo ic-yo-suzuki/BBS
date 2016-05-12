@@ -38,7 +38,7 @@ public class AddNgWord extends HttpServlet{
 		List<NgWord> ngWord = new MessageService().getNgWord();
 		boolean flg = false;
 		for(NgWord n : ngWord){
-			if(text.toUpperCase().indexOf(n.getWord().toUpperCase()) != -1){
+			if(text.toUpperCase().equals(n.getWord().toUpperCase())){
 				flg = true;
 			}
 		}

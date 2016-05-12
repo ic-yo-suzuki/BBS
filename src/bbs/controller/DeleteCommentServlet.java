@@ -1,6 +1,7 @@
 package bbs.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -17,6 +18,11 @@ import bbs.service.MessageService;
 @WebServlet(urlPatterns = {"/deleteComment"})
 public class DeleteCommentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		response.sendRedirect("./top");
+	}
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 
@@ -24,10 +30,15 @@ public class DeleteCommentServlet extends HttpServlet {
 		int id = Integer.parseInt(request.getParameter("id"));
 
 		HttpSession session = request.getSession();
+		List<String> errorMessages = new ArrayList<String>();
 
+		if(isExistComment(id)){
+			new MessageService().deleteComment(id);
+		}else{
+			errorMessages.add("削除しようとしたコメントは存在しません");
+			session.setAttribute("errorMessages", errorMessages);
+		}
 
-
-		new MessageService().deleteComment(id);
 
 
 		List<String> categories = new MessageService().getCategories();
@@ -37,7 +48,10 @@ public class DeleteCommentServlet extends HttpServlet {
 		session.setAttribute("categories", categories);
 		List<Comment> comments = new MessageService().getComment();
 		session.setAttribute("comments", comments);
+		request.setAttribute("postCount", messages.size());
 		response.sendRedirect("./top");
 	}
-
+	private boolean isExistComment(int id) {
+		return new MessageService().isExistComment(id);
+	}
 }

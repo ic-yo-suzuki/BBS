@@ -44,7 +44,19 @@ function openwin() {
 
 
 		<div class = "ngwordlist">
-		NGワード一覧
+		NGワード管理
+		<table class = "ngwordadd">
+			<th>新たに追加するNGワード</th>
+			<th>操作</th>
+			<tbody>
+			<tr>
+						<form action = "addngword" method = "post">
+							<td><input name = "word" id = "word"   />(100文字まで)</td>
+							<td colspan = "2"><button type = 'submit' name = 'word' >登録</button></td>
+						</form>
+					</tr>
+			</tbody>
+		</table>
 		<table class = "ngwordlist">
 			<tbody>
 				<th>NGワード</th>
@@ -63,12 +75,7 @@ function openwin() {
 
 						</tr>
 					</c:forEach>
-					<tr>
-						<form action = "addngword" method = "post">
-							<td><input name = "word" id = "word"   /></td>
-							<td colspan = "2"><button type = 'submit' name = 'word' >登録</button></td>
-						</form>
-					</tr>
+
 			</tbody>
 		</table>
 		</div>

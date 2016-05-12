@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import bbs.beans.Comment;
 import bbs.beans.Message;
@@ -17,6 +18,11 @@ import bbs.service.MessageService;
 @WebServlet(urlPatterns = {"/narrowing"})
 public class NarrowPostServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		response.sendRedirect("./top");
+	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
@@ -62,6 +68,8 @@ public class NarrowPostServlet extends HttpServlet {
 		int[] branchPostCount = new MessageService().getBranchPostCount(user.getId());
 		request.setAttribute("userPostCount", userPostCount);
 		request.setAttribute("branchPostCount", branchPostCount);
+		request.setAttribute("postCount", messages.size());
+		request.setAttribute("commentCount", comments.size());
 		request.getRequestDispatcher("/top.jsp").forward(request, response);
 
 	}

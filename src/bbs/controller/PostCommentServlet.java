@@ -78,12 +78,19 @@ public class PostCommentServlet extends HttpServlet {
 		if(isExistNgWord(request.getParameter("comment"))){
 			messages.add("使うことの出来ないキーワードが含まれています");
 		}
+		if(!isExistPost(Integer.parseInt(request.getParameter("postId")))){
+			messages.add("コメントしようとした投稿は存在しません");
+		}
 
 		if(messages.size() == 0){
 			return true;
 		}else{
 			return false;
 		}
+	}
+
+	private boolean isExistPost(int postId) {
+		return new MessageService().isExistPost(postId);
 	}
 
 	private boolean isExistNgWord(String text){

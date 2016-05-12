@@ -214,3 +214,7 @@ background: #fffafa;
 .ngwordlist tr:nth-child(2n+1) td {
     background: #F0FFFF;
 }
+
+table{
+	table-layout:auto;
+}

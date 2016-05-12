@@ -330,4 +330,42 @@ public class MessageService {
 	}
 
 
+	public boolean isExistPost(int postId) {
+		Connection connection = null;
+		boolean flg = false;
+		try{
+			connection = getConnection();
+			flg = new MessageDao().isExistPost(connection, postId);
+			commit(connection);
+		}catch(RuntimeException e){
+			rollback(connection);
+			throw e;
+		}catch(Error e){
+			rollback(connection);
+			throw e;
+		}finally{
+			close(connection);
+		}
+		return flg;
+	}
+
+	public boolean isExistComment(int postId) {
+		Connection connection = null;
+		boolean flg = false;
+		try{
+			connection = getConnection();
+			flg = new MessageDao().isExistComment(connection, postId);
+			commit(connection);
+		}catch(RuntimeException e){
+			rollback(connection);
+			throw e;
+		}catch(Error e){
+			rollback(connection);
+			throw e;
+		}finally{
+			close(connection);
+		}
+		return flg;
+	}
 }
+

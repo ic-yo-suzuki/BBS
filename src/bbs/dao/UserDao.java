@@ -387,4 +387,22 @@ public class UserDao {
 		}
 		return elapsedTime;
 	}
+
+	public String getLoginId(Connection connection, int id) {
+		PreparedStatement ps = null;
+		String loginId = null;
+		try{
+			StringBuilder sql = new StringBuilder();
+			sql.append("select login_id from users where id = ?");
+			ps = connection.prepareStatement(sql.toString());
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			loginId = rs.getString("login_id");
+
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return loginId;
+	}
 }

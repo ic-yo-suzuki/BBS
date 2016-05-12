@@ -65,6 +65,7 @@ public class PostNewsServlet extends HttpServlet {
 			request.setAttribute("categories", categories);
 			List<Comment> comments = new MessageService().getComment();
 			request.setAttribute("comments", comments);
+			request.setAttribute("postCount", messages.size());
 			request.getRequestDispatcher("/newposts.jsp").forward(request, response);
 			return;
 		}
@@ -83,19 +84,26 @@ public class PostNewsServlet extends HttpServlet {
 		if(message.getText().length() > 1000){
 			messages.add("本文は1000文字以下で入力してください");
 		}
+		if(isExistNgWord(message.getText())){
+			messages.add("本文中に使うことの出来ないキーワードが含まれています");
+		}
+
 		if(message.getTitle().length() > 50){
 			messages.add("タイトルは50文字以下で入力してください");
 		}
 		if(StringUtils.isBlank(message.getTitle())){
 			messages.add("タイトルを入力してください");
 		}
-		if(message.getCategory().length() > 10){
+		if(isExistNgWord(message.getTitle())){
+			messages.add("タイトルに使うことの出来ないキーワードが含まれています");
+		}
+
+		if(message.getCategory().length() > 10 || StringUtils.isBlank(message.getCategory())){
 			messages.add("カテゴリ名は10文字以内で入力してください");
 			message.setCategory("");
 		}
-
-		if(isExistNgWord(message.getText()) || isExistNgWord(message.getTitle()) || isExistNgWord(message.getCategory())){
-			messages.add("使うことの出来ないキーワードが含まれています");
+		if(isExistNgWord(message.getCategory())){
+			messages.add("カテゴリに使うことの出来ないキーワードが含まれています");
 		}
 		if(messages.size() == 0){
 			return true;
