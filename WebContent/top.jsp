@@ -36,7 +36,7 @@
 				<a href = "logout">ログアウト</a>
 				<p>
 			</div>
-			<div class = "name">ようこそ<b><c:out value = "${loginUser.name }" /></b>さん(最終ログイン：<fmt:formatDate value="${loginUser.lastLoginDate }" pattern ="yyyy/MM/dd HH:mm:ss" />)</div>
+			<div class = "name">ようこそ<b><c:out value = "${loginUser.name }" /></b>さん</div>
 		<p>
 		</div>
 		<p>
@@ -53,7 +53,7 @@
 		<p>
 
 		<div class = "narrowing">
-		<form action = "narrowing" method = "post"  style = "display:inline">
+		<form action = "top"  method = "post"  style = "display:inline">
 			<b>投稿の絞込み検索</b><p>
 			<ul>
 			<li>カテゴリー</li>
@@ -79,11 +79,12 @@
 			開始日時<input type = "text" name = "dateStart" id = "dateStart" value = "${dates[0] }">
 			終了日時<input type = "text" name = "dateEnd"   id = "dateEnd"   value = "${dates[1] }">(クリックするとカレンダーが表示されます)
 			<p></p>
-			<input type = "submit" value = "指定した条件で検索" >
+
+			<button type = "submit" name = "mode" value = "narrow">指定した条件で検索</button>
+			<button type = "submit" name = "mode" value = "reset">絞込みを解除</button>
+
 		</form>
-		<form action = "top" method = "get"  style = "display:inline">
-			<input type = "submit" value = "条件をクリア">
-		</form>
+
 
 		</div>
 		<table class = "postCount">
@@ -117,7 +118,7 @@
 						<c:set var = "id" scope = "request" value = "${message.id }" />
 						<tr><td>投稿者</td><td><c:out value = "${message.name }"></c:out></td></tr>
 						<c:set var = "name" scope = "request" value = "${message.name }" />
-						<tr><td>件名</td><td><c:out value = "${message.title }"></c:out></td></tr>
+						<tr><td>タイトル</td><td><c:out value = "${message.title }"></c:out></td></tr>
 						<tr><td>カテゴリ</td><td><c:out value = "${message.category }"></c:out></td></tr>
 
 					<tr><td>本文</td><td>

@@ -185,21 +185,17 @@ public class MessageDao {
 			StringBuilder sql_post = new StringBuilder();
 			StringBuilder sql_comment = new StringBuilder();
 
-			sql_post.append("select count(*) as count from posts ");
-			sql_post.append("where user_id = ?;");
+			sql_post.append("select count(*) as count from posts inner join users on users.id = posts.user_id ");
+			sql_post.append("where posts.user_id = ? and users.status = true;");
 
 			ps_post = connection.prepareStatement(sql_post.toString());
 			ps_post.setInt(1, id);
 
-
-
-			sql_comment.append("select count(*) as count from comments ");
-			sql_comment.append("where user_id = ?;");
+			sql_comment.append("select count(*) as count from comments inner join users on users.id = comments.user_id ");
+			sql_comment.append("where comments.user_id = ? and users.status = true;");
 
 			ps_comment = connection.prepareStatement(sql_comment.toString());
 			ps_comment.setInt(1, id);
-
-
 
 			ResultSet rs = ps_post.executeQuery();
 			rs.next();
@@ -229,14 +225,14 @@ public class MessageDao {
 			StringBuilder sql_comment = new StringBuilder();
 
 			sql_post.append("select count(posts.text) as count from users inner join posts on users.id = posts.user_id ");
-			sql_post.append("where branch_id = (select branch_id from users where id = ?);");
+			sql_post.append("where branch_id = (select branch_id from users where id = ?) and status = true;");
 
 			ps_post = connection.prepareStatement(sql_post.toString());
 			ps_post.setInt(1, id);
 
 
 			sql_comment.append("select count(comments.text) as count from users inner join comments on users.id = comments.user_id ");
-			sql_comment.append("where branch_id = (select branch_id from users where id = ?);");
+			sql_comment.append("where branch_id = (select branch_id from users where id = ?) and status = true;");
 
 			ps_comment = connection.prepareStatement(sql_comment.toString());
 			ps_comment.setInt(1, id);

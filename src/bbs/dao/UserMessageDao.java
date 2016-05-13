@@ -23,7 +23,7 @@ public class UserMessageDao {
 		try{
 			StringBuilder sql = new StringBuilder();
 			sql.append(FIXED_STRING);
-			sql.append("order by insert_date DESC;");
+			sql.append("where status = true order by insert_date DESC;");
 
 			ps = connection.prepareStatement(sql.toString());
 
@@ -83,7 +83,7 @@ public class UserMessageDao {
 		try{
 			StringBuilder sql = new StringBuilder();
 			sql.append(FIXED_STRING);
-			sql.append("where category = ? order by insert_date DESC;");
+			sql.append("where category = ? and status = true order by insert_date DESC;");
 
 			ps = connection.prepareStatement(sql.toString());
 			ps.setString(1, category);
@@ -107,7 +107,7 @@ public class UserMessageDao {
 		try{
 
 			if(selectedDates[0].isEmpty()){
-				sql.append("where insert_date <= ? order by insert_date DESC;");
+				sql.append("where insert_date <= ? and status = true order by insert_date DESC;");
 				ps = connection.prepareStatement(sql.toString());
 				StringBuilder selectedDate = new StringBuilder();
 
@@ -116,7 +116,7 @@ public class UserMessageDao {
 				ps.setString(1, selectedDate.toString());
 
 			}else if(selectedDates[1].isEmpty()){
-				sql.append("where insert_date >= ? order by insert_date DESC;");
+				sql.append("where insert_date >= ? and status = true order by insert_date DESC;");
 				ps = connection.prepareStatement(sql.toString());
 				StringBuilder selectedDate = new StringBuilder();
 
@@ -125,7 +125,7 @@ public class UserMessageDao {
 				ps.setString(1, selectedDate.toString());
 
 			} else{
-				sql.append("where insert_date between ? and ? order by insert_date DESC;");
+				sql.append("where insert_date between ? and ? and status = true order by insert_date DESC;");
 				ps = connection.prepareStatement(sql.toString());
 				for(int i = 0; i < 2; i++){
 					int index = i + 1;
@@ -157,7 +157,7 @@ public class UserMessageDao {
 			String[] time = {" 00:00:00", " 23:59:59"};
 
 			if(selectedDates[0].isEmpty()){
-				sql.append("where category = ? and insert_date <= ? order by insert_date DESC;");
+				sql.append("where category = ? and insert_date <= ? and status = true order by insert_date DESC;");
 				ps = connection.prepareStatement(sql.toString());
 				ps.setString(1, category);
 				StringBuilder selectedDate = new StringBuilder();
@@ -167,7 +167,7 @@ public class UserMessageDao {
 				ps.setString(2, selectedDate.toString());
 
 			}else if(selectedDates[1].isEmpty()){
-				sql.append("where category = ? and insert_date >= ? order by insert_date DESC;");
+				sql.append("where category = ? and insert_date >= ? and status = true order by insert_date DESC;");
 				ps = connection.prepareStatement(sql.toString());
 				ps.setString(1, category);
 				StringBuilder selectedDate = new StringBuilder();
@@ -176,7 +176,7 @@ public class UserMessageDao {
 				selectedDate.append(time[0]);
 				ps.setString(2, selectedDate.toString());
 			}else{
-				sql.append("where category = ? and insert_date between ? and ? order by insert_date DESC;");
+				sql.append("where category = ? and insert_date between ? and ? and status = true order by insert_date DESC;");
 				ps = connection.prepareStatement(sql.toString());
 				ps.setString(1, category);
 				for(int i = 0; i < 2; i++){
@@ -201,8 +201,8 @@ public class UserMessageDao {
 		List<Comment> ret = null;
 		try{
 			StringBuilder sql = new StringBuilder();
-			sql.append("select comments.id, user_id, post_id, users.name as name, users.branch_id as branch_id, users.department_id as department_id, text, insert_date, timestampdiff(SECOND, comments.insert_date, CURRENT_TIMESTAMP) as elapsed_time  from comments inner join users on users.id = comments.user_id ");
-			sql.append("order by id;");
+			sql.append("select comments.id, user_id, post_id, users.name as name, users.branch_id as branch_id, users.department_id as department_id, text, insert_date, timestampdiff(SECOND, comments.insert_date, CURRENT_TIMESTAMP) as elapsed_time  from comments inner join users on users.id = comments.user_id " );
+			sql.append("where status = true order by id;");
 
 			ps = connection.prepareStatement(sql.toString());
 			ResultSet rs = ps.executeQuery();

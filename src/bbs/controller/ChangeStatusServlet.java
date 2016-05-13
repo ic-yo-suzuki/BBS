@@ -17,6 +17,8 @@ import bbs.service.UserService;
 public class ChangeStatusServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 
+
+
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		int id = Integer.parseInt(request.getParameter("id"));

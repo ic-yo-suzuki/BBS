@@ -10,6 +10,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import bbs.beans.Comment;
 import bbs.beans.Message;
@@ -31,17 +33,23 @@ public class PermissionFilter implements Filter{
 		User user = (User)((HttpServletRequest)request).getSession().getAttribute("loginUser");
 		try{
 			if(user.getDepartmentId() != 1){
-				request.setAttribute("errorMessages", "この操作に対する権限がありません");
+				HttpSession session = ((HttpServletRequest)request).getSession();
+				session.setAttribute("errorMessages", "この操作に対する権限がありません");
 				List<String> categories = new MessageService().getCategories();
-				request.setAttribute("categories", categories);
+				session.setAttribute("categories", categories);
 				List<Message> messages =  new MessageService().getMessage();
-				request.setAttribute("loginUser", user);
-				request.setAttribute("messages", messages);
-				request.setAttribute("categories", categories);
+				session.setAttribute("loginUser", user);
+				session.setAttribute("messages", messages);
+				session.setAttribute("categories", categories);
 				List<Comment> comments = new MessageService().getComment();
-				request.setAttribute("comments", comments);
-				request.setAttribute("postCount", messages.size());
-				request.getRequestDispatcher("/top.jsp").forward(request, response);
+				session.setAttribute("comments", comments);
+				session.setAttribute("postCount", messages.size());
+
+				((HttpServletResponse)response).sendRedirect("./top");
+				session.removeAttribute("categories");
+				session.removeAttribute("messages");
+				session.removeAttribute("comments");
+				session.removeAttribute("postCount");
 				return;
 			}
 			chain.doFilter(request, response);

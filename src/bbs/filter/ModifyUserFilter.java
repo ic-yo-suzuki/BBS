@@ -1,4 +1,5 @@
 package bbs.filter;
+
 import java.io.IOException;
 
 import javax.servlet.Filter;
@@ -15,8 +16,8 @@ import javax.servlet.http.HttpSession;
 import bbs.beans.User;
 import bbs.service.UserService;
 
-@WebFilter(urlPatterns = {"/top", "/newpost", "/signup", "/usermanager", "/edit", "/ngwordmanager"})
-public class LoginFilter implements Filter {
+@WebFilter(urlPatterns = {"/deleteUser", "/changeStatus"})
+public class ModifyUserFilter implements Filter {
 
 	@Override
 	public void destroy() {
@@ -27,24 +28,25 @@ public class LoginFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
+		// TODO 自動生成されたメソッド・スタブ
+		int modifyUserId = Integer.parseInt(((HttpServletRequest)request).getParameter("id"));
 		User loginUser = (User)((HttpServletRequest)request).getSession().getAttribute("loginUser");
-		User user = null;
-		if(loginUser != null){
-			user = new UserService().getUser(loginUser.getId());
-		}
-		if(user == null || user.getStatus() == false || new UserService().isExistUser(user.getId()) == false){
-			HttpSession session = ((HttpServletRequest)request).getSession();
-			session.setAttribute("errorMessages", "ログインしてください");
-			((HttpServletResponse)response).sendRedirect("./login");
+		int loginUserId = new UserService().getUser(loginUser.getId()).getId();
 
+		if(modifyUserId == loginUserId){
+			HttpSession session = ((HttpServletRequest)request).getSession();
+
+			session.setAttribute("errorMessages", "このユーザに対して変更を適用できません");
+			session.setAttribute("userList", new UserService().getUserList());
+			((HttpServletResponse)response).sendRedirect("./usermanager");
 			return;
 		}
 		chain.doFilter(request, response);
 	}
 
 	@Override
-	public void init(FilterConfig config) throws ServletException {
+	public void init(FilterConfig arg0) throws ServletException {
+		// TODO 自動生成されたメソッド・スタブ
 
 	}
-
 }

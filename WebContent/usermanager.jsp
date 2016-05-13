@@ -23,6 +23,17 @@
 			</c:if>
 
 		</div></div><p>
+
+					<c:if test="${not empty errorMessages }">
+			<div class = "errorMessages">
+				<ul>
+					<c:forEach items = "${errorMessages }" var = "messages">
+						<li><c:out value = "${messages }" /></li><br />
+					</c:forEach>
+				</ul>
+			</div>
+			<c:remove var = "errorMessages" scope = "session"/>
+		</c:if>
 		<hr>
 		ユーザ一覧
 		<div class = "userlist">

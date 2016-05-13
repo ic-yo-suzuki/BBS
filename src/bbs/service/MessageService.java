@@ -16,9 +16,9 @@ import bbs.dao.UserMessageDao;
 
 public class MessageService {
 	public void register(Message message) throws Exception{
-		Connection connection = null;
+		Connection connection = getConnection();
 		try{
-			connection = getConnection();
+
 			MessageDao messageDao = new MessageDao();
 
 			messageDao.insert(connection, message);
@@ -37,10 +37,10 @@ public class MessageService {
 	}
 
 	public List<Message> getMessage() {
-		Connection connection = null;
+		Connection connection = getConnection();
 		List<Message> ret = null;
 		try{
-			connection = getConnection();
+
 			UserMessageDao messageDao = new UserMessageDao();
 			ret = messageDao.getUserMessages(connection);
 			commit(connection);
@@ -59,10 +59,10 @@ public class MessageService {
 	}
 
 	public List<String> getCategories(){
-		Connection connection = null;
+		Connection connection = getConnection();
 		List<String> ret = null;
 		try{
-			connection = getConnection();
+
 			MessageDao messageDao = new MessageDao();
 			ret = messageDao.getCategories(connection);
 			commit(connection);
@@ -79,10 +79,10 @@ public class MessageService {
 	}
 
 	public List<Message> getMessage(String category) {
-		Connection connection = null;
+		Connection connection = getConnection();
 		List<Message> ret = null;
 		try{
-			connection = getConnection();
+
 			UserMessageDao messageDao = new UserMessageDao();
 			ret = messageDao.getUserMessages(connection, category);
 			commit(connection);
@@ -101,10 +101,10 @@ public class MessageService {
 	}
 
 	public List<Message> getMessage(String[] selectedDates) {
-		Connection connection = null;
+		Connection connection = getConnection();
 		List<Message> ret = null;
 		try{
-			connection = getConnection();
+
 			UserMessageDao messageDao = new UserMessageDao();
 			ret = messageDao.getUserMessages(connection, selectedDates);
 			commit(connection);
@@ -123,10 +123,10 @@ public class MessageService {
 	}
 
 	public List<Message> getMessage(String category, String[] selectedDates) {
-		Connection connection = null;
+		Connection connection = getConnection();
 		List<Message> ret = null;
 		try{
-			connection = getConnection();
+
 			UserMessageDao messageDao = new UserMessageDao();
 			ret = messageDao.getUserMessages(connection, category, selectedDates);
 			commit(connection);
@@ -145,10 +145,10 @@ public class MessageService {
 	}
 
 	public void delete(int id){
-		Connection connection = null;
+		Connection connection = getConnection();
 
 		try{
-			connection = getConnection();
+
 			new MessageDao().postDelete(connection, id);
 			commit(connection);
 		}catch(RuntimeException e){
@@ -164,9 +164,9 @@ public class MessageService {
 		}
 	}
 	public void insertComment(Comment comment) throws SQLException{
-		Connection connection = null;
+		Connection connection = getConnection();
 		try{
-			connection = getConnection();
+
 			MessageDao messageDao = new MessageDao();
 			messageDao.insertComment(connection, comment);
 			commit(connection);
@@ -184,10 +184,10 @@ public class MessageService {
 	}
 
 	public List<Comment> getComment() {
-		Connection connection = null;
+		Connection connection = getConnection();
 		List<Comment> ret = null;
 		try{
-			connection = getConnection();
+
 			UserMessageDao messageDao = new UserMessageDao();
 			ret = messageDao.getComments(connection);
 			commit(connection);
@@ -206,10 +206,10 @@ public class MessageService {
 	}
 
 	public List<NgWord> getNgWord(){
-		Connection connection = null;
+		Connection connection = getConnection();
 		List<NgWord> ngWord = null;
 		try{
-			connection = getConnection();
+
 			MessageDao messageDao = new MessageDao();
 			ngWord = messageDao.getNgWord(connection);
 			commit(connection);
@@ -226,10 +226,10 @@ public class MessageService {
 	}
 
 	public void deleteComment(int id) {
-		Connection connection = null;
+		Connection connection = getConnection();
 
 		try{
-			connection = getConnection();
+
 			new MessageDao().deleteComment(connection, id);
 			commit(connection);
 		}catch(RuntimeException e){
@@ -246,10 +246,10 @@ public class MessageService {
 	}
 
 	public int[] getUserPostCount(int id){
-		Connection connection = null;
+		Connection connection = getConnection();
 		int[] count = new int[2];
 		try{
-			connection = getConnection();
+
 
 			count = new MessageDao().getUserPostCount(connection , id);
 			commit(connection);
@@ -268,10 +268,10 @@ public class MessageService {
 	}
 
 	public int[] getBranchPostCount(int id){
-		Connection connection = null;
+		Connection connection = getConnection();
 		int[] count = new int[2];
 		try{
-			connection = getConnection();
+
 			count = new MessageDao().getBranchPostCount(connection , id);
 			commit(connection);
 		}catch(RuntimeException e){
@@ -289,10 +289,9 @@ public class MessageService {
 	}
 
 	public void deleteNgWord(int id) {
-		Connection connection = null;
+		Connection connection = getConnection();
 
 		try{
-			connection = getConnection();
 			new MessageDao().deleteNgWord(connection, id);
 			commit(connection);
 		}catch(RuntimeException e){
@@ -310,9 +309,9 @@ public class MessageService {
 	}
 
 	public void addNgWord(String word) {
-		Connection connection = null;
+		Connection connection = getConnection();
 		try{
-			connection = getConnection();
+
 			new MessageDao().addNgWord(connection , word);
 			commit(connection);
 		}catch(RuntimeException e){
@@ -331,10 +330,10 @@ public class MessageService {
 
 
 	public boolean isExistPost(int postId) {
-		Connection connection = null;
+		Connection connection = getConnection();
 		boolean flg = false;
 		try{
-			connection = getConnection();
+
 			flg = new MessageDao().isExistPost(connection, postId);
 			commit(connection);
 		}catch(RuntimeException e){
@@ -350,10 +349,10 @@ public class MessageService {
 	}
 
 	public boolean isExistComment(int postId) {
-		Connection connection = null;
+		Connection connection = getConnection();
 		boolean flg = false;
 		try{
-			connection = getConnection();
+
 			flg = new MessageDao().isExistComment(connection, postId);
 			commit(connection);
 		}catch(RuntimeException e){

@@ -3,6 +3,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import bbs.exception.SQLRuntimeException;
+
 public class DBUtil {
 	private static final String DRIVER = "com.mysql.jdbc.Driver";
 	private static final String URL = "jdbc:mysql://localhost/bbs";
@@ -23,7 +25,7 @@ public class DBUtil {
 			connection.setAutoCommit(false);
 
 		}catch(SQLException e){
-//			throw new SQLRuntimeException(e);
+			throw new SQLRuntimeException(e);
 		}
 		return connection;
 	}
@@ -32,7 +34,7 @@ public class DBUtil {
 		try{
 			connection.commit();
 		}catch(SQLException e){
-//			throw new SQLRuntimeException(e);
+			throw new SQLRuntimeException(e);
 		}
 	}
 
@@ -40,7 +42,7 @@ public class DBUtil {
 		try{
 			connection.rollback();
 		}catch(SQLException e){
-//			throw new SQLRuntimeException(e);
+			throw new SQLRuntimeException(e);
 		}
 	}
 }

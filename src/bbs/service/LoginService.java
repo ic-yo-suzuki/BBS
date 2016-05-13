@@ -10,10 +10,9 @@ import bbs.utils.CipherUtil;
 
 public class LoginService {
 	public int login(String loginId, String password) throws Exception{
-		Connection connection = null;
+		Connection connection = getConnection();
 		int id = 0;
 		try{
-			connection = getConnection();
 			UserDao userDao = new UserDao();
 			String encPassword = CipherUtil.encrypt(password);
 			id = userDao.getUser(connection, loginId, encPassword);
