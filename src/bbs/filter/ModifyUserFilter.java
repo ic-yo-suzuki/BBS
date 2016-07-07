@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 import bbs.beans.User;
 import bbs.service.UserService;
 
-@WebFilter(urlPatterns = {"/deleteUser", "/changeStatus"})
+@WebFilter(urlPatterns = { "/deleteUser", "/changeStatus" })
 public class ModifyUserFilter implements Filter {
 
 	@Override
@@ -29,16 +29,16 @@ public class ModifyUserFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		// TODO 自動生成されたメソッド・スタブ
-		int modifyUserId = Integer.parseInt(((HttpServletRequest)request).getParameter("id"));
-		User loginUser = (User)((HttpServletRequest)request).getSession().getAttribute("loginUser");
+		int modifyUserId = Integer.parseInt(((HttpServletRequest) request).getParameter("id"));
+		User loginUser = (User) ((HttpServletRequest) request).getSession().getAttribute("loginUser");
 		int loginUserId = new UserService().getUser(loginUser.getId()).getId();
 
-		if(modifyUserId == loginUserId){
-			HttpSession session = ((HttpServletRequest)request).getSession();
+		if (modifyUserId == loginUserId) {
+			HttpSession session = ((HttpServletRequest) request).getSession();
 
 			session.setAttribute("errorMessages", "このユーザに対して変更を適用できません");
 			session.setAttribute("userList", new UserService().getUserList());
-			((HttpServletResponse)response).sendRedirect("./usermanager");
+			((HttpServletResponse) response).sendRedirect("./usermanager");
 			return;
 		}
 		chain.doFilter(request, response);

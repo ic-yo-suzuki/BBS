@@ -1,4 +1,5 @@
 package bbs.controller;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -12,21 +13,22 @@ import javax.servlet.http.HttpSession;
 import bbs.beans.NgWord;
 import bbs.service.MessageService;
 
-@WebServlet(urlPatterns = {"/addngword"})
-public class AddNgWord extends HttpServlet{
+@WebServlet(urlPatterns = { "/addngword" })
+public class AddNgWord extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)throws IOException, ServletException{
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
 		String word = request.getParameter("word");
 		HttpSession session = request.getSession();
-		if(!isExistNgWord(word)){
+		if (!isExistNgWord(word)) {
 			new MessageService().addNgWord(word);
-		}else{
+		} else {
 			session.setAttribute("errorMessages", "そのNGワードは既に登録されています");
 		}
 
-		List<NgWord> ngWordList =  new MessageService().getNgWord();
+		List<NgWord> ngWordList = new MessageService().getNgWord();
 		session.setAttribute("ngWordList", ngWordList);
 		response.sendRedirect("./ngwordmanager");
 
@@ -34,11 +36,11 @@ public class AddNgWord extends HttpServlet{
 
 	}
 
-	private boolean isExistNgWord(String text){
+	private boolean isExistNgWord(String text) {
 		List<NgWord> ngWord = new MessageService().getNgWord();
 		boolean flg = false;
-		for(NgWord n : ngWord){
-			if(text.toUpperCase().equals(n.getWord().toUpperCase())){
+		for (NgWord n : ngWord) {
+			if (text.toUpperCase().equals(n.getWord().toUpperCase())) {
 				flg = true;
 			}
 		}

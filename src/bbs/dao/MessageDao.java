@@ -13,35 +13,33 @@ import bbs.beans.Comment;
 import bbs.beans.Message;
 import bbs.beans.NgWord;
 
-
 public class MessageDao {
 
-	public List<String> getCategories(Connection connection){
+	public List<String> getCategories(Connection connection) {
 		PreparedStatement ps = null;
 		List<String> categories = new ArrayList<String>();
 		categories.add("カテゴリを選択してください");
-		try{
+		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("select distinct category from posts order by category;");
 			ps = connection.prepareStatement(sql.toString());
 			ResultSet rs = ps.executeQuery();
-			while(rs.next()){
+			while (rs.next()) {
 				categories.add(rs.getString("category"));
 			}
-			if(ps != null){
+			if (ps != null) {
 				ps.close();
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 
 		}
 
 		return categories;
 	}
 
-
-	public void insert(Connection connection, Message message) throws Exception{
+	public void insert(Connection connection, Message message) throws Exception {
 		PreparedStatement ps = null;
-		try{
+		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("insert into posts(user_id, title, text, category, insert_date) ");
 			sql.append("values(?, ?, ?, ?, CURRENT_TIMESTAMP);");
@@ -53,16 +51,16 @@ public class MessageDao {
 			ps.setString(4, message.getCategory());
 			ps.toString();
 			ps.executeUpdate();
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			close(ps);
 		}
 	}
 
-	public void delete(Connection connection, int id, String operation) throws Exception{
+	public void delete(Connection connection, int id, String operation) throws Exception {
 		PreparedStatement ps = null;
-		try{
+		try {
 			StringBuilder sql = new StringBuilder();
 
 			sql.append(operation);
@@ -72,16 +70,16 @@ public class MessageDao {
 			ps.setInt(1, id);
 
 			ps.executeUpdate();
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			close(ps);
 		}
 	}
 
-	public void insertComment(Connection connection, Comment comment) throws SQLException{
+	public void insertComment(Connection connection, Comment comment) throws SQLException {
 		PreparedStatement ps = null;
-		try{
+		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("insert into comments(user_id, post_id, text, insert_date) ");
 			sql.append("values(?, ?, ?, CURRENT_TIMESTAMP);");
@@ -92,19 +90,18 @@ public class MessageDao {
 			ps.setString(3, comment.getText());
 			ps.toString();
 			ps.executeUpdate();
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			close(ps);
 		}
 	}
-
 
 	public void postDelete(Connection connection, int id) {
 		PreparedStatement ps_post = null;
 		PreparedStatement ps_comment = null;
 
-		try{
+		try {
 			StringBuilder sql_post = new StringBuilder();
 			StringBuilder sql_comment = new StringBuilder();
 
@@ -121,23 +118,23 @@ public class MessageDao {
 			ps_post.executeUpdate();
 			ps_comment.executeUpdate();
 
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			close(ps_post);
 			close(ps_comment);
 		}
 	}
 
-	public List<NgWord> getNgWord(Connection connection){
+	public List<NgWord> getNgWord(Connection connection) {
 		PreparedStatement ps = null;
 		List<NgWord> ngWord = new ArrayList<NgWord>();
-		try{
+		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("select * from ngwords order by id;");
 			ps = connection.prepareStatement(sql.toString());
 			ResultSet rs = ps.executeQuery();
-			while(rs.next()){
+			while (rs.next()) {
 				int id = rs.getInt("id");
 				String word = rs.getString("word");
 				NgWord ng = new NgWord();
@@ -145,20 +142,19 @@ public class MessageDao {
 				ng.setWord(word);
 				ngWord.add(ng);
 			}
-			if(ps != null){
+			if (ps != null) {
 				ps.close();
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return ngWord;
 	}
 
-
 	public void deleteComment(Connection connection, int id) {
 		PreparedStatement ps = null;
-		try{
+		try {
 			StringBuilder sql = new StringBuilder();
 
 			sql.append("delete from comments ");
@@ -168,20 +164,19 @@ public class MessageDao {
 			ps.setInt(1, id);
 
 			ps.executeUpdate();
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			close(ps);
 		}
 	}
-
 
 	public int[] getUserPostCount(Connection connection, int id) {
 		PreparedStatement ps_post = null;
 		PreparedStatement ps_comment = null;
 
 		int[] count = new int[2];
-		try{
+		try {
 			StringBuilder sql_post = new StringBuilder();
 			StringBuilder sql_comment = new StringBuilder();
 
@@ -191,7 +186,8 @@ public class MessageDao {
 			ps_post = connection.prepareStatement(sql_post.toString());
 			ps_post.setInt(1, id);
 
-			sql_comment.append("select count(*) as count from comments inner join users on users.id = comments.user_id ");
+			sql_comment
+					.append("select count(*) as count from comments inner join users on users.id = comments.user_id ");
 			sql_comment.append("where comments.user_id = ? and users.status = true;");
 
 			ps_comment = connection.prepareStatement(sql_comment.toString());
@@ -205,10 +201,9 @@ public class MessageDao {
 			rs.next();
 			count[1] = rs.getInt("count");
 
-
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			close(ps_post);
 			close(ps_comment);
 		}
@@ -220,24 +215,23 @@ public class MessageDao {
 		PreparedStatement ps_comment = null;
 
 		int[] count = new int[2];
-		try{
+		try {
 			StringBuilder sql_post = new StringBuilder();
 			StringBuilder sql_comment = new StringBuilder();
 
-			sql_post.append("select count(posts.text) as count from users inner join posts on users.id = posts.user_id ");
+			sql_post.append(
+					"select count(posts.text) as count from users inner join posts on users.id = posts.user_id ");
 			sql_post.append("where branch_id = (select branch_id from users where id = ?) and status = true;");
 
 			ps_post = connection.prepareStatement(sql_post.toString());
 			ps_post.setInt(1, id);
 
-
-			sql_comment.append("select count(comments.text) as count from users inner join comments on users.id = comments.user_id ");
+			sql_comment.append(
+					"select count(comments.text) as count from users inner join comments on users.id = comments.user_id ");
 			sql_comment.append("where branch_id = (select branch_id from users where id = ?) and status = true;");
 
 			ps_comment = connection.prepareStatement(sql_comment.toString());
 			ps_comment.setInt(1, id);
-
-
 
 			ResultSet rs = ps_post.executeQuery();
 			rs.next();
@@ -247,19 +241,18 @@ public class MessageDao {
 			rs.next();
 			count[1] = rs.getInt("count");
 
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			close(ps_post);
 			close(ps_comment);
 		}
 		return count;
 	}
 
-
 	public void deleteNgWord(Connection connection, int id) {
 		PreparedStatement ps = null;
-		try{
+		try {
 			StringBuilder sql = new StringBuilder();
 
 			sql.append("delete from ngwords ");
@@ -269,17 +262,16 @@ public class MessageDao {
 			ps.setInt(1, id);
 
 			ps.executeUpdate();
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			close(ps);
 		}
 	}
 
-
 	public void addNgWord(Connection connection, String word) {
 		PreparedStatement ps = null;
-		try{
+		try {
 			StringBuilder sql = new StringBuilder();
 
 			sql.append("insert into ngwords(word) ");
@@ -289,51 +281,50 @@ public class MessageDao {
 			ps.setString(1, word);
 
 			ps.executeUpdate();
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			close(ps);
 		}
 
 	}
 
-
 	public boolean isExistPost(Connection connection, int postId) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("select count(*) as count from posts where id = ?;");
 		PreparedStatement ps = null;
-		try{
+		try {
 			ps = connection.prepareStatement(sql.toString());
 			ps.setInt(1, postId);
 			ResultSet rs = ps.executeQuery();
 			rs.next();
-			if(rs.getInt("count") == 1){
+			if (rs.getInt("count") == 1) {
 				return true;
-			}else{
+			} else {
 				return false;
 			}
-		}catch(Exception e){
-			return false;
-		}
-	}
-	public boolean isExistComment(Connection connection, int postId) {
-		StringBuilder sql = new StringBuilder();
-		sql.append("select count(*) as count from comments where id = ?;");
-		PreparedStatement ps = null;
-		try{
-			ps = connection.prepareStatement(sql.toString());
-			ps.setInt(1, postId);
-			ResultSet rs = ps.executeQuery();
-			rs.next();
-			if(rs.getInt("count") == 1){
-				return true;
-			}else{
-				return false;
-			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			return false;
 		}
 	}
 
+	public boolean isExistComment(Connection connection, int postId) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("select count(*) as count from comments where id = ?;");
+		PreparedStatement ps = null;
+		try {
+			ps = connection.prepareStatement(sql.toString());
+			ps.setInt(1, postId);
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			if (rs.getInt("count") == 1) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			return false;
+		}
+	}
 
 }

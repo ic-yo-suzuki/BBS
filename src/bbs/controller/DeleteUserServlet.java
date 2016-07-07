@@ -13,18 +13,19 @@ import javax.servlet.http.HttpSession;
 import bbs.beans.User;
 import bbs.service.UserService;
 
-@WebServlet(urlPatterns = {"/deleteUser"})
-public class DeleteUserServlet extends HttpServlet{
+@WebServlet(urlPatterns = { "/deleteUser" })
+public class DeleteUserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
 
 		int id = Integer.parseInt(request.getParameter("id"));
 		new UserService().deleteUser(id);
 
 		HttpSession session = request.getSession();
-		List<User> userList =  new UserService().getUserList();
+		List<User> userList = new UserService().getUserList();
 		session.setAttribute("userList", userList);
 		response.sendRedirect("./usermanager");
 	}

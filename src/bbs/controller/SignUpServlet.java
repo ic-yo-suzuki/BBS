@@ -19,12 +19,13 @@ import bbs.dao.DepartmentDao;
 import bbs.dao.UserDao;
 import bbs.service.UserService;
 
-@WebServlet(urlPatterns = {"/signup"})
-public class SignUpServlet extends HttpServlet{
+@WebServlet(urlPatterns = { "/signup" })
+public class SignUpServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)throws IOException, ServletException{
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
 
 		request.setAttribute("branches", BranchDao.getBranches());
 		request.setAttribute("departments", DepartmentDao.getDepartments());
@@ -33,10 +34,11 @@ public class SignUpServlet extends HttpServlet{
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)throws IOException, ServletException{
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
 		List<String> messages = new ArrayList<String>();
 		HttpSession session = request.getSession();
-//		request.setCharacterEncoding("UTF-8");
+		// request.setCharacterEncoding("UTF-8");
 		User user = new User();
 		user.setName(request.getParameter("name"));
 		user.setLoginId(request.getParameter("loginId"));
@@ -44,10 +46,10 @@ public class SignUpServlet extends HttpServlet{
 		user.setBranchId(BranchDao.getBranchId(request.getParameter("branch")));
 		user.setDepartmentId(DepartmentDao.getDepartmentId(request.getParameter("department")));
 
-		if(isValid(request, messages)){
+		if (isValid(request, messages)) {
 			new UserService().register(user);
 			response.sendRedirect("./usermanager");
-		}else{
+		} else {
 			session.setAttribute("errorMessages", messages);
 			request.setAttribute("inputValues", user);
 
@@ -66,44 +68,43 @@ public class SignUpServlet extends HttpServlet{
 
 	private boolean isValid(HttpServletRequest request, List<String> messages) {
 
-		if(StringUtils.isEmpty(request.getParameter("name"))){
+		if (StringUtils.isEmpty(request.getParameter("name"))) {
 			messages.add("名前を入力してください");
 		}
-		if(request.getParameter("name").length() > 11){
+		if (request.getParameter("name").length() > 11) {
 			messages.add("名前は10文字以内で入力してください");
 		}
 
-		if(StringUtils.isEmpty(request.getParameter("loginId"))){
+		if (StringUtils.isEmpty(request.getParameter("loginId"))) {
 			messages.add("ログインIDを入力してください");
 
-		} else if((!request.getParameter("loginId").matches("^[0-9a-zA-Z]{6,20}"))){
+		} else if ((!request.getParameter("loginId").matches("^[0-9a-zA-Z]{6,20}"))) {
 
 			messages.add("ログインIDは半角英数字6文字以上20文字以下で入力してください");
 
-		} else if(UserDao.isExist(request.getParameter("loginId"))){
+		} else if (UserDao.isExist(request.getParameter("loginId"))) {
 			messages.add("ログインIDが既に使われています");
 
 		}
-		if(StringUtils.isEmpty(request.getParameter("password"))
-				|| StringUtils.isEmpty(request.getParameter("password_verify"))){
+		if (StringUtils.isEmpty(request.getParameter("password"))
+				|| StringUtils.isEmpty(request.getParameter("password_verify"))) {
 			messages.add("パスワードを入力してください");
 		}
-		if(request.getParameter("password").getBytes().length > request.getParameter("password").length()
-				|| request.getParameter("password_verify").getBytes().length > request.getParameter("password_verify").length()
+		if (request.getParameter("password").getBytes().length > request.getParameter("password").length()
+				|| request.getParameter("password_verify").getBytes().length > request.getParameter("password_verify")
+						.length()
 				|| (request.getParameter("password").matches("{6,255}"))
-				|| (request.getParameter("password_verify").matches("{6,255}"))){
+				|| (request.getParameter("password_verify").matches("{6,255}"))) {
 			messages.add("パスワードは半角文字6文字以上255文字以下で入力してください");
-		} else if(!(request.getParameter("password").equals(request.getParameter("password_verify")))){
+		} else if (!(request.getParameter("password").equals(request.getParameter("password_verify")))) {
 			messages.add("入力されたパスワードが一致しません");
 		}
 
-		if(messages.size() == 0){
+		if (messages.size() == 0) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
-
-
 
 }

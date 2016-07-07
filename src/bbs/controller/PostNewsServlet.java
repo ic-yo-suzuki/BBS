@@ -20,20 +20,22 @@ import bbs.beans.User;
 import bbs.service.MessageService;
 import bbs.utils.Trimming;
 
-@WebServlet(urlPatterns = { "/newpost"})
+@WebServlet(urlPatterns = { "/newpost" })
 
 public class PostNewsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
 
 		List<String> categories = new MessageService().getCategories();
 		request.setAttribute("categories", categories);
 		request.getRequestDispatcher("./newposts.jsp").forward(request, response);
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
 		HttpSession session = request.getSession();
 		List<String> messages = new ArrayList<String>();
 		Message message = new Message();
@@ -42,22 +44,22 @@ public class PostNewsServlet extends HttpServlet {
 		message.setText(request.getParameter("message"));
 		message.setId(user.getId());
 		message.setTitle(request.getParameter("title"));
-		if(request.getParameter("newCategory").length() != 0){
+		if (request.getParameter("newCategory").length() != 0) {
 			new Trimming();
 			String category = Trimming.trim(request.getParameter("newCategory").toString());
 			message.setCategory(category);
-		}else{
+		} else {
 			message.setCategory(request.getParameter("category"));
 		}
 
-		if(isValid(messages, message)){
+		if (isValid(messages, message)) {
 			try {
 				new MessageService().register(message);
 			} catch (Exception e) {
 
 			}
 
-		}else{
+		} else {
 			messages.add("投稿に失敗しました");
 			session.setAttribute("errorMessages", messages);
 			request.setAttribute("inputValues", message);
@@ -77,46 +79,45 @@ public class PostNewsServlet extends HttpServlet {
 
 	private boolean isValid(List<String> messages, Message message) {
 
-
-		if(StringUtils.isBlank(message.getText())){
+		if (StringUtils.isBlank(message.getText())) {
 			messages.add("本文を入力してください");
 		}
-		if(message.getText().length() > 1000){
+		if (message.getText().length() > 1000) {
 			messages.add("本文は1000文字以下で入力してください");
 		}
-		if(isExistNgWord(message.getText())){
+		if (isExistNgWord(message.getText())) {
 			messages.add("本文中に使うことの出来ないキーワードが含まれています");
 		}
 
-		if(message.getTitle().length() > 50){
+		if (message.getTitle().length() > 50) {
 			messages.add("タイトルは50文字以下で入力してください");
 		}
-		if(StringUtils.isBlank(message.getTitle())){
+		if (StringUtils.isBlank(message.getTitle())) {
 			messages.add("タイトルを入力してください");
 		}
-		if(isExistNgWord(message.getTitle())){
+		if (isExistNgWord(message.getTitle())) {
 			messages.add("タイトルに使うことの出来ないキーワードが含まれています");
 		}
 
-		if(message.getCategory().length() > 10 || StringUtils.isBlank(message.getCategory())){
+		if (message.getCategory().length() > 10 || StringUtils.isBlank(message.getCategory())) {
 			messages.add("カテゴリ名は10文字以内で入力してください");
 			message.setCategory("");
 		}
-		if(isExistNgWord(message.getCategory())){
+		if (isExistNgWord(message.getCategory())) {
 			messages.add("カテゴリに使うことの出来ないキーワードが含まれています");
 		}
-		if(messages.size() == 0){
+		if (messages.size() == 0) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
 
-	private boolean isExistNgWord(String text){
+	private boolean isExistNgWord(String text) {
 		List<NgWord> ngWord = new MessageService().getNgWord();
 		boolean flg = false;
-		for(NgWord n : ngWord){
-			if(text.indexOf(n.getWord()) != -1){
+		for (NgWord n : ngWord) {
+			if (text.indexOf(n.getWord()) != -1) {
 				flg = true;
 			}
 		}

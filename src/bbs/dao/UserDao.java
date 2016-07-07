@@ -15,14 +15,13 @@ import bbs.beans.User;
 import bbs.exception.NoRowsUpdatedRuntimeException;
 import bbs.exception.SQLRuntimeException;
 
-
 public class UserDao {
 
 	private static final String FIXED_STRING = "select id, login_id, password, name, branch_id, department_id, status, last_login_date, timestampdiff(SECOND, users.last_login_date, CURRENT_TIMESTAMP) as elapsed_time from users ";
 
 	public void insert(Connection connection, User user) {
 		PreparedStatement ps = null;
-		try{
+		try {
 			StringBuilder sql = new StringBuilder();
 
 			sql.append("insert into users ( ");
@@ -39,17 +38,17 @@ public class UserDao {
 			ps.setInt(5, user.getDepartmentId());
 			ps.executeUpdate();
 
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			close(ps);
 		}
 	}
 
 	private List<User> toUserList(ResultSet rs) throws Exception {
 		List<User> ret = new ArrayList<User>();
-		try{
-			while(rs.next()){
+		try {
+			while (rs.next()) {
 				int id = rs.getInt("id");
 				int branchId = rs.getInt("branch_id");
 				int departmentId = rs.getInt("department_id");
@@ -80,7 +79,7 @@ public class UserDao {
 			}
 			return ret;
 
-		}finally{
+		} finally {
 			rs.close();
 		}
 	}
@@ -88,7 +87,7 @@ public class UserDao {
 	public int getUser(Connection connection, String loginId, String encPassword) {
 		PreparedStatement ps = null;
 		int id = 0;
-		try{
+		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("select id from users ");
 			sql.append("where login_id = ? and password = ? and status = true;");
@@ -97,16 +96,16 @@ public class UserDao {
 			ps.setString(2, encPassword);
 
 			ResultSet rs = ps.executeQuery();
-			if(rs.next()){
+			if (rs.next()) {
 				id = rs.getInt("id");
 			}
 
-			if(ps != null){
+			if (ps != null) {
 				ps.close();
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 
 		}
 		return id;
@@ -116,29 +115,28 @@ public class UserDao {
 		PreparedStatement ps = null;
 		Connection connection = getConnection();
 		int result = 0;
-		try{
+		try {
 			String sql = "select count(login_id) as result from users where login_id = ?;";
 			ps = connection.prepareStatement(sql);
 			ps.setString(1, loginId);
 			ResultSet rs = ps.executeQuery();
 			rs.next();
 			result = rs.getInt("result");
-			if(ps != null){
+			if (ps != null) {
 				ps.close();
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 		}
-		if(result == 1){
+		if (result == 1) {
 			return true;
 		}
 		return false;
 	}
 
-
 	public User getUser(Connection connection, int id) {
 		PreparedStatement ps = null;
 		List<User> userList = null;
-		try{
+		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append(FIXED_STRING);
 			sql.append("where id = ?");
@@ -147,14 +145,14 @@ public class UserDao {
 
 			ResultSet rs = ps.executeQuery();
 			userList = toUserList(rs);
-			if(userList.isEmpty()){
+			if (userList.isEmpty()) {
 				return null;
-			}else if(2 <= userList.size()){
+			} else if (2 <= userList.size()) {
 				throw new IllegalStateException("2 <= userList.size()");
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 
-		}finally{
+		} finally {
 			close(ps);
 		}
 		return userList.get(0);
@@ -163,7 +161,7 @@ public class UserDao {
 	public List<User> getUserList(Connection connection) {
 		PreparedStatement ps = null;
 		List<User> userList = null;
-		try{
+		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append(FIXED_STRING);
 			sql.append("order by branch_id, department_id, id;");
@@ -171,25 +169,25 @@ public class UserDao {
 
 			ResultSet rs = ps.executeQuery();
 			userList = toUserList(rs);
-			if(userList.isEmpty()){
+			if (userList.isEmpty()) {
 				return null;
-			}else if(2 <= userList.size()){
+			} else if (2 <= userList.size()) {
 				throw new IllegalStateException("2 <= userList.size()");
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 
-		}finally{
+		} finally {
 			close(ps);
 		}
 		return userList;
 	}
 
-	public String getBranchName(int userId, int branchId){
+	public String getBranchName(int userId, int branchId) {
 		PreparedStatement ps = null;
 		String branchName = null;
 		Connection connection = getConnection();
 
-		try{
+		try {
 			String sql = "select branches.name as branch_name from branches inner join users on branches.id = users.branch_id where users.id = ? and users.branch_id = ?;";
 			ps = connection.prepareStatement(sql);
 			ps.setInt(1, userId);
@@ -199,20 +197,20 @@ public class UserDao {
 			rs.next();
 			branchName = rs.getString("branch_name");
 
-		}catch(Exception e){
+		} catch (Exception e) {
 
-		}finally{
+		} finally {
 			close(ps);
 		}
 		return branchName;
 	}
 
-	public String getDepartmentName(int userId, int departmentId){
+	public String getDepartmentName(int userId, int departmentId) {
 		PreparedStatement ps = null;
 		String departmentName = null;
 		Connection connection = getConnection();
 
-		try{
+		try {
 			String sql = "select departments.name as department_name from departments inner join users on departments.id = users.department_id where users.id = ? and users.department_id = ?;";
 			ps = connection.prepareStatement(sql);
 			ps.setInt(1, userId);
@@ -222,20 +220,20 @@ public class UserDao {
 			rs.next();
 			departmentName = rs.getString("department_name");
 
-		}catch(Exception e){
+		} catch (Exception e) {
 
-		}finally{
+		} finally {
 			close(ps);
 		}
 		return departmentName;
 	}
 
-	public boolean getStatus(Connection connection, int id){
+	public boolean getStatus(Connection connection, int id) {
 		PreparedStatement ps = null;
 		connection = getConnection();
 		boolean status = false;
 
-		try{
+		try {
 			String sql = "select status from users where id = ?;";
 			ps = connection.prepareStatement(sql);
 			ps.setInt(1, id);
@@ -244,38 +242,38 @@ public class UserDao {
 			rs.next();
 			status = rs.getBoolean("status");
 
-		}catch(Exception e){
+		} catch (Exception e) {
 
-		}finally{
+		} finally {
 			close(ps);
 		}
 		return status;
 	}
 
-	public void changeStatus(Connection connection, int id, boolean status){
+	public void changeStatus(Connection connection, int id, boolean status) {
 		PreparedStatement ps = null;
 
-		try{
+		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("update users set status = ? where id = ?");
 			ps = connection.prepareStatement(sql.toString());
 			ps.setBoolean(1, !status);
 			ps.setInt(2, id);
-			if((ps.executeUpdate()) == 0){
+			if ((ps.executeUpdate()) == 0) {
 				throw new NoRowsUpdatedRuntimeException();
 			}
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			throw new SQLRuntimeException(e);
-		}finally{
+		} finally {
 			close(ps);
 		}
 	}
 
 	public void update(Connection connection, User user, boolean passwordModifyFlg) {
 		PreparedStatement ps = null;
-		try{
+		try {
 			StringBuilder sql = new StringBuilder();
-			if(passwordModifyFlg){
+			if (passwordModifyFlg) {
 				sql.append("update users set login_id = ?, name = ?, password = ?, branch_id = ?, department_id = ? ");
 				sql.append("where id = ?");
 
@@ -287,7 +285,7 @@ public class UserDao {
 				ps.setInt(4, user.getBranchId());
 				ps.setInt(5, user.getDepartmentId());
 				ps.setInt(6, user.getId());
-			}else{
+			} else {
 				sql.append("update users set login_id = ?, name = ?, branch_id = ?, department_id = ? ");
 				sql.append("where id = ?");
 
@@ -300,51 +298,52 @@ public class UserDao {
 				ps.setInt(5, user.getId());
 			}
 
-			if((ps.executeUpdate()) == 0){
+			if ((ps.executeUpdate()) == 0) {
 				throw new NoRowsUpdatedRuntimeException();
 			}
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			throw new SQLRuntimeException(e);
-		}finally{
+		} finally {
 			close(ps);
 		}
 
 	}
 
-	public void delete(Connection connection, int id){
+	public void delete(Connection connection, int id) {
 		String[] sql = new String[3];
 		sql[0] = "delete posts from posts inner join users on users.id = posts.user_id where users.id = ?;";
 		sql[1] = "delete comments from comments inner join users on users.id = comments.user_id where users.id = ?;";
 		sql[2] = "delete from users where id = ?";
 
 		PreparedStatement ps = null;
-		for(int i = 0; i < 3; i++){
-			try{
+		for (int i = 0; i < 3; i++) {
+			try {
 				ps = connection.prepareStatement(sql[i].toString());
 				ps.setInt(1, id);
 				ps.executeUpdate();
-			}catch(SQLException e){
+			} catch (SQLException e) {
 				e.printStackTrace();
-			}finally{
+			} finally {
 				close(ps);
 			}
 		}
 	}
-	public boolean isExistUser(Connection connection, int id){
+
+	public boolean isExistUser(Connection connection, int id) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("select count(*) as count from users where id = ?;");
 		PreparedStatement ps = null;
-		try{
+		try {
 			ps = connection.prepareStatement(sql.toString());
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			rs.next();
-			if(rs.getInt("count") == 1){
+			if (rs.getInt("count") == 1) {
 				return true;
-			}else{
+			} else {
 				return false;
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			return false;
 		}
 
@@ -353,36 +352,37 @@ public class UserDao {
 	public void updateLastLoginDate(Connection connection, int id) {
 		PreparedStatement ps = null;
 
-		try{
+		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("update users set last_login_date = CURRENT_TIMESTAMP where id = ?");
 			ps = connection.prepareStatement(sql.toString());
 			ps.setInt(1, id);
-			if((ps.executeUpdate()) == 0){
+			if ((ps.executeUpdate()) == 0) {
 				throw new NoRowsUpdatedRuntimeException();
 			}
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			throw new SQLRuntimeException(e);
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			close(ps);
 		}
 	}
 
-	public long getElapsedTime(Connection connection, int id){
+	public long getElapsedTime(Connection connection, int id) {
 		PreparedStatement ps = null;
 		long elapsedTime = 0;
-		try{
+		try {
 			StringBuilder sql = new StringBuilder();
-			sql.append("select timestampdiff(SECOND, users.last_login_date, CURRENT_TIMESTAMP) as elapsed_time from users where id = ?");
+			sql.append(
+					"select timestampdiff(SECOND, users.last_login_date, CURRENT_TIMESTAMP) as elapsed_time from users where id = ?");
 			ps = connection.prepareStatement(sql.toString());
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			rs.next();
 			elapsedTime = rs.getLong("elapsed_time");
 
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return elapsedTime;
@@ -391,7 +391,7 @@ public class UserDao {
 	public String getLoginId(Connection connection, int id) {
 		PreparedStatement ps = null;
 		String loginId = null;
-		try{
+		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("select login_id from users where id = ?");
 			ps = connection.prepareStatement(sql.toString());
@@ -400,7 +400,7 @@ public class UserDao {
 			rs.next();
 			loginId = rs.getString("login_id");
 
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return loginId;

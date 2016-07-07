@@ -1,4 +1,5 @@
 package bbs.filter;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import bbs.beans.Message;
 import bbs.beans.User;
 import bbs.service.MessageService;
 
-@WebFilter(urlPatterns = {"/ngwordmanager"})
+@WebFilter(urlPatterns = { "/ngwordmanager" })
 
 public class NgWordPermissionFilter implements Filter {
 
@@ -31,14 +32,14 @@ public class NgWordPermissionFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		User user = (User)((HttpServletRequest)request).getSession().getAttribute("loginUser");
-		try{
-			if(user.getDepartmentId() != 2){
-				HttpSession session = ((HttpServletRequest)request).getSession();
+		User user = (User) ((HttpServletRequest) request).getSession().getAttribute("loginUser");
+		try {
+			if (user.getDepartmentId() != 2) {
+				HttpSession session = ((HttpServletRequest) request).getSession();
 				session.setAttribute("errorMessages", "この操作に対する権限がありません");
 				List<String> categories = new MessageService().getCategories();
 				session.setAttribute("categories", categories);
-				List<Message> messages =  new MessageService().getMessage();
+				List<Message> messages = new MessageService().getMessage();
 				session.setAttribute("loginUser", user);
 				session.setAttribute("messages", messages);
 				session.setAttribute("categories", categories);
@@ -46,7 +47,7 @@ public class NgWordPermissionFilter implements Filter {
 				session.setAttribute("comments", comments);
 				session.setAttribute("postCount", messages.size());
 
-				((HttpServletResponse)response).sendRedirect("./top");
+				((HttpServletResponse) response).sendRedirect("./top");
 				session.removeAttribute("categories");
 				session.removeAttribute("messages");
 				session.removeAttribute("comments");
@@ -54,7 +55,7 @@ public class NgWordPermissionFilter implements Filter {
 				return;
 			}
 			chain.doFilter(request, response);
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

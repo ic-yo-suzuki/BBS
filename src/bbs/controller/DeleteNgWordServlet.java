@@ -14,19 +14,20 @@ import bbs.beans.User;
 import bbs.service.MessageService;
 import bbs.service.UserService;
 
-@WebServlet(urlPatterns = {"/deletengword"})
+@WebServlet(urlPatterns = { "/deletengword" })
 
 public class DeleteNgWordServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
 
 		int id = Integer.parseInt(request.getParameter("id"));
 		new MessageService().deleteNgWord(id);
 
 		HttpSession session = request.getSession();
-		List<User> userList =  new UserService().getUserList();
+		List<User> userList = new UserService().getUserList();
 		session.setAttribute("userList", userList);
 		response.sendRedirect("./ngwordmanager");
 	}

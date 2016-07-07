@@ -14,19 +14,18 @@ import bbs.beans.Message;
 import bbs.beans.User;
 import bbs.service.MessageService;
 
-@WebServlet(urlPatterns = {"/top"})
+@WebServlet(urlPatterns = { "/top" })
 
 public class TopServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
-
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
 
 		User user = (User) request.getSession().getAttribute("loginUser");
 		List<String> categories = new MessageService().getCategories();
 		request.setAttribute("categories", categories);
-		List<Message> messages =  new MessageService().getMessage();
-
+		List<Message> messages = new MessageService().getMessage();
 
 		int[] userPostCount = new MessageService().getUserPostCount(user.getId());
 		int[] branchPostCount = new MessageService().getBranchPostCount(user.getId());
@@ -45,17 +44,17 @@ public class TopServlet extends HttpServlet {
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
 		String category = request.getParameter("category");
 		String dateStart = request.getParameter("dateStart");
 		String dateEnd = request.getParameter("dateEnd");
 		User user = (User) request.getSession().getAttribute("loginUser");
 
+		// 開始日時が終了日時よりも後ろにあった場合、開始日時と終了日時を入れ替え
 
-	 // 開始日時が終了日時よりも後ろにあった場合、開始日時と終了日時を入れ替え
-
-		if(((!dateStart.isEmpty()) && (!dateEnd.isEmpty()) && dateStart.compareTo(dateEnd) > 0)){
+		if (((!dateStart.isEmpty()) && (!dateEnd.isEmpty()) && dateStart.compareTo(dateEnd) > 0)) {
 			String tmp = dateStart;
 			dateStart = dateEnd;
 			dateEnd = tmp;
@@ -69,24 +68,21 @@ public class TopServlet extends HttpServlet {
 		List<String> categories = new MessageService().getCategories();
 		request.setAttribute("categories", categories);
 
-
 		List<Message> messages;
 
-
-
-		if(request.getParameter("mode").equals("narrow")){
-			if(!category.equals("カテゴリを選択してください") && ((!dateStart.isEmpty()) || (!dateEnd.isEmpty()))){
-				messages =  new MessageService().getMessage(category, selectedDates);
-			} else if(category.equals("カテゴリを選択してください") && dateStart.isEmpty() && dateEnd.isEmpty()){
-				messages =  new MessageService().getMessage();
-			} else if(dateStart.isEmpty() && dateEnd.isEmpty()){
-				messages =  new MessageService().getMessage(category);
-			} else{
-				messages =  new MessageService().getMessage(selectedDates);
+		if (request.getParameter("mode").equals("narrow")) {
+			if (!category.equals("カテゴリを選択してください") && ((!dateStart.isEmpty()) || (!dateEnd.isEmpty()))) {
+				messages = new MessageService().getMessage(category, selectedDates);
+			} else if (category.equals("カテゴリを選択してください") && dateStart.isEmpty() && dateEnd.isEmpty()) {
+				messages = new MessageService().getMessage();
+			} else if (dateStart.isEmpty() && dateEnd.isEmpty()) {
+				messages = new MessageService().getMessage(category);
+			} else {
+				messages = new MessageService().getMessage(selectedDates);
 			}
 			request.setAttribute("selectedCategory", category);
-		}else{
-			messages =  new MessageService().getMessage();
+		} else {
+			messages = new MessageService().getMessage();
 			int[] userPostCount = new MessageService().getUserPostCount(user.getId());
 			int[] branchPostCount = new MessageService().getBranchPostCount(user.getId());
 			request.setAttribute("userPostCount", userPostCount);
@@ -106,6 +102,5 @@ public class TopServlet extends HttpServlet {
 		request.setAttribute("commentCount", comments.size());
 		request.getRequestDispatcher("/top.jsp").forward(request, response);
 	}
-
 
 }
